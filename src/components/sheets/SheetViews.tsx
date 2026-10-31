@@ -1,0 +1,773 @@
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { formatIDR, formatKoef, formatNumber, parseNumeric } from "../../lib/format";
+import {
+  collectLeaves,
+  collectUniqueItems,
+  COMPONENT_META,
+  tenagaMandays,
+  type LeafInfo,
+} from "../../lib/sheets";
+import { ANALYSIS_ORDER } from "../../lib/tree";
+import { useWbsStore } from "../../store/useWbsStore";
+
+const ALIGN = { left: "text-left", right: "text-right", center: "text-center" } as const;
+const NUM = "font-mono tabular-nums";
+
+function Th({
+  children,
+  align = "left",
+  className = "",
+}: {
+  children?: ReactNode;
+  align?: keyof typeof ALIGN;
+  className?: string;
+}) {
+  return (
+    <th
+      className={`sticky top-0 z-10 whitespace-nowrap border-b border-line bg-panel2 px-3 py-1.5 text-[8.5px] font-semibold uppercase tracking-widest text-muted ${ALIGN[align]} ${className}`}
+    >
+      {children}
+    </th>
+  );
+}
+
+function Td({
+  children,
+  align = "left",
+  className = "",
+}: {
+  children?: ReactNode;
+  align?: keyof typeof ALIGN;
+  className?: string;
+}) {
+  return (
+    <td
+      className={`border-b border-line/40 px-3 py-1.5 align-middle text-[10.5px] text-ink/90 ${ALIGN[align]} ${className}`}
+    >
+      {children}
+    </td>
+  );
+}
+
+function NumInput({
+  value,
+  onCommit,
+  title,
+  className = "",
+}: {
+  value: number;
+  onCommit: (value: number) => void;
+  title?: string;
+  className?: string;
+}) {
+  const [draft, setDraft] = useState(() => formatNumber(value));
+  useEffect(() => {
+    setDraft(formatNumber(value));
+  }, [value]);
+
+  const commit = () => {
+    const parsed = parseNumeric(draft);
+    if (parsed !== value) onCommit(parsed);
+    else setDraft(formatNumber(value));
+  };
+
+  return (
+    <input
+      value={draft}
+      onChange={(event) => setDraft(event.target.value)}
+      onFocus={(event) => event.target.select()}
+      onBlur={commit}
+      onKeyDown={(event) => {
+        if (event.key === "Enter") {
+          event.currentTarget.blur();
+        } else if (event.key === "Escape") {
+          setDraft(formatNumber(value));
+          event.currentTarget.blur();
+        }
+      }}
+      inputMode="decimal"
+      title={title}
+      className={`h-6 w-24 rounded-[3px] border border-line/60 bg-shell px-2 text-right font-mono text-[10.5px] text-ink outline-none focus:border-accent ${className}`}
+    />
+  );
+}
+
+function SheetShell({
+  title,
+  meta,
+  children,
+}: {
+  title: string;
+  meta: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="flex min-h-0 flex-1 flex-col">
+      <div className="flex h-8 shrink-0 items-center justify-between border-b border-line bg-panel/60 px-3">
+        <span className="text-[9.5px] font-semibold uppercase tracking-[0.16em] text-muted">
+          {title}
+        </span>
+        <span className="font-mono text-[9px] text-muted/50">{meta}</span>
+      </div>
+      <div className="min-h-0 flex-1 overflow-auto">{children}</div>
+    </div>
+  );
+}
+
+function useLeaves(): LeafInfo[] {
+  const nodes = useWbsStore((state) => state.nodes);
+  const roots = useWbsStore((state) => state.roots);
+  return useMemo(() => collectLeaves(nodes, roots), [nodes, roots]);
+}
+
+export function VolumeSheet() {
+  const leaves = useLeaves();
+  const updateCell = useWbsStore((state) => state.updateCell);
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+
+  const divisions = useMemo(() => {
+    const order: Array<{ key: string; code: string; label: string; leaves: LeafInfo[] }> = [];
+    const map = new Map<string, (typeof order)[number]>();
+    for (const info of leaves) {
+      const key = info.division?.id ?? "__none";
+      let group = map.get(key);
+      if (!group) {
+        group = {
+          key,
+          code: info.division?.code ?? "—",
+          label: info.division?.name ?? "Tanpa Divisi",
+          leaves: [],
+        };
+        map.set(key, group);
+        order.push(group);
+      }
+      group.leaves.push(info);
+    }
+    return order;
+  }, [leaves]);
+
+  const toggle = (key: string) =>
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+
+  return (
+    <SheetShell title="Volume Pekerjaan" meta={`${leaves.length} item · ${divisions.length} divisi`}>
+      <table className="w-full border-collapse">
+        <thead>
+          <tr>
+            <Th>Kode</Th>
+            <Th>AHSP</Th>
+            <Th align="center">Satuan</Th>
+            <Th align="right">Volume</Th>
+          </tr>
+        </thead>
+        <tbody>
+          {divisions.map((division) => {
+            const isOpen = expanded.has(division.key);
+            return (
+              <FragmentRows key={division.key}>
+                <tr
+                  onClick={() => toggle(division.key)}
+                  className="cursor-pointer border-t-2 border-line/70 bg-panel2/40 hover:bg-panel2/60"
+                >
+                  <td colSpan={3} className="border-b border-line/40 px-3 py-1.5 text-[10.5px]">
+                    <span className="flex items-center gap-2">
+                      <span className="w-2 text-[9px] text-muted">{isOpen ? "▾" : "▸"}</span>
+                      <span className={`text-muted/70 ${NUM}`}>{division.code}</span>
+                      <span className="font-medium text-ink">{division.label}</span>
+                    </span>
+                  </td>
+                  <td
+                    className={`border-b border-line/40 px-3 py-1.5 text-right text-[10.5px] ${NUM} text-muted`}
+                  >
+                    {division.leaves.length} item
+                  </td>
+                </tr>
+                {isOpen &&
+                  division.leaves.map(({ node }) => (
+                    <tr key={node.id} className="hover:bg-panel2/30">
+                      <Td className={`text-muted/70 ${NUM}`}>{node.code}</Td>
+                      <Td className="pl-6">{node.name}</Td>
+                      <Td align="center" className="text-muted">
+                        {node.unit || "—"}
+                      </Td>
+                      <Td align="right">
+                        <NumInput
+                          value={node.volume}
+                          onCommit={(value) => updateCell(node.id, "volume", value)}
+                          title="Ubah volume"
+                        />
+                      </Td>
+                    </tr>
+                  ))}
+              </FragmentRows>
+            );
+          })}
+        </tbody>
+      </table>
+    </SheetShell>
+  );
+}
+
+export function RabSheet() {
+  const leaves = useLeaves();
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+
+  const divisions = useMemo(() => {
+    const order: Array<{
+      key: string;
+      code: string;
+      label: string;
+      total: number;
+      leaves: LeafInfo[];
+    }> = [];
+    const map = new Map<string, (typeof order)[number]>();
+    for (const info of leaves) {
+      const key = info.division?.id ?? "__none";
+      let group = map.get(key);
+      if (!group) {
+        group = {
+          key,
+          code: info.division?.code ?? "—",
+          label: info.division?.name ?? "Tanpa Divisi",
+          total: 0,
+          leaves: [],
+        };
+        map.set(key, group);
+        order.push(group);
+      }
+      group.total += info.node.total_price;
+      group.leaves.push(info);
+    }
+    return order;
+  }, [leaves]);
+
+  const grandTotal = divisions.reduce((sum, group) => sum + group.total, 0);
+
+  const toggle = (key: string) =>
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+
+  return (
+    <SheetShell title="RAB" meta={`${leaves.length} item · ${divisions.length} divisi`}>
+      <table className="w-full border-collapse">
+        <thead>
+          <tr>
+            <Th>Kode</Th>
+            <Th>Uraian Pekerjaan</Th>
+            <Th align="right">Volume</Th>
+            <Th align="center">Satuan</Th>
+            <Th align="right">Harga Satuan</Th>
+            <Th align="right">Total Biaya</Th>
+          </tr>
+        </thead>
+        <tbody>
+          {divisions.map((division) => {
+            const isOpen = expanded.has(division.key);
+            return (
+              <FragmentRows key={division.key}>
+                <tr
+                  onClick={() => toggle(division.key)}
+                  className="cursor-pointer border-t-2 border-line/70 bg-panel2/40 hover:bg-panel2/60"
+                >
+                  <td colSpan={5} className="border-b border-line/40 px-3 py-1.5 text-[10.5px]">
+                    <span className="flex items-center gap-2">
+                      <span className="w-2 text-[9px] text-muted">{isOpen ? "▾" : "▸"}</span>
+                      <span className={`text-muted/70 ${NUM}`}>{division.code}</span>
+                      <span className="font-medium text-ink">{division.label}</span>
+                    </span>
+                  </td>
+                  <td
+                    className={`border-b border-line/40 px-3 py-1.5 text-right text-[10.5px] ${NUM} font-semibold text-ink`}
+                  >
+                    {formatIDR(division.total)}
+                  </td>
+                </tr>
+                {isOpen &&
+                  division.leaves.map(({ node }) => (
+                    <tr key={node.id} className="hover:bg-panel2/30">
+                      <Td className={`text-muted/70 ${NUM}`}>{node.code}</Td>
+                      <Td className="pl-6">{node.name}</Td>
+                      <Td align="right" className={NUM}>
+                        {formatNumber(node.volume)}
+                      </Td>
+                      <Td align="center" className="text-muted">
+                        {node.unit || "—"}
+                      </Td>
+                      <Td align="right" className={NUM}>
+                        {formatIDR(node.unit_price)}
+                      </Td>
+                      <Td align="right" className={`${NUM} font-medium text-ink`}>
+                        {formatIDR(node.total_price)}
+                      </Td>
+                    </tr>
+                  ))}
+              </FragmentRows>
+            );
+          })}
+          <tr className="border-t-2 border-line/70 bg-panel2/40">
+            <td
+              colSpan={5}
+              className="border-b border-line/40 px-3 py-1.5 text-[10.5px] font-semibold uppercase tracking-wide text-ink"
+            >
+              Grand Total
+            </td>
+            <td
+              className={`border-b border-line/40 px-3 py-1.5 text-right text-[10.5px] ${NUM} font-semibold text-ink`}
+            >
+              {formatIDR(grandTotal)}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </SheetShell>
+  );
+}
+
+export function RekapitulasiSheet() {
+  const leaves = useLeaves();
+  const groups = useMemo(() => {
+    const order: Array<{ key: string; code: string; label: string; total: number }> = [];
+    const map = new Map<string, { key: string; code: string; label: string; total: number }>();
+    for (const { node, division } of leaves) {
+      const key = division?.id ?? "__none";
+      let group = map.get(key);
+      if (!group) {
+        group = {
+          key,
+          code: division?.code ?? "—",
+          label: division?.name ?? "Tanpa Divisi",
+          total: 0,
+        };
+        map.set(key, group);
+        order.push(group);
+      }
+      group.total += node.total_price;
+    }
+    return order;
+  }, [leaves]);
+
+  const grandTotal = groups.reduce((sum, group) => sum + group.total, 0);
+
+  return (
+    <SheetShell title="Rekapitulasi" meta={`${groups.length} divisi`}>
+      <table className="w-full border-collapse">
+        <thead>
+          <tr>
+            <Th>Divisi</Th>
+            <Th align="right">Total Biaya</Th>
+            <Th align="right">Porsi</Th>
+          </tr>
+        </thead>
+        <tbody>
+          {groups.map((group) => (
+            <tr key={group.key} className="hover:bg-panel2/30">
+              <Td>
+                <span className={`mr-2 text-muted/70 ${NUM}`}>{group.code}</span>
+                {group.label}
+              </Td>
+              <Td align="right" className={`${NUM} font-medium text-ink`}>
+                {formatIDR(group.total)}
+              </Td>
+              <Td align="right" className={`${NUM} text-muted`}>
+                {grandTotal > 0 ? `${formatNumber((group.total / grandTotal) * 100)}%` : "—"}
+              </Td>
+            </tr>
+          ))}
+          <tr className="border-t-2 border-line/70 bg-panel2/40">
+            <Td className="font-semibold uppercase tracking-wide text-ink">Total</Td>
+            <Td align="right" className={`${NUM} font-semibold text-ink`}>
+              {formatIDR(grandTotal)}
+            </Td>
+            <Td align="right" className={`${NUM} font-semibold text-muted`}>
+              {grandTotal > 0 ? "100%" : "—"}
+            </Td>
+          </tr>
+        </tbody>
+      </table>
+    </SheetShell>
+  );
+}
+
+export function HargaDasarSheet() {
+  const nodes = useWbsStore((state) => state.nodes);
+  const roots = useWbsStore((state) => state.roots);
+  const setItemPrice = useWbsStore((state) => state.setItemPrice);
+  const items = useMemo(() => collectUniqueItems(nodes, roots), [nodes, roots]);
+  const unfilled = items.filter((item) => item.base_price <= 0).length;
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+
+  const groups = useMemo(
+    () =>
+      ANALYSIS_ORDER.map((kind) => ({
+        kind,
+        items: items.filter((item) => item.kind === kind),
+      })).filter((group) => group.items.length > 0),
+    [items],
+  );
+
+  const toggle = (key: string) =>
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+
+  return (
+    <SheetShell
+      title="Harga Dasar"
+      meta={`${items.length} harga unik${unfilled > 0 ? ` · ${unfilled} belum diisi` : ""}`}
+    >
+      <table className="w-full border-collapse">
+        <thead>
+          <tr>
+            <Th>Nama</Th>
+            <Th align="center">Satuan</Th>
+            <Th align="right">Harga Dasar</Th>
+            <Th align="right">Status</Th>
+          </tr>
+        </thead>
+        <tbody>
+          {groups.map((group) => {
+            const meta = COMPONENT_META[group.kind];
+            const isOpen = expanded.has(group.kind);
+            const groupUnfilled = group.items.filter((item) => item.base_price <= 0).length;
+            return (
+              <FragmentRows key={group.kind}>
+                <tr
+                  onClick={() => toggle(group.kind)}
+                  className="cursor-pointer border-t-2 border-line/70 bg-panel2/40 hover:bg-panel2/60"
+                >
+                  <td colSpan={4} className="border-b border-line/40 px-3 py-1.5 text-[10.5px]">
+                    <span className="flex items-center gap-2">
+                      <span className="w-2 text-[9px] text-muted">{isOpen ? "▾" : "▸"}</span>
+                      <span className={`h-1.5 w-1.5 rounded-full ${meta.dot}`} />
+                      <span className={`font-medium ${meta.text}`}>{meta.label}</span>
+                      <span className="text-muted/60">({meta.letter})</span>
+                      <span className="text-muted/50">· {group.items.length}</span>
+                      {groupUnfilled > 0 && (
+                        <span className="text-danger/80">· {groupUnfilled} belum diisi</span>
+                      )}
+                    </span>
+                  </td>
+                </tr>
+                {isOpen &&
+                  group.items.map((item) => (
+                    <tr key={item.key} className="hover:bg-panel2/30">
+                      <Td className="pl-7">{item.name}</Td>
+                      <Td align="center" className="text-muted">
+                        {item.unit}
+                      </Td>
+                      <Td align="right">
+                        <NumInput
+                          value={item.base_price}
+                          onCommit={(value) => setItemPrice(item.name, item.unit, value)}
+                          title="Ubah harga dasar (berlaku ke semua kemunculan item)"
+                          className="w-28"
+                        />
+                      </Td>
+                      <Td align="right">
+                        {item.base_price <= 0 ? (
+                          <span className="rounded-sm border border-danger/40 bg-danger/10 px-1.5 py-0.5 text-[9px] text-danger">
+                            Belum diisi
+                          </span>
+                        ) : (
+                          <span className="text-muted/40">—</span>
+                        )}
+                      </Td>
+                    </tr>
+                  ))}
+              </FragmentRows>
+            );
+          })}
+        </tbody>
+      </table>
+    </SheetShell>
+  );
+}
+
+export function BoqSheet() {
+  const nodes = useWbsStore((state) => state.nodes);
+  const roots = useWbsStore((state) => state.roots);
+  const items = useMemo(() => collectUniqueItems(nodes, roots), [nodes, roots]);
+  const grandTotal = items.reduce((sum, item) => sum + item.subtotal, 0);
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+
+  const groups = useMemo(
+    () =>
+      ANALYSIS_ORDER.map((kind) => ({
+        kind,
+        items: items.filter((item) => item.kind === kind),
+      })).filter((group) => group.items.length > 0),
+    [items],
+  );
+
+  const toggle = (key: string) =>
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+
+  return (
+    <SheetShell title="BOQ" meta={`${items.length} material`}>
+      <table className="w-full border-collapse">
+        <thead>
+          <tr>
+            <Th>Nama</Th>
+            <Th align="center">Satuan</Th>
+            <Th align="right">Harga Dasar</Th>
+            <Th align="right">Kebutuhan</Th>
+            <Th align="right">Jumlah</Th>
+          </tr>
+        </thead>
+        <tbody>
+          {groups.map((group) => {
+            const meta = COMPONENT_META[group.kind];
+            const isOpen = expanded.has(group.kind);
+            const groupTotal = group.items.reduce((sum, item) => sum + item.subtotal, 0);
+            return (
+              <FragmentRows key={group.kind}>
+                <tr
+                  onClick={() => toggle(group.kind)}
+                  className="cursor-pointer border-t-2 border-line/70 bg-panel2/40 hover:bg-panel2/60"
+                >
+                  <td colSpan={4} className="border-b border-line/40 px-3 py-1.5 text-[10.5px]">
+                    <span className="flex items-center gap-2">
+                      <span className="w-2 text-[9px] text-muted">{isOpen ? "▾" : "▸"}</span>
+                      <span className={`h-1.5 w-1.5 rounded-full ${meta.dot}`} />
+                      <span className={`font-medium ${meta.text}`}>{meta.label}</span>
+                      <span className="text-muted/60">({meta.letter})</span>
+                      <span className="text-muted/50">· {group.items.length}</span>
+                    </span>
+                  </td>
+                  <td
+                    className={`border-b border-line/40 px-3 py-1.5 text-right text-[10.5px] ${NUM} font-semibold text-ink`}
+                  >
+                    {formatIDR(groupTotal)}
+                  </td>
+                </tr>
+                {isOpen &&
+                  group.items.map((item) => (
+                    <tr key={item.key} className="hover:bg-panel2/30">
+                      <Td className="pl-7">{item.name}</Td>
+                      <Td align="center" className="text-muted">
+                        {item.unit}
+                      </Td>
+                      <Td align="right" className={item.base_price <= 0 ? "" : NUM}>
+                        {item.base_price > 0 ? (
+                          formatIDR(item.base_price)
+                        ) : (
+                          <span className="rounded-sm border border-danger/40 bg-danger/10 px-1.5 py-0.5 text-[9px] text-danger">
+                            Belum diisi
+                          </span>
+                        )}
+                      </Td>
+                      <Td align="right" className={`${NUM} text-ink/70`}>
+                        {formatNumber(item.quantity)}
+                      </Td>
+                      <Td align="right" className={`${NUM} font-medium text-ink`}>
+                        {formatIDR(item.subtotal)}
+                      </Td>
+                    </tr>
+                  ))}
+              </FragmentRows>
+            );
+          })}
+          <tr className="border-t-2 border-line/70 bg-panel2/40">
+            <td
+              colSpan={4}
+              className="border-b border-line/40 px-3 py-1.5 text-[10.5px] font-semibold uppercase tracking-wide text-ink"
+            >
+              Grand Total
+            </td>
+            <td
+              className={`border-b border-line/40 px-3 py-1.5 text-right text-[10.5px] ${NUM} font-semibold text-ink`}
+            >
+              {formatIDR(grandTotal)}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </SheetShell>
+  );
+}
+
+export function AnalisaSheet() {
+  const leaves = useLeaves();
+  return (
+    <SheetShell title="Analisa" meta={`${leaves.length} analisa`}>
+      <table className="w-full border-collapse">
+        <thead>
+          <tr>
+            <Th>Kode</Th>
+            <Th>Uraian</Th>
+            <Th align="center">Satuan</Th>
+            <Th align="right">Koef</Th>
+            <Th align="right">Harga Dasar</Th>
+            <Th align="right">Subtotal</Th>
+            <Th align="right">Harga Satuan Pekerjaan</Th>
+          </tr>
+        </thead>
+        <tbody>
+          {leaves.map(({ node }) => (
+            <AnalisaBlock key={node.id} id={node.id} />
+          ))}
+        </tbody>
+      </table>
+    </SheetShell>
+  );
+}
+
+function AnalisaBlock({ id }: { id: string }) {
+  const node = useWbsStore((state) => state.nodes[id]);
+  if (!node) return null;
+  return (
+    <>
+      <tr className="border-t-2 border-line/70 bg-panel2/40">
+        <Td className={`text-accent ${NUM}`}>{node.code}</Td>
+        <Td className="font-medium text-ink">{node.name}</Td>
+        <Td align="center" className="text-muted">
+          {node.unit || "—"}
+        </Td>
+        <Td />
+        <Td />
+        <Td />
+        <Td align="right" className={`${NUM} font-semibold text-accent`}>
+          {formatIDR(node.unit_price)}
+        </Td>
+      </tr>
+      {ANALYSIS_ORDER.map((kind) => {
+        const component = node.components[kind];
+        if (component.subtotal <= 0 && component.items.length === 0) return null;
+        const meta = COMPONENT_META[kind];
+        return (
+          <FragmentRows key={kind}>
+            <tr className="bg-shell/40">
+              <Td />
+              <Td className={meta.text}>
+                {meta.letter} · {meta.label}
+              </Td>
+              <Td />
+              <Td />
+              <Td />
+              <Td align="right" className={`${NUM} ${meta.text}`}>
+                {formatIDR(component.subtotal)}
+              </Td>
+              <Td />
+            </tr>
+            {component.items.map((item, index) => (
+              <tr key={index} className="hover:bg-panel2/30">
+                <Td />
+                <Td className="pl-8 text-ink/80">{item.name}</Td>
+                <Td align="center" className="text-muted">
+                  {item.unit}
+                </Td>
+                <Td align="right" className={`${NUM} text-muted`}>
+                  {formatKoef(item.coefficient)}
+                </Td>
+                <Td align="right" className={NUM}>
+                  {formatIDR(item.base_price)}
+                </Td>
+                <Td align="right" className={`${NUM} text-ink/80`}>
+                  {formatIDR(item.subtotal)}
+                </Td>
+                <Td />
+              </tr>
+            ))}
+          </FragmentRows>
+        );
+      })}
+    </>
+  );
+}
+
+function FragmentRows({ children }: { children: ReactNode }) {
+  return <>{children}</>;
+}
+
+export function RencanaKerjaSheet() {
+  const leaves = useLeaves();
+  const [plan, setPlan] = useState<Record<string, { workers: string; duration: string }>>({});
+
+  const setWorkers = (id: string, mandays: number, raw: string) => {
+    const workers = parseNumeric(raw);
+    const duration = mandays > 0 && workers > 0 ? formatNumber(mandays / workers) : "";
+    setPlan((prev) => ({ ...prev, [id]: { workers: raw, duration } }));
+  };
+
+  const setDuration = (id: string, mandays: number, raw: string) => {
+    const duration = parseNumeric(raw);
+    const workers = mandays > 0 && duration > 0 ? formatNumber(mandays / duration) : "";
+    setPlan((prev) => ({ ...prev, [id]: { workers, duration: raw } }));
+  };
+
+  const totalMandays = leaves.reduce((sum, { node }) => sum + tenagaMandays(node), 0);
+
+  return (
+    <SheetShell title="Rencana Kerja" meta={`${formatNumber(totalMandays)} mandays`}>
+      <table className="w-full border-collapse">
+        <thead>
+          <tr>
+            <Th>Kode</Th>
+            <Th>AHSP</Th>
+            <Th align="center">Satuan</Th>
+            <Th align="right">Volume</Th>
+            <Th align="right">Mandays (OH)</Th>
+            <Th align="right">Jumlah Pekerja</Th>
+            <Th align="right">Durasi (hari)</Th>
+          </tr>
+        </thead>
+        <tbody>
+          {leaves.map(({ node }) => {
+            const mandays = tenagaMandays(node);
+            const entry = plan[node.id] ?? { workers: "", duration: "" };
+            return (
+              <tr key={node.id} className="hover:bg-panel2/30">
+                <Td className={`text-muted/70 ${NUM}`}>{node.code}</Td>
+                <Td>{node.name}</Td>
+                <Td align="center" className="text-muted">
+                  {node.unit || "—"}
+                </Td>
+                <Td align="right" className={NUM}>
+                  {formatNumber(node.volume)}
+                </Td>
+                <Td align="right" className={`${NUM} text-ink/70`}>
+                  {formatNumber(mandays)}
+                </Td>
+                <Td align="right">
+                  <input
+                    value={entry.workers}
+                    onChange={(event) => setWorkers(node.id, mandays, event.target.value)}
+                    inputMode="decimal"
+                    placeholder="—"
+                    className="h-6 w-20 rounded-[3px] border border-line/60 bg-shell px-2 text-right font-mono text-[10.5px] text-ink outline-none placeholder:text-muted/40 focus:border-accent"
+                  />
+                </Td>
+                <Td align="right">
+                  <input
+                    value={entry.duration}
+                    onChange={(event) => setDuration(node.id, mandays, event.target.value)}
+                    inputMode="decimal"
+                    placeholder="—"
+                    className="h-6 w-20 rounded-[3px] border border-line/60 bg-shell px-2 text-right font-mono text-[10.5px] text-ink outline-none placeholder:text-muted/40 focus:border-accent"
+                  />
+                </Td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </SheetShell>
+  );
+}
