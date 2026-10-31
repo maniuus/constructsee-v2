@@ -4,6 +4,26 @@ High-precision civil cost estimation & WBS engine — desktop app built with **T
 
 ConstrucSee memodelkan pekerjaan konstruksi sebagai WBS (Work Breakdown Structure) berbasis SNI/AHSP: setiap item pekerjaan diturunkan menjadi komponen **Tenaga Kerja (A) / Bahan (B) / Alat (C)**, lengkap dengan analisa harga satuan, kuantitas/BOQ, dan rekapitulasi biaya.
 
+## Tangkapan Layar
+
+**Sheet Full / WBS** — struktur divisi → item, baris komponen dasar (A/B/C) dan item resource:
+
+![Sheet Full](docs/screenshots/01-full.png)
+
+**Sheet Analisa** — analisa harga satuan per pekerjaan:
+
+![Sheet Analisa](docs/screenshots/05-analisa.png)
+
+**Sheet RAB** — rekap per divisi yang dapat dilipat:
+
+![Sheet RAB](docs/screenshots/04-rab.png)
+
+**Sheet Rekapitulasi** — biaya dan porsi per divisi:
+
+![Sheet Rekapitulasi](docs/screenshots/07-rekapitulasi.png)
+
+Selengkapnya di [`docs/screenshots/`](docs/screenshots).
+
 ## Fitur
 
 - **WBS Engine** — struktur divisi → subdivisi → item pekerjaan (leaf) dengan rollup biaya otomatis lewat actor engine Rust (mpsc).
