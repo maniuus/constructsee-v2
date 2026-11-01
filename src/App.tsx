@@ -4,6 +4,8 @@ import { RibbonBar } from "./components/shell/RibbonBar";
 import { StatusBar } from "./components/shell/StatusBar";
 import { TitleBar } from "./components/shell/TitleBar";
 import { Workspace } from "./components/shell/Workspace";
+import { PdfPreview } from "./components/pdf/PdfPreview";
+import { RegionDialog } from "./components/ahsp/RegionDialog";
 import { useWbsStore } from "./store/useWbsStore";
 
 export default function App() {
@@ -18,6 +20,8 @@ export default function App() {
       <TitleBar />
       <RibbonBar />
       <Workspace />
+      <PdfPreview />
+      <RegionDialog />
       <StatusBar />
       <ErrorPopup />
     </div>

@@ -153,6 +153,23 @@ impl ComponentCost {
         ComponentCost::from_share(self.subtotal, templates)
     }
 
+    /// Bangun kategori komponen dari daftar resource item (dipakai saat load
+    /// dari tabel ter-normalisasi `node_resource_items`).
+    pub fn from_items(items: Vec<ComponentItem>) -> Self {
+        let coefficient: f64 = items.iter().map(|item| item.coefficient).sum();
+        let subtotal: f64 = items.iter().map(|item| item.subtotal).sum();
+        Self {
+            coefficient,
+            base_price: if coefficient > 0.0 {
+                subtotal / coefficient
+            } else {
+                0.0
+            },
+            subtotal,
+            items,
+        }
+    }
+
     pub fn set_item_price(&mut self, name: &str, unit: &str, base_price: f64) -> bool {
         let mut touched = false;
         for item in self.items.iter_mut() {
@@ -183,6 +200,10 @@ pub struct WbsComponents {
 }
 
 impl WbsComponents {
+    /// Turunkan komponen dari `unit_price` tanpa memaksakan kategori Alat.
+    /// Pekerjaan tanpa alat (mis. pengecatan) tidak lagi otomatis dialokasikan
+    /// 15% ke "Alat Berat". Kategori Alat dibiarkan kosong sampai pengguna
+    /// menambahkannya sendiri.
     pub fn from_unit_price(unit_price: f64) -> Self {
         let price = if unit_price.is_finite() && unit_price > 0.0 {
             unit_price
@@ -191,9 +212,9 @@ impl WbsComponents {
         };
 
         Self {
-            bahan: ComponentCost::from_share(price * 0.58, BAHAN_ITEMS),
-            tenaga: ComponentCost::from_share(price * 0.27, TENAGA_ITEMS),
-            alat: ComponentCost::from_share(price * 0.15, ALAT_ITEMS),
+            bahan: ComponentCost::from_share(price * 0.70, BAHAN_ITEMS),
+            tenaga: ComponentCost::from_share(price * 0.30, TENAGA_ITEMS),
+            alat: ComponentCost::default(),
         }
     }
 
@@ -212,6 +233,17 @@ impl WbsComponents {
         let tenaga = self.tenaga.set_item_price(name, unit, base_price);
         let alat = self.alat.set_item_price(name, unit, base_price);
         bahan || tenaga || alat
+    }
+
+    /// Skalakan seluruh harga dasar resource dengan faktor (dipakai saat
+    /// wilayah proyek berubah / multiplier regional diterapkan).
+    pub fn scale_prices(&mut self, factor: f64) {
+        if !factor.is_finite() || factor <= 0.0 {
+            return;
+        }
+        self.bahan = self.bahan.scaled(factor);
+        self.tenaga = self.tenaga.scaled(factor);
+        self.alat = self.alat.scaled(factor);
     }
 
     pub fn rebalanced_to(&self, target: f64) -> Self {
@@ -264,11 +296,30 @@ pub struct DeltaPayload {
     pub new_value: f64,
 }
 
+/// Rencana kerja (sheet Rencana Kerja) yang dipersistensi per baris pekerjaan.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct WorkPlan {
+    pub node_id: String,
+    pub num_workers: f64,
+    pub duration_days: f64,
+}
+
+/// Wilayah proyek aktif + faktor pengali harga regional.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct RegionInfo {
+    pub region_id: String,
+    pub region_name: String,
+    pub multiplier_factor: f64,
+}
+
 #[derive(Debug, Clone, Serialize)]
 pub struct EngineSnapshot {
     pub nodes: Vec<WbsNode>,
     pub roots: Vec<String>,
     pub total_cost: f64,
+    pub overhead_percent: f64,
+    pub can_undo: bool,
+    pub can_redo: bool,
 }
 
 #[derive(Debug, Clone, Serialize)]

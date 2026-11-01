@@ -3,13 +3,19 @@ import { open, save } from "@tauri-apps/plugin-dialog";
 import { backfillComponentItems } from "../lib/mockEngine";
 import { SNI_DIVISIONS } from "../lib/divisions";
 import { isTauriRuntime, safeInvoke } from "../lib/tauriBridge";
+import { useUiStore } from "./useUiStore";
 import type {
   AffectedPatch,
+  Analytics,
   EditableField,
   EngineSnapshot,
+  MasterStats,
   PriceMethod,
+  Region,
+  RegionInfo,
   WbsComponents,
   WbsNode,
+  WorkPlan,
 } from "../types/wbs";
 
 const emptyComponents = (): WbsComponents => {
@@ -32,8 +38,17 @@ interface WbsState {
   activeCell: ActiveCell | null;
   selectedId: string | null;
   overhead: number;
-  profit: number;
   ppn: number;
+  workPlans: Record<string, WorkPlan>;
+  analytics: Analytics | null;
+  analyticsLoading: boolean;
+  canUndo: boolean;
+  canRedo: boolean;
+  regionId: string;
+  regionName: string;
+  regionMultiplier: number;
+  regions: Region[];
+  masterStats: MasterStats | null;
   load: () => Promise<void>;
   selectRow: (id: string) => void;
   setActiveCell: (cell: ActiveCell | null) => void;
@@ -46,9 +61,20 @@ interface WbsState {
   removeNodes: (itemIds: string[]) => Promise<void>;
   importExcel: () => Promise<void>;
   exportExcel: () => Promise<void>;
-  setOverhead: (value: number) => void;
-  setProfit: (value: number) => void;
+  exportPdf: () => Promise<void>;
+  previewPdf: () => Promise<void>;
+  setOverhead: (value: number) => Promise<void>;
   setPpn: (value: number) => void;
+  loadWorkPlans: () => Promise<void>;
+  setWorkPlan: (nodeId: string, numWorkers: number, durationDays: number) => Promise<void>;
+  loadAnalytics: () => Promise<void>;
+  setProjectStart: (date: string) => Promise<void>;
+  loadRegion: () => Promise<void>;
+  openRegion: (regionId: string) => Promise<void>;
+  loadRegions: () => Promise<void>;
+  setRegion: (regionId: string) => Promise<void>;
+  undo: () => Promise<void>;
+  redo: () => Promise<void>;
 }
 
 const normalizeNode = (node: WbsNode): WbsNode => {
@@ -63,10 +89,19 @@ const ingest = (snapshot: EngineSnapshot) => ({
   })),
   roots: snapshot.roots,
   totalCost: snapshot.total_cost,
+  overhead: Number.isFinite(snapshot.overhead_percent) ? snapshot.overhead_percent : 10,
+  canUndo: Boolean(snapshot.can_undo),
+  canRedo: Boolean(snapshot.can_redo),
   loading: false,
   syncing: false,
   lastSyncedAt: Date.now(),
 });
+
+/** Patch tidak membawa flag history → update optimis di sisi UI. */
+const markMutated = {
+  canUndo: true,
+  canRedo: false,
+};
 
 export const useWbsStore = create<WbsState>((set, get) => ({
   nodes: {},
@@ -78,8 +113,17 @@ export const useWbsStore = create<WbsState>((set, get) => ({
   activeCell: null,
   selectedId: null,
   overhead: 10,
-  profit: 8,
   ppn: 11,
+  workPlans: {},
+  analytics: null,
+  analyticsLoading: false,
+  canUndo: false,
+  canRedo: false,
+  regionId: "national",
+  regionName: "NASIONAL",
+  regionMultiplier: 1,
+  regions: [],
+  masterStats: null,
 
   load: async () => {
     set({ loading: true });
@@ -120,6 +164,9 @@ export const useWbsStore = create<WbsState>((set, get) => ({
         // non-fatal: engine lama mungkin belum punya add_node
       }
     }
+
+    await get().loadWorkPlans();
+    await get().loadRegion();
   },
 
   selectRow: (id) => set({ selectedId: id }),
@@ -147,7 +194,7 @@ export const useWbsStore = create<WbsState>((set, get) => ({
         const normalized = normalizeNode(node);
         nodes[normalized.id] = normalized;
       }
-      return { nodes, totalCost: patch.total_cost, syncing: false, lastSyncedAt: Date.now() };
+      return { nodes, totalCost: patch.total_cost, syncing: false, lastSyncedAt: Date.now(), ...markMutated };
     });
   },
 
@@ -189,7 +236,7 @@ export const useWbsStore = create<WbsState>((set, get) => ({
         const normalized = normalizeNode(node);
         nodes[normalized.id] = normalized;
       }
-      return { nodes, totalCost: patch.total_cost, syncing: false, lastSyncedAt: Date.now() };
+      return { nodes, totalCost: patch.total_cost, syncing: false, lastSyncedAt: Date.now(), ...markMutated };
     });
   },
 
@@ -211,7 +258,7 @@ export const useWbsStore = create<WbsState>((set, get) => ({
         const normalized = normalizeNode(node);
         nodes[normalized.id] = normalized;
       }
-      return { nodes, totalCost: patch.total_cost, syncing: false, lastSyncedAt: Date.now() };
+      return { nodes, totalCost: patch.total_cost, syncing: false, lastSyncedAt: Date.now(), ...markMutated };
     });
   },
 
@@ -231,7 +278,7 @@ export const useWbsStore = create<WbsState>((set, get) => ({
         const normalized = normalizeNode(updated);
         nodes[normalized.id] = normalized;
       }
-      return { nodes, totalCost: patch.total_cost, syncing: false, lastSyncedAt: Date.now() };
+      return { nodes, totalCost: patch.total_cost, syncing: false, lastSyncedAt: Date.now(), ...markMutated };
     });
   },
 
@@ -247,24 +294,22 @@ export const useWbsStore = create<WbsState>((set, get) => ({
     if (valid.length === 0) return;
 
     set({ syncing: true });
-    const merged: Record<string, WbsNode> = {};
-    let totalCost = get().totalCost;
-
-    for (const id of valid) {
-      const patch = await safeInvoke<AffectedPatch>("remove_node", { item_id: id });
-      if (!patch) continue;
-      for (const node of patch.nodes) merged[node.id] = node;
-      totalCost = patch.total_cost;
+    const patch = await safeInvoke<AffectedPatch>("remove_nodes_batch", { ids: valid });
+    if (!patch) {
+      set({ syncing: false });
+      return;
     }
 
     set((state) => {
       const nodes = { ...state.nodes };
       for (const id of valid) delete nodes[id];
-      for (const node of Object.values(merged)) {
+      for (const node of patch.nodes) {
         const normalized = normalizeNode(node);
         nodes[normalized.id] = normalized;
       }
-      return { nodes, totalCost, syncing: false, lastSyncedAt: Date.now() };
+      const workPlans = { ...state.workPlans };
+      for (const id of valid) delete workPlans[id];
+      return { nodes, workPlans, totalCost: patch.total_cost, syncing: false, lastSyncedAt: Date.now(), ...markMutated };
     });
   },
 
@@ -306,7 +351,125 @@ export const useWbsStore = create<WbsState>((set, get) => ({
     set({ syncing: false, lastSyncedAt: written ? Date.now() : get().lastSyncedAt });
   },
 
-  setOverhead: (value) => set({ overhead: value }),
-  setProfit: (value) => set({ profit: value }),
+  exportPdf: async () => {
+    if (!isTauriRuntime()) {
+      await safeInvoke("export_pdf", { path: "" });
+      return;
+    }
+    const path = await save({
+      defaultPath: "RAB-ConstrucSee.pdf",
+      filters: [{ name: "PDF Document", extensions: ["pdf"] }],
+    });
+    if (!path) return;
+    set({ syncing: true });
+    const written = await safeInvoke<number>("export_pdf", { path });
+    set({ syncing: false, lastSyncedAt: written ? Date.now() : get().lastSyncedAt });
+  },
+
+  previewPdf: async () => {
+    if (!isTauriRuntime()) {
+      await safeInvoke("preview_pdf");
+      return;
+    }
+    set({ syncing: true });
+    try {
+      const bytes = await safeInvoke<number[]>("preview_pdf");
+      if (!bytes || bytes.length === 0) return;
+      const blob = new Blob([new Uint8Array(bytes)], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      useUiStore.getState().openPdfPreview(url);
+    } finally {
+      set({ syncing: false });
+    }
+  },
+
+  setOverhead: async (value) => {
+    if (!Number.isFinite(value) || value < 0) return;
+    set({ overhead: value });
+    const snapshot = await safeInvoke<EngineSnapshot>("set_overhead", { percent: value });
+    if (snapshot) set((state) => ({ ...ingest(snapshot), selectedId: state.selectedId }));
+  },
+  undo: async () => {
+    const snapshot = await safeInvoke<EngineSnapshot>("undo");
+    if (snapshot) set((state) => ({ ...ingest(snapshot), selectedId: state.selectedId }));
+  },
+  redo: async () => {
+    const snapshot = await safeInvoke<EngineSnapshot>("redo");
+    if (snapshot) set((state) => ({ ...ingest(snapshot), selectedId: state.selectedId }));
+  },
   setPpn: (value) => set({ ppn: value }),
+
+  loadWorkPlans: async () => {
+    const plans = await safeInvoke<WorkPlan[]>("get_work_plans");
+    if (!plans) return;
+    const map: Record<string, WorkPlan> = {};
+    for (const plan of plans) map[plan.node_id] = plan;
+    set({ workPlans: map });
+  },
+
+  setWorkPlan: async (nodeId, numWorkers, durationDays) => {
+    set((state) => ({
+      workPlans: {
+        ...state.workPlans,
+        [nodeId]: { node_id: nodeId, num_workers: numWorkers, duration_days: durationDays },
+      },
+    }));
+    const plan = await safeInvoke<WorkPlan>("set_work_plan", {
+      node_id: nodeId,
+      num_workers: numWorkers,
+      duration_days: durationDays,
+    });
+    if (plan) set((state) => ({ workPlans: { ...state.workPlans, [plan.node_id]: plan } }));
+  },
+
+  loadAnalytics: async () => {
+    set({ analyticsLoading: true });
+    const analytics = await safeInvoke<Analytics>("get_analytics");
+    set({ analytics: analytics ?? null, analyticsLoading: false });
+  },
+
+  setProjectStart: async (date) => {
+    if (!date) return;
+    const saved = await safeInvoke<string>("set_project_start", { date });
+    if (saved) {
+      set((state) => ({
+        analytics: state.analytics ? { ...state.analytics, project_start: saved } : state.analytics,
+      }));
+      await get().loadAnalytics();
+    }
+  },
+
+  loadRegion: async () => {
+    const info = await safeInvoke<RegionInfo>("get_region");
+    if (info) {
+      set({
+        regionId: info.region_id,
+        regionName: info.region_name,
+        regionMultiplier: info.multiplier_factor,
+      });
+    }
+  },
+
+  openRegion: async (regionId) => {
+    await get().setRegion(regionId);
+  },
+
+  loadRegions: async () => {
+    const regions = await safeInvoke<Region[]>("get_regions");
+    const stats = await safeInvoke<MasterStats>("get_master_stats");
+    set({ regions: regions ?? [], masterStats: stats ?? null });
+  },
+
+  setRegion: async (regionId) => {
+    set({ syncing: true });
+    try {
+      const snapshot = await safeInvoke<EngineSnapshot>("set_region", {
+        region_id: regionId,
+      });
+      if (snapshot) set(ingest(snapshot));
+      await get().loadRegion();
+    } finally {
+      set({ syncing: false, lastSyncedAt: Date.now() });
+    }
+  },
 }));

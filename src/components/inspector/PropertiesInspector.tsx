@@ -16,14 +16,15 @@ export function PropertiesInspector({ onCollapse }: { onCollapse?: () => void } 
   const activeCell = useWbsStore((state) => state.activeCell);
   const totalCost = useWbsStore((state) => state.totalCost);
   const overhead = useWbsStore((state) => state.overhead);
-  const profit = useWbsStore((state) => state.profit);
   const setOverhead = useWbsStore((state) => state.setOverhead);
-  const setProfit = useWbsStore((state) => state.setProfit);
 
   const targetId = activeCell?.rowId ?? selectedId;
   const node = targetId ? nodes[targetId] : undefined;
   const chain = node ? ancestorChain(nodes, node.id) : [];
-  const grandTotal = totalCost * (1 + overhead / 100);
+  const grandTotal = totalCost;
+  const overheadFactor = 1 + overhead / 100;
+  const baseTotal = grandTotal / (overheadFactor || 1);
+  const overheadValue = grandTotal - baseTotal;
   const totals = useMemo(
     () => (node ? componentTotals(nodes, node.id) : { bahan: 0, tenaga: 0, alat: 0 }),
     [node, nodes],
@@ -111,17 +112,28 @@ export function PropertiesInspector({ onCollapse }: { onCollapse?: () => void } 
 
         <section className="border-t border-line pt-3">
           <div className="mb-2 text-[9px] uppercase tracking-widest text-muted/60">
-            Overhead & Profit
+            Overhead
           </div>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 gap-2">
             <PercentInput label="Overhead %" value={overhead} onChange={setOverhead} />
-            <PercentInput label="Profit %" value={profit} onChange={setProfit} />
           </div>
-          <div className="mt-3 flex items-baseline justify-between border border-line bg-shell px-2 py-2">
-            <span className="text-[9px] uppercase tracking-widest text-muted">Grand Total</span>
-            <span className="font-mono text-[12px] font-semibold text-accent">
-              {formatIDR(grandTotal)}
-            </span>
+          <div className="mt-3 space-y-1 border border-line bg-shell px-2 py-2 text-[10px]">
+            <div className="flex items-baseline justify-between">
+              <span className="text-[9px] uppercase tracking-widest text-muted/70">Subtotal</span>
+              <span className="font-mono text-ink/80">{formatIDR(baseTotal)}</span>
+            </div>
+            <div className="flex items-baseline justify-between">
+              <span className="text-[9px] uppercase tracking-widest text-muted/70">
+                Overhead ({formatNumber(overhead)}%)
+              </span>
+              <span className="font-mono text-ink/80">{formatIDR(overheadValue)}</span>
+            </div>
+            <div className="mt-1 flex items-baseline justify-between border-t border-line pt-1.5">
+              <span className="text-[9px] uppercase tracking-widest text-muted">Grand Total</span>
+              <span className="font-mono text-[12px] font-semibold text-accent">
+                {formatIDR(grandTotal)}
+              </span>
+            </div>
           </div>
         </section>
       </div>

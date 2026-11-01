@@ -1,8 +1,9 @@
-import { useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { ProjectNavigator } from "../navigator/ProjectNavigator";
 import { Sheets } from "../sheets/Sheets";
 import { PropertiesInspector } from "../inspector/PropertiesInspector";
 import { DialogHost } from "../ahsp/Dialogs";
+import { useWbsStore } from "../../store/useWbsStore";
 
 const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max);
@@ -19,6 +20,49 @@ export function Workspace() {
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   const [rightCollapsed, setRightCollapsed] = useState(false);
   const drag = useRef<DragState | null>(null);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (!event.ctrlKey || event.altKey || event.shiftKey) return;
+      if (event.key === "[") {
+        event.preventDefault();
+        setLeftCollapsed((value) => !value);
+      } else if (event.key === "]") {
+        event.preventDefault();
+        setRightCollapsed((value) => !value);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (!event.ctrlKey || event.altKey) return;
+      const target = event.target as HTMLElement | null;
+      const inInput = Boolean(
+        target?.tagName === "INPUT" ||
+          target?.tagName === "TEXTAREA" ||
+          target?.isContentEditable,
+      );
+      if (event.key === "z" || event.key === "Z") {
+        if (!inInput) {
+          event.preventDefault();
+          useWbsStore.getState().undo();
+        }
+        return;
+      }
+      if ((event.key === "y" || event.key === "Y") || (event.shiftKey && event.key === "z")) {
+        if (!inInput) {
+          event.preventDefault();
+          useWbsStore.getState().redo();
+        }
+        return;
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
 
   const beginDrag =
     (side: DragState["side"]) => (event: ReactPointerEvent<HTMLDivElement>) => {

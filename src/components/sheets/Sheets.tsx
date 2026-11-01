@@ -1,5 +1,6 @@
-import { useState } from "react";
 import { WbsTable } from "../wbs/WbsTable";
+import { useUiStore } from "../../store/useUiStore";
+import { KurvaSSheet } from "./KurvaS";
 import {
   AnalisaSheet,
   BoqSheet,
@@ -18,7 +19,8 @@ type SheetId =
   | "rekapitulasi"
   | "analisa"
   | "boq"
-  | "rencana";
+  | "rencana"
+  | "kurvaS";
 
 const SHEETS: Array<{ id: SheetId; label: string }> = [
   { id: "ahsp", label: "Full" },
@@ -29,6 +31,7 @@ const SHEETS: Array<{ id: SheetId; label: string }> = [
   { id: "analisa", label: "Analisa" },
   { id: "boq", label: "BOQ" },
   { id: "rencana", label: "Rencana Kerja" },
+  { id: "kurvaS", label: "Kurva S" },
 ];
 
 const VIEWS: Record<SheetId, () => JSX.Element> = {
@@ -40,11 +43,13 @@ const VIEWS: Record<SheetId, () => JSX.Element> = {
   analisa: AnalisaSheet,
   boq: BoqSheet,
   rencana: RencanaKerjaSheet,
+  kurvaS: KurvaSSheet,
 };
 
 export function Sheets() {
-  const [active, setActive] = useState<SheetId>("ahsp");
-  const View = VIEWS[active];
+  const active = useUiStore((state) => state.activeSheet) as SheetId;
+  const setActive = useUiStore((state) => state.setActiveSheet);
+  const View = VIEWS[active] ?? WbsTable;
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">

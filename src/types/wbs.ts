@@ -38,11 +38,57 @@ export interface EngineSnapshot {
   nodes: WbsNode[];
   roots: string[];
   total_cost: number;
+  overhead_percent: number;
+  can_undo: boolean;
+  can_redo: boolean;
+}
+
+export interface WorkPlan {
+  node_id: string;
+  num_workers: number;
+  duration_days: number;
 }
 
 export interface AffectedPatch {
   nodes: WbsNode[];
   total_cost: number;
+}
+
+export interface SCurvePoint {
+  week: number;
+  date: string;
+  weekly: number;
+  cumulative: number;
+}
+
+export interface ScheduleItem {
+  node_id: string;
+  code: string;
+  name: string;
+  start_day: number;
+  end_day: number;
+  duration_days: number;
+  weight: number;
+}
+
+export interface ParetoItem {
+  name: string;
+  unit: string;
+  category: string;
+  total_cost: number;
+  cost_percentage: number;
+  cumulative_percentage: number;
+  critical: boolean;
+}
+
+export interface Analytics {
+  project_start: string;
+  total_cost: number;
+  total_days: number;
+  s_curve: SCurvePoint[];
+  schedule: ScheduleItem[];
+  pareto: ParetoItem[];
+  warnings: string[];
 }
 
 export interface DeltaPayload {
@@ -52,6 +98,26 @@ export interface DeltaPayload {
 }
 
 export type EditableField = "volume" | "unit_price";
+
+export interface Region {
+  id: string;
+  province: string;
+  city_regency: string;
+  multiplier_factor: number;
+}
+
+export interface RegionInfo {
+  region_id: string;
+  region_name: string;
+  multiplier_factor: number;
+}
+
+export interface MasterStats {
+  divisions: number;
+  items: number;
+  components: number;
+  regions: number;
+}
 
 export type DisplayRowKind = "node" | "analysis" | "item";
 

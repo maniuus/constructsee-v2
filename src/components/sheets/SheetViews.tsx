@@ -109,7 +109,9 @@ function SheetShell({
         </span>
         <span className="font-mono text-[9px] text-muted/50">{meta}</span>
       </div>
-      <div className="min-h-0 flex-1 overflow-auto">{children}</div>
+      <div className="min-h-0 flex-1 overflow-auto calcir-grid">
+        <div className="bg-shell">{children}</div>
+      </div>
     </div>
   );
 }
@@ -123,7 +125,7 @@ function useLeaves(): LeafInfo[] {
 export function VolumeSheet() {
   const leaves = useLeaves();
   const updateCell = useWbsStore((state) => state.updateCell);
-  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
 
   const divisions = useMemo(() => {
     const order: Array<{ key: string; code: string; label: string; leaves: LeafInfo[] }> = [];
@@ -147,7 +149,7 @@ export function VolumeSheet() {
   }, [leaves]);
 
   const toggle = (key: string) =>
-    setExpanded((prev) => {
+    setCollapsed((prev) => {
       const next = new Set(prev);
       if (next.has(key)) next.delete(key);
       else next.add(key);
@@ -167,7 +169,7 @@ export function VolumeSheet() {
         </thead>
         <tbody>
           {divisions.map((division) => {
-            const isOpen = expanded.has(division.key);
+            const isOpen = !collapsed.has(division.key);
             return (
               <FragmentRows key={division.key}>
                 <tr
@@ -215,7 +217,9 @@ export function VolumeSheet() {
 
 export function RabSheet() {
   const leaves = useLeaves();
-  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const overhead = useWbsStore((state) => state.overhead);
+  const totalCost = useWbsStore((state) => state.totalCost);
+  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
 
   const divisions = useMemo(() => {
     const order: Array<{
@@ -249,7 +253,7 @@ export function RabSheet() {
   const grandTotal = divisions.reduce((sum, group) => sum + group.total, 0);
 
   const toggle = (key: string) =>
-    setExpanded((prev) => {
+    setCollapsed((prev) => {
       const next = new Set(prev);
       if (next.has(key)) next.delete(key);
       else next.add(key);
@@ -271,7 +275,7 @@ export function RabSheet() {
         </thead>
         <tbody>
           {divisions.map((division) => {
-            const isOpen = expanded.has(division.key);
+            const isOpen = !collapsed.has(division.key);
             return (
               <FragmentRows key={division.key}>
                 <tr
@@ -316,14 +320,40 @@ export function RabSheet() {
           <tr className="border-t-2 border-line/70 bg-panel2/40">
             <td
               colSpan={5}
+              className="border-b border-line/40 px-3 py-1.5 text-[10.5px] uppercase tracking-wide text-ink/70"
+            >
+              Subtotal RAB
+            </td>
+            <td
+              className={`border-b border-line/40 px-3 py-1.5 text-right text-[10.5px] ${NUM} text-ink/80`}
+            >
+              {formatIDR(grandTotal)}
+            </td>
+          </tr>
+          {overhead > 0 && (
+            <tr>
+              <td
+                colSpan={5}
+                className="border-b border-line/40 px-3 py-1.5 text-[10.5px] uppercase tracking-wide text-ink/70"
+              >
+                Overhead ({formatNumber(overhead)}%)
+              </td>
+              <td className={`border-b border-line/40 px-3 py-1.5 text-right text-[10.5px] ${NUM} text-ink/80`}>
+                {formatIDR(grandTotal * (overhead / 100))}
+              </td>
+            </tr>
+          )}
+          <tr className="border-t-2 border-line/70 bg-panel2/40">
+            <td
+              colSpan={5}
               className="border-b border-line/40 px-3 py-1.5 text-[10.5px] font-semibold uppercase tracking-wide text-ink"
             >
-              Grand Total
+              Grand Total (incl. Overhead)
             </td>
             <td
               className={`border-b border-line/40 px-3 py-1.5 text-right text-[10.5px] ${NUM} font-semibold text-ink`}
             >
-              {formatIDR(grandTotal)}
+              {formatIDR(totalCost)}
             </td>
           </tr>
         </tbody>
@@ -334,6 +364,8 @@ export function RabSheet() {
 
 export function RekapitulasiSheet() {
   const leaves = useLeaves();
+  const overhead = useWbsStore((state) => state.overhead);
+  const totalCost = useWbsStore((state) => state.totalCost);
   const groups = useMemo(() => {
     const order: Array<{ key: string; code: string; label: string; total: number }> = [];
     const map = new Map<string, { key: string; code: string; label: string; total: number }>();
@@ -358,7 +390,10 @@ export function RekapitulasiSheet() {
   const grandTotal = groups.reduce((sum, group) => sum + group.total, 0);
 
   return (
-    <SheetShell title="Rekapitulasi" meta={`${groups.length} divisi`}>
+    <SheetShell
+      title="Rekapitulasi"
+      meta={`${groups.length} divisi${overhead > 0 ? ` · GRAND TOTAL ${formatIDR(totalCost)}` : ""}`}
+    >
       <table className="w-full border-collapse">
         <thead>
           <tr>
@@ -368,27 +403,66 @@ export function RekapitulasiSheet() {
           </tr>
         </thead>
         <tbody>
-          {groups.map((group) => (
-            <tr key={group.key} className="hover:bg-panel2/30">
-              <Td>
-                <span className={`mr-2 text-muted/70 ${NUM}`}>{group.code}</span>
-                {group.label}
-              </Td>
-              <Td align="right" className={`${NUM} font-medium text-ink`}>
-                {formatIDR(group.total)}
-              </Td>
-              <Td align="right" className={`${NUM} text-muted`}>
-                {grandTotal > 0 ? `${formatNumber((group.total / grandTotal) * 100)}%` : "—"}
-              </Td>
-            </tr>
-          ))}
+          {groups.map((group) => {
+            const share = grandTotal > 0 ? group.total / grandTotal : 0;
+            return (
+              <tr key={group.key} className="hover:bg-panel2/30">
+                <Td>
+                  <span className={`mr-2 text-muted/70 ${NUM}`}>{group.code}</span>
+                  {group.label}
+                </Td>
+                <Td align="right" className={`${NUM} font-medium text-ink`}>
+                  {formatIDR(group.total)}
+                </Td>
+                <Td align="right" className={NUM}>
+                  {grandTotal > 0 ? (
+                    <span className="flex items-center justify-end gap-2">
+                      <span className={`h-1.5 w-16 overflow-hidden rounded-full bg-panel2`}>
+                        <span
+                          className="block h-full bg-accent2/70"
+                          style={{ width: `${share * 100}%` }}
+                        />
+                      </span>
+                      <span className="w-10 text-muted">{formatNumber(share * 100)}%</span>
+                    </span>
+                  ) : (
+                    <span className="text-muted">—</span>
+                  )}
+                </Td>
+              </tr>
+            );
+          })}
           <tr className="border-t-2 border-line/70 bg-panel2/40">
-            <Td className="font-semibold uppercase tracking-wide text-ink">Total</Td>
-            <Td align="right" className={`${NUM} font-semibold text-ink`}>
+            <Td className="uppercase tracking-wide text-ink/70">Subtotal RAB</Td>
+            <Td align="right" className={`${NUM} text-ink/80`}>
               {formatIDR(grandTotal)}
             </Td>
-            <Td align="right" className={`${NUM} font-semibold text-muted`}>
+            <Td align="right" className={`${NUM} text-muted`}>
               {grandTotal > 0 ? "100%" : "—"}
+            </Td>
+          </tr>
+          {overhead > 0 && (
+            <tr>
+              <Td className="uppercase tracking-wide text-ink/70">
+                Overhead ({formatNumber(overhead)}%)
+              </Td>
+              <Td align="right" className={`${NUM} text-ink/80`}>
+                {formatIDR(grandTotal * (overhead / 100))}
+              </Td>
+              <Td align="right" className={`${NUM} text-muted`}>
+                —
+              </Td>
+            </tr>
+          )}
+          <tr className="border-t-2 border-line/70 bg-panel2/40">
+            <Td className="font-semibold uppercase tracking-wide text-ink">
+              Grand Total (incl. Overhead)
+            </Td>
+            <Td align="right" className={`${NUM} font-semibold text-ink`}>
+              {formatIDR(totalCost)}
+            </Td>
+            <Td align="right" className={`${NUM} font-semibold text-muted`}>
+              —
             </Td>
           </tr>
         </tbody>
@@ -403,7 +477,7 @@ export function HargaDasarSheet() {
   const setItemPrice = useWbsStore((state) => state.setItemPrice);
   const items = useMemo(() => collectUniqueItems(nodes, roots), [nodes, roots]);
   const unfilled = items.filter((item) => item.base_price <= 0).length;
-  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
 
   const groups = useMemo(
     () =>
@@ -415,7 +489,7 @@ export function HargaDasarSheet() {
   );
 
   const toggle = (key: string) =>
-    setExpanded((prev) => {
+    setCollapsed((prev) => {
       const next = new Set(prev);
       if (next.has(key)) next.delete(key);
       else next.add(key);
@@ -439,7 +513,7 @@ export function HargaDasarSheet() {
         <tbody>
           {groups.map((group) => {
             const meta = COMPONENT_META[group.kind];
-            const isOpen = expanded.has(group.kind);
+            const isOpen = !collapsed.has(group.kind);
             const groupUnfilled = group.items.filter((item) => item.base_price <= 0).length;
             return (
               <FragmentRows key={group.kind}>
@@ -498,9 +572,11 @@ export function HargaDasarSheet() {
 export function BoqSheet() {
   const nodes = useWbsStore((state) => state.nodes);
   const roots = useWbsStore((state) => state.roots);
+  const overhead = useWbsStore((state) => state.overhead);
+  const totalCost = useWbsStore((state) => state.totalCost);
   const items = useMemo(() => collectUniqueItems(nodes, roots), [nodes, roots]);
   const grandTotal = items.reduce((sum, item) => sum + item.subtotal, 0);
-  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
 
   const groups = useMemo(
     () =>
@@ -512,7 +588,7 @@ export function BoqSheet() {
   );
 
   const toggle = (key: string) =>
-    setExpanded((prev) => {
+    setCollapsed((prev) => {
       const next = new Set(prev);
       if (next.has(key)) next.delete(key);
       else next.add(key);
@@ -534,7 +610,7 @@ export function BoqSheet() {
         <tbody>
           {groups.map((group) => {
             const meta = COMPONENT_META[group.kind];
-            const isOpen = expanded.has(group.kind);
+            const isOpen = !collapsed.has(group.kind);
             const groupTotal = group.items.reduce((sum, item) => sum + item.subtotal, 0);
             return (
               <FragmentRows key={group.kind}>
@@ -587,14 +663,40 @@ export function BoqSheet() {
           <tr className="border-t-2 border-line/70 bg-panel2/40">
             <td
               colSpan={4}
+              className="border-b border-line/40 px-3 py-1.5 text-[10.5px] uppercase tracking-wide text-ink/70"
+            >
+              Subtotal BOQ
+            </td>
+            <td
+              className={`border-b border-line/40 px-3 py-1.5 text-right text-[10.5px] ${NUM} text-ink/80`}
+            >
+              {formatIDR(grandTotal)}
+            </td>
+          </tr>
+          {overhead > 0 && (
+            <tr>
+              <td
+                colSpan={4}
+                className="border-b border-line/40 px-3 py-1.5 text-[10.5px] uppercase tracking-wide text-ink/70"
+              >
+                Overhead ({formatNumber(overhead)}%)
+              </td>
+              <td className={`border-b border-line/40 px-3 py-1.5 text-right text-[10.5px] ${NUM} text-ink/80`}>
+                {formatIDR(grandTotal * (overhead / 100))}
+              </td>
+            </tr>
+          )}
+          <tr className="border-t-2 border-line/70 bg-panel2/40">
+            <td
+              colSpan={4}
               className="border-b border-line/40 px-3 py-1.5 text-[10.5px] font-semibold uppercase tracking-wide text-ink"
             >
-              Grand Total
+              Grand Total (incl. Overhead)
             </td>
             <td
               className={`border-b border-line/40 px-3 py-1.5 text-right text-[10.5px] ${NUM} font-semibold text-ink`}
             >
-              {formatIDR(grandTotal)}
+              {formatIDR(totalCost)}
             </td>
           </tr>
         </tbody>
@@ -698,18 +800,43 @@ function FragmentRows({ children }: { children: ReactNode }) {
 
 export function RencanaKerjaSheet() {
   const leaves = useLeaves();
-  const [plan, setPlan] = useState<Record<string, { workers: string; duration: string }>>({});
+  const workPlans = useWbsStore((state) => state.workPlans);
+  const setWorkPlan = useWbsStore((state) => state.setWorkPlan);
+  const [drafts, setDrafts] = useState<Record<string, { workers: string; duration: string }>>({});
+
+  useEffect(() => {
+    setDrafts((prev) => {
+      let changed = false;
+      const next = { ...prev };
+      for (const [id, plan] of Object.entries(workPlans)) {
+        if (!next[id]) {
+          next[id] = {
+            workers: plan.num_workers ? formatNumber(plan.num_workers) : "",
+            duration: plan.duration_days ? formatNumber(plan.duration_days) : "",
+          };
+          changed = true;
+        }
+      }
+      return changed ? next : prev;
+    });
+  }, [workPlans]);
 
   const setWorkers = (id: string, mandays: number, raw: string) => {
     const workers = parseNumeric(raw);
     const duration = mandays > 0 && workers > 0 ? formatNumber(mandays / workers) : "";
-    setPlan((prev) => ({ ...prev, [id]: { workers: raw, duration } }));
+    setDrafts((prev) => ({ ...prev, [id]: { workers: raw, duration } }));
   };
 
   const setDuration = (id: string, mandays: number, raw: string) => {
     const duration = parseNumeric(raw);
     const workers = mandays > 0 && duration > 0 ? formatNumber(mandays / duration) : "";
-    setPlan((prev) => ({ ...prev, [id]: { workers, duration: raw } }));
+    setDrafts((prev) => ({ ...prev, [id]: { workers, duration: raw } }));
+  };
+
+  const commit = (id: string) => {
+    const entry = drafts[id];
+    if (!entry) return;
+    void setWorkPlan(id, parseNumeric(entry.workers) || 0, parseNumeric(entry.duration) || 0);
   };
 
   const totalMandays = leaves.reduce((sum, { node }) => sum + tenagaMandays(node), 0);
@@ -731,7 +858,7 @@ export function RencanaKerjaSheet() {
         <tbody>
           {leaves.map(({ node }) => {
             const mandays = tenagaMandays(node);
-            const entry = plan[node.id] ?? { workers: "", duration: "" };
+            const entry = drafts[node.id] ?? { workers: "", duration: "" };
             return (
               <tr key={node.id} className="hover:bg-panel2/30">
                 <Td className={`text-muted/70 ${NUM}`}>{node.code}</Td>
@@ -749,18 +876,26 @@ export function RencanaKerjaSheet() {
                   <input
                     value={entry.workers}
                     onChange={(event) => setWorkers(node.id, mandays, event.target.value)}
+                    onBlur={() => commit(node.id)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") event.currentTarget.blur();
+                    }}
                     inputMode="decimal"
                     placeholder="—"
-                    className="h-6 w-20 rounded-[3px] border border-line/60 bg-shell px-2 text-right font-mono text-[10.5px] text-ink outline-none placeholder:text-muted/40 focus:border-accent"
+                    className="h-6 w-20 rounded-[3px] border border-line bg-shell px-2 text-right font-mono text-[10.5px] text-ink outline-none placeholder:text-muted/40 transition-colors hover:border-accent/50 focus:border-accent"
                   />
                 </Td>
                 <Td align="right">
                   <input
                     value={entry.duration}
                     onChange={(event) => setDuration(node.id, mandays, event.target.value)}
+                    onBlur={() => commit(node.id)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") event.currentTarget.blur();
+                    }}
                     inputMode="decimal"
                     placeholder="—"
-                    className="h-6 w-20 rounded-[3px] border border-line/60 bg-shell px-2 text-right font-mono text-[10.5px] text-ink outline-none placeholder:text-muted/40 focus:border-accent"
+                    className="h-6 w-20 rounded-[3px] border border-line bg-shell px-2 text-right font-mono text-[10.5px] text-ink outline-none placeholder:text-muted/40 transition-colors hover:border-accent/50 focus:border-accent"
                   />
                 </Td>
               </tr>

@@ -1,20 +1,28 @@
 import type {
   AffectedPatch,
+  Analytics,
   ComponentCost,
   ComponentItem,
   ComponentKind,
   DeltaPayload,
   EngineSnapshot,
+  MasterStats,
+  ParetoItem,
   PriceMethod,
+  Region,
+  RegionInfo,
+  SCurvePoint,
+  ScheduleItem,
   WbsComponents,
   WbsNode,
+  WorkPlan,
 } from "../types/wbs";
 import { SNI_DIVISIONS } from "./divisions";
 
 const COMPONENT_MODEL: Record<ComponentKind, { share: number }> = {
-  bahan: { share: 0.58 },
-  tenaga: { share: 0.27 },
-  alat: { share: 0.15 },
+  bahan: { share: 0.7 },
+  tenaga: { share: 0.3 },
+  alat: { share: 0.0 },
 };
 
 interface ItemTemplate {
@@ -78,12 +86,19 @@ export const backfillComponentItems = (components: WbsComponents): WbsComponents
   };
 };
 
+const emptyComponent = (): ComponentCost => ({
+  coefficient: 0,
+  base_price: 0,
+  subtotal: 0,
+  items: [],
+});
+
 const componentsFromPrice = (unitPrice: number): WbsComponents => {
   const price = Number.isFinite(unitPrice) && unitPrice > 0 ? unitPrice : 0;
   return {
     bahan: componentFromShare(price * COMPONENT_MODEL.bahan.share, "bahan"),
     tenaga: componentFromShare(price * COMPONENT_MODEL.tenaga.share, "tenaga"),
-    alat: componentFromShare(price * COMPONENT_MODEL.alat.share, "alat"),
+    alat: emptyComponent(),
   };
 };
 
@@ -224,6 +239,35 @@ const rollup = (nodes: Record<string, WbsNode>): void => {
 };
 
 let state: { nodes: Record<string, WbsNode>; roots: string[] } | null = null;
+let overheadPercent = 10;
+let workPlans: Record<string, WorkPlan> = {};
+let projectStart = new Date().toISOString().slice(0, 10);
+
+const MOCK_REGIONS: Region[] = [
+  { id: "national", province: "NASIONAL", city_regency: "NASIONAL", multiplier_factor: 1.0 },
+  { id: "dki-jakarta", province: "DKI JAKARTA", city_regency: "JAKARTA PUSAT", multiplier_factor: 1.052 },
+  { id: "jawa-barat", province: "JAWA BARAT", city_regency: "KOTA BANDUNG", multiplier_factor: 1.0 },
+  { id: "jawa-timur", province: "JAWA TIMUR", city_regency: "KOTA SURABAYA", multiplier_factor: 1.018 },
+  { id: "bali", province: "BALI", city_regency: "KOTA DENPASAR", multiplier_factor: 1.095 },
+  { id: "kalimantan-timur", province: "KALIMANTAN TIMUR", city_regency: "KOTA BALIKPAPAN", multiplier_factor: 1.248 },
+  { id: "papua", province: "PAPUA", city_regency: "KABUPATEN PUNCAK JAYA", multiplier_factor: 1.85 },
+];
+let regionId = "national";
+let regionName = "NASIONAL";
+let regionMultiplier = 1;
+
+const regionInfo = (): RegionInfo => ({
+  region_id: regionId,
+  region_name: regionName,
+  multiplier_factor: regionMultiplier,
+});
+
+const withOverhead = (base: number): number => base * (1 + overheadPercent / 100);
+
+const computeTotal = (current: { nodes: Record<string, WbsNode>; roots: string[] }): number =>
+  withOverhead(
+    current.roots.reduce((sum, id) => sum + current.nodes[id].total_price, 0),
+  );
 
 const ensureState = () => {
   if (!state) {
@@ -237,14 +281,14 @@ const ensureState = () => {
 
 const snapshot = (): EngineSnapshot => {
   const current = ensureState();
-  const totalCost = current.roots.reduce(
-    (sum, id) => sum + current.nodes[id].total_price,
-    0,
-  );
+  const totalCost = computeTotal(current);
   return {
     nodes: Object.values(current.nodes).map((node) => ({ ...node })),
     roots: [...current.roots],
     total_cost: totalCost,
+    overhead_percent: overheadPercent,
+    can_undo: false,
+    can_redo: false,
   };
 };
 
@@ -278,10 +322,7 @@ const updateCell = (payload: DeltaPayload): AffectedPatch => {
     cursor = parent.parent_id;
   }
 
-  const totalCost = current.roots.reduce(
-    (sum, id) => sum + current.nodes[id].total_price,
-    0,
-  );
+  const totalCost = computeTotal(current);
   return { nodes: affected, total_cost: totalCost };
 };
 
@@ -299,10 +340,7 @@ const setMethod = (itemId: string, method: PriceMethod): AffectedPatch => {
   if (node.children_ids.length > 0) throw new Error("Metode hanya berlaku untuk baris pekerjaan (leaf)");
   if (method !== "ahsp" && method !== "langsung") throw new Error(`Metode tidak dikenal: ${method}`);
   node.method = method;
-  const totalCost = current.roots.reduce(
-    (sum, id) => sum + current.nodes[id].total_price,
-    0,
-  );
+  const totalCost = computeTotal(current);
   return { nodes: [{ ...node }], total_cost: totalCost };
 };
 
@@ -365,10 +403,7 @@ const setItemPrice = (name: string, unit: string, basePrice: number): AffectedPa
     }
   }
 
-  const totalCost = current.roots.reduce(
-    (sum, id) => sum + current.nodes[id].total_price,
-    0,
-  );
+  const totalCost = computeTotal(current);
   return { nodes: affected, total_cost: totalCost };
 };
 
@@ -425,10 +460,7 @@ const addNode = (parentId: string | null, incoming: WbsNode): AffectedPatch => {
     if (!affected.some((item) => item.id === extra.id)) affected.push(extra);
   }
 
-  const totalCost = current.roots.reduce(
-    (sum, id) => sum + current.nodes[id].total_price,
-    0,
-  );
+  const totalCost = computeTotal(current);
   return { nodes: affected, total_cost: totalCost };
 };
 
@@ -454,11 +486,235 @@ const removeNode = (itemId: string): AffectedPatch => {
 
   const affected = collectAffected(current, parentId);
 
-  const totalCost = current.roots.reduce(
-    (sum, id) => sum + current.nodes[id].total_price,
-    0,
-  );
+  const totalCost = computeTotal(current);
   return { nodes: affected, total_cost: totalCost };
+};
+
+const setOverhead = (percent: number): EngineSnapshot => {
+  if (!Number.isFinite(percent) || percent < 0) {
+    throw new Error("Overhead harus berupa angka non-negatif");
+  }
+  overheadPercent = percent;
+  return snapshot();
+};
+
+const getWorkPlans = (): WorkPlan[] =>
+  Object.values(workPlans).map((plan) => ({ ...plan }));
+
+const setWorkPlan = (
+  nodeId: string,
+  numWorkers: number,
+  durationDays: number,
+): WorkPlan => {
+  const current = ensureState();
+  const node = current.nodes[nodeId];
+  if (!node) throw new Error("Item WBS tidak ditemukan");
+  if (node.children_ids.length > 0) {
+    throw new Error("Rencana kerja hanya untuk baris pekerjaan (leaf)");
+  }
+  if (
+    !Number.isFinite(numWorkers) ||
+    numWorkers < 0 ||
+    !Number.isFinite(durationDays) ||
+    durationDays < 0
+  ) {
+    throw new Error("Nilai rencana kerja harus berupa angka non-negatif");
+  }
+  const plan: WorkPlan = {
+    node_id: nodeId,
+    num_workers: numWorkers,
+    duration_days: durationDays,
+  };
+  workPlans = { ...workPlans, [nodeId]: plan };
+  return plan;
+};
+
+const addDays = (base: string, days: number): string => {
+  const date = new Date(`${base}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return "";
+  date.setDate(date.getDate() + days);
+  return date.toISOString().slice(0, 10);
+};
+
+const orderedNodes = (): WbsNode[] => {
+  const current = ensureState();
+  const out: WbsNode[] = [];
+  const walk = (id: string) => {
+    const node = current.nodes[id];
+    if (!node) return;
+    out.push(node);
+    for (const child of node.children_ids) walk(child);
+  };
+  for (const root of current.roots) walk(root);
+  return out;
+};
+
+const computeAnalytics = (): Analytics => {
+  const ordered = orderedNodes();
+  const billable = ordered.filter(
+    (node) => node.children_ids.length === 0 && node.total_price > 0,
+  );
+  const subtotal = billable.reduce((sum, node) => sum + node.total_price, 0);
+  const warnings: string[] = [];
+  if (subtotal <= 0) {
+    warnings.push("Belum ada pekerjaan bernilai biaya untuk dijadwalkan.");
+  }
+
+  let cursor = 0;
+  let missing = 0;
+  const schedule: ScheduleItem[] = [];
+  for (const node of billable) {
+    const plan = workPlans[node.id];
+    let duration = 1;
+    if (plan && Number.isFinite(plan.duration_days) && plan.duration_days > 0) {
+      duration = plan.duration_days;
+    } else {
+      missing += 1;
+    }
+    const weight = subtotal > 0 ? (node.total_price / subtotal) * 100 : 0;
+    schedule.push({
+      node_id: node.id,
+      code: node.code,
+      name: node.name,
+      start_day: cursor,
+      end_day: cursor + duration,
+      duration_days: duration,
+      weight,
+    });
+    cursor += duration;
+  }
+  if (missing > 0) {
+    warnings.push(`${missing} pekerjaan belum punya durasi; memakai default 1 hari.`);
+  }
+
+  const totalDays = cursor;
+  const dayCount = Math.max(1, Math.ceil(totalDays));
+  const daily = new Array<number>(dayCount).fill(0);
+  for (const item of schedule) {
+    if (item.duration_days <= 0 || item.weight <= 0) continue;
+    const first = Math.floor(item.start_day);
+    const last = Math.ceil(item.end_day);
+    for (let day = first; day < last; day += 1) {
+      if (day < 0 || day >= dayCount) continue;
+      const overlap = Math.min(item.end_day, day + 1) - Math.max(item.start_day, day);
+      if (overlap > 0) daily[day] += (item.weight * overlap) / item.duration_days;
+    }
+  }
+
+  const weekCount = Math.ceil(dayCount / 7);
+  const sCurve: SCurvePoint[] = [];
+  let cumulative = 0;
+  for (let week = 0; week < weekCount; week += 1) {
+    let weekly = 0;
+    for (let day = week * 7; day < Math.min((week + 1) * 7, dayCount); day += 1) {
+      weekly += daily[day];
+    }
+    cumulative += weekly;
+    sCurve.push({
+      week: week + 1,
+      date: addDays(projectStart, week * 7),
+      weekly,
+      cumulative,
+    });
+  }
+
+  const agg = new Map<
+    string,
+    { name: string; unit: string; category: string; total_cost: number }
+  >();
+  for (const node of billable) {
+    const groups: Array<[string, ComponentCost]> = [
+      ["tenaga", node.components.tenaga],
+      ["bahan", node.components.bahan],
+      ["alat", node.components.alat],
+    ];
+    for (const [category, cost] of groups) {
+      for (const item of cost.items) {
+        const total = item.coefficient * item.base_price * node.volume;
+        if (total <= 0) continue;
+        const key = `${item.name}|${item.unit}|${category}`;
+        const existing = agg.get(key);
+        if (existing) existing.total_cost += total;
+        else agg.set(key, { name: item.name, unit: item.unit, category, total_cost: total });
+      }
+    }
+  }
+
+  const rows = [...agg.values()].sort((a, b) => b.total_cost - a.total_cost);
+  const grand = rows.reduce((sum, row) => sum + row.total_cost, 0);
+  const pareto: ParetoItem[] = [];
+  let cumulativeCost = 0;
+  if (grand > 0) {
+    for (const row of rows) {
+      const before = cumulativeCost;
+      cumulativeCost += row.total_cost;
+      pareto.push({
+        ...row,
+        cost_percentage: (row.total_cost / grand) * 100,
+        cumulative_percentage: (cumulativeCost / grand) * 100,
+        critical: before < 80,
+      });
+    }
+  } else if (subtotal > 0) {
+    warnings.push("Rincian resource (AHSP) belum tersedia untuk analisa Pareto.");
+  }
+
+  return {
+    project_start: projectStart,
+    total_cost: subtotal,
+    total_days: totalDays,
+    s_curve: sCurve,
+    schedule,
+    pareto,
+    warnings,
+  };
+};
+
+const removeNodesBatch = (ids: string[]): AffectedPatch => {
+  const current = ensureState();
+  const valid = ids.filter((id) => {
+    const node = current.nodes[id];
+    return Boolean(node) && node.children_ids.length === 0;
+  });
+  if (valid.length === 0) {
+    throw new Error("Tidak ada baris pekerjaan (leaf) yang dapat dihapus");
+  }
+
+  const affectedIds: string[] = [];
+  for (const id of valid) {
+    const parentId = current.nodes[id].parent_id;
+    if (parentId) {
+      const parent = current.nodes[parentId];
+      if (parent) {
+        parent.children_ids = parent.children_ids.filter((child) => child !== id);
+      }
+      affectedIds.push(parentId);
+      let cursor = current.nodes[parentId]?.parent_id ?? null;
+      while (cursor) {
+        affectedIds.push(cursor);
+        cursor = current.nodes[cursor]?.parent_id ?? null;
+      }
+    } else {
+      current.roots = current.roots.filter((root) => root !== id);
+    }
+  }
+
+  for (const id of valid) {
+    delete current.nodes[id];
+    delete workPlans[id];
+  }
+  rollup(current.nodes);
+
+  const affected: WbsNode[] = [];
+  const seen = new Set<string>();
+  for (const id of affectedIds) {
+    const node = current.nodes[id];
+    if (node && !seen.has(id)) {
+      seen.add(id);
+      affected.push({ ...node });
+    }
+  }
+  return { nodes: affected, total_cost: computeTotal(current) };
 };
 
 export async function mockInvoke<T>(
@@ -495,10 +751,76 @@ export async function mockInvoke<T>(
       ) as T;
     case "remove_node":
       return removeNode(String(args?.item_id)) as T;
+    case "remove_nodes_batch":
+      return removeNodesBatch((args?.ids as string[] | undefined) ?? []) as T;
+    case "set_overhead":
+      return setOverhead(Number(args?.percent)) as T;
+    case "get_work_plans":
+      return getWorkPlans() as T;
+    case "set_work_plan":
+      return setWorkPlan(
+        String(args?.node_id),
+        Number(args?.num_workers),
+        Number(args?.duration_days),
+      ) as T;
+    case "get_analytics":
+      return computeAnalytics() as T;
+    case "set_project_start": {
+      const date = String(args?.date ?? "");
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+        throw new Error("Format tanggal harus YYYY-MM-DD");
+      }
+      projectStart = date;
+      return projectStart as T;
+    }
+    case "get_region":
+      return regionInfo() as T;
+    case "get_regions":
+      return [...MOCK_REGIONS] as T;
+    case "get_master_stats":
+      return {
+        divisions: 10,
+        items: 3155,
+        components: 0,
+        regions: MOCK_REGIONS.length,
+      } as MasterStats as T;
+    case "set_region": {
+      const id = String(args?.region_id ?? "");
+      const region = MOCK_REGIONS.find((item) => item.id === id);
+      if (!region) throw new Error(`Wilayah ${id} tidak ditemukan`);
+      const ratio = regionMultiplier > 0 ? region.multiplier_factor / regionMultiplier : region.multiplier_factor;
+      const current = ensureState();
+      for (const node of Object.values(current.nodes)) {
+        if (node.children_ids.length > 0) continue;
+        for (const kind of ["bahan", "tenaga", "alat"] as ComponentKind[]) {
+          const component = node.components[kind];
+          for (const item of component.items) {
+            item.base_price *= ratio;
+            item.subtotal = item.coefficient * item.base_price;
+          }
+          component.subtotal = component.items.reduce((sum, item) => sum + item.subtotal, 0);
+          component.base_price =
+            component.coefficient > 0 ? component.subtotal / component.coefficient : component.base_price;
+        }
+        const total =
+          node.components.bahan.subtotal + node.components.tenaga.subtotal + node.components.alat.subtotal;
+        if (total > 0) node.unit_price = total;
+        node.total_price = node.volume * node.unit_price;
+      }
+      rollup(current.nodes);
+      regionId = region.id;
+      regionName = `${region.province} — ${region.city_regency}`;
+      regionMultiplier = region.multiplier_factor;
+      return snapshot() as T;
+    }
     case "import_excel":
       throw new Error("Import Excel hanya tersedia pada runtime desktop Tauri.");
     case "export_excel":
       throw new Error("Export Excel hanya tersedia pada runtime desktop Tauri.");
+    case "export_pdf":
+      throw new Error("Export PDF hanya tersedia pada runtime desktop Tauri.");
+    case "preview_pdf":
+      throw new Error("Preview PDF hanya tersedia pada runtime desktop Tauri.");
     default:
       throw new Error(`Command mock tidak dikenal: ${command}`);
   }

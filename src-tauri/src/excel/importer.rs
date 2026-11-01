@@ -1,6 +1,7 @@
+use std::collections::HashMap;
 use std::path::Path;
 
-use calamine::{open_workbook_auto, Data, Reader};
+use calamine::{open_workbook_auto, Data, DataType, Dimensions, Reader, Sheets};
 use regex::Regex;
 use uuid::Uuid;
 
@@ -20,6 +21,32 @@ pub fn import_workbook(path: &Path) -> Result<(Vec<WbsNode>, Vec<String>), Strin
         .worksheet_range(&sheet)
         .map_err(|error| format!("Gagal membaca sheet {sheet}: {error}"))?;
 
+    // Metadata merged cell (hanya didukung XLSX/XLS). Direplikasi ke sel yang
+    // tertutup merge sebelum heuristik membaca grid.
+    let merged: Vec<Dimensions> = match &mut workbook {
+        Sheets::Xlsx(reader) => reader.merge_cells_by_sheet_name(&sheet).unwrap_or_default(),
+        Sheets::Xls(reader) => reader.merge_cells_by_sheet_name(&sheet).unwrap_or_default(),
+        _ => Vec::new(),
+    };
+    let mut merged_fill: HashMap<(usize, usize), Data> = HashMap::new();
+    if let Some((start_row, start_col)) = range.start() {
+        for dim in &merged {
+            let lr0 = dim.start.0.saturating_sub(start_row) as usize;
+            let lc0 = dim.start.1.saturating_sub(start_col) as usize;
+            let lr1 = dim.end.0.saturating_sub(start_row) as usize;
+            let lc1 = dim.end.1.saturating_sub(start_col) as usize;
+            if let Some(value) = range.get((lr0, lc0)) {
+                if !value.is_empty() {
+                    for r in lr0..=lr1 {
+                        for c in lc0..=lc1 {
+                            merged_fill.insert((r, c), value.clone());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     let division_re = Regex::new(r"^([IVXLC]+)\.?$").map_err(|error| error.to_string())?;
     let numeric_re = Regex::new(r"^(\d+(?:\.\d+)*)\.?$").map_err(|error| error.to_string())?;
 
@@ -31,19 +58,20 @@ pub fn import_workbook(path: &Path) -> Result<(Vec<WbsNode>, Vec<String>), Strin
     let mut last_code = String::new();
     let mut last_name = String::new();
 
-    for row in range.rows() {
-        let column_a = text(row.first());
-        let column_b = text(row.get(1));
-        let column_c = text(row.get(2));
-        let number_b = number(row.get(1));
-        let number_c = number(row.get(2));
-        let number_d = number(row.get(3));
-        let number_e = number(row.get(4));
+    for (r, row) in range.rows().enumerate() {
+        let cell = |c: usize| -> Option<&Data> { merged_fill.get(&(r, c)).or_else(|| row.get(c)) };
+        let column_a = text(cell(0));
+        let column_b = text(cell(1));
+        let column_c = text(cell(2));
+        let number_b = number(cell(1));
+        let number_c = number(cell(2));
+        let number_d = number(cell(3));
+        let number_e = number(cell(4));
 
         let combined = number_b.is_some() && number_c.is_some();
         let (mut code, mut name, unit, volume, unit_price) = if combined {
             let (code, name) = split_label(&column_a);
-            (code, name, text(row.get(4)), number_b.unwrap_or(0.0), number_c.unwrap_or(0.0))
+            (code, name, text(cell(4)), number_b.unwrap_or(0.0), number_c.unwrap_or(0.0))
         } else {
             let (code, inferred) = split_label(&column_a);
             let name = if column_b.is_empty() { inferred } else { column_b.clone() };

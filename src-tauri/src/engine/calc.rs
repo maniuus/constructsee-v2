@@ -87,12 +87,23 @@ pub fn rollup_all(nodes: &mut HashMap<String, WbsNode>) {
     }
 }
 
-pub fn total_cost(nodes: &HashMap<String, WbsNode>, roots: &[String]) -> f64 {
-    roots
+/// Total biaya proyek dengan overhead diterapkan sekali di level agregat
+/// (single source of truth). `overhead_percent` disimpan di engine, bukan di UI.
+pub fn total_cost(
+    nodes: &HashMap<String, WbsNode>,
+    roots: &[String],
+    overhead_percent: f64,
+) -> f64 {
+    let base: f64 = roots
         .iter()
         .filter_map(|root_id| nodes.get(root_id))
         .map(|node| node.total_price)
-        .sum()
+        .sum();
+
+    if !overhead_percent.is_finite() {
+        return base;
+    }
+    base * (1.0 + overhead_percent / 100.0)
 }
 
 pub fn ordered_nodes(

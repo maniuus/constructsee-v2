@@ -1,8 +1,10 @@
 use std::path::Path;
 
-use rust_xlsxwriter::{Formula, Workbook};
+use rust_xlsxwriter::{Format, Formula, Workbook};
 
 use crate::engine::models::WbsNode;
+
+const CURRENCY_FORMAT: &str = "_(* #,##0.00_);_(* (#,##0.00);_(* \"-\"??_);_(@_)";
 
 pub fn export_workbook(
     path: &Path,
@@ -10,9 +12,15 @@ pub fn export_workbook(
 ) -> Result<u32, String> {
     let mut workbook = Workbook::new();
     let sheet = workbook.add_worksheet();
+
     sheet
         .set_name("RAB")
         .map_err(|error| error.to_string())?;
+
+    let currency_fmt = Format::new()
+        .set_num_format(CURRENCY_FORMAT)
+        .set_font_name("Liberation Sans")
+        .set_font_size(10);
 
     sheet
         .set_column_width(0, 56.0)
@@ -60,7 +68,7 @@ pub fn export_workbook(
         };
 
         sheet
-            .write_string(row, 0, &label)
+            .write_string_with_format(row, 0, &label, &currency_fmt)
             .map_err(|error| error.to_string())?;
         sheet
             .write_string(row, 4, &node.unit)
@@ -68,20 +76,20 @@ pub fn export_workbook(
 
         if node.children_ids.is_empty() {
             sheet
-                .write_number(row, 1, node.volume)
+                .write_number_with_format(row, 1, node.volume, &currency_fmt)
                 .map_err(|error| error.to_string())?;
             sheet
-                .write_number(row, 2, node.unit_price)
+                .write_number_with_format(row, 2, node.unit_price, &currency_fmt)
                 .map_err(|error| error.to_string())?;
             let formula = format!("=B{excel_row}*C{excel_row}");
             sheet
-                .write_formula(row, 3, Formula::new(formula))
+                .write_formula_with_format(row, 3, Formula::new(formula), &currency_fmt)
                 .map_err(|error| error.to_string())?;
         } else {
             let end = descendant_end(index, ordered);
             let formula = format!("=SUM(D{}:D{})", excel_row + 1, end as u32 + 4);
             sheet
-                .write_formula(row, 3, Formula::new(formula))
+                .write_formula_with_format(row, 3, Formula::new(formula), &currency_fmt)
                 .map_err(|error| error.to_string())?;
         }
     }

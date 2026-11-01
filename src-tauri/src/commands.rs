@@ -1,7 +1,11 @@
 use tauri::State;
 
 use crate::engine::actor::EngineHandle;
-use crate::engine::models::{AffectedPatch, DeltaPayload, EngineSnapshot, WbsNode};
+use crate::engine::analytics::Analytics;
+use crate::engine::models::{
+    AffectedPatch, DeltaPayload, EngineSnapshot, RegionInfo, WbsNode, WorkPlan,
+};
+use crate::master::{self, MasterDb, MasterStats, Region};
 
 #[tauri::command(rename_all = "snake_case")]
 pub async fn get_wbs(engine: State<'_, EngineHandle>) -> Result<EngineSnapshot, String> {
@@ -53,6 +57,35 @@ pub async fn set_item_price(
 }
 
 #[tauri::command(rename_all = "snake_case")]
+pub async fn set_overhead(
+    percent: f64,
+    engine: State<'_, EngineHandle>,
+) -> Result<EngineSnapshot, String> {
+    engine.inner().clone().set_overhead(percent).await
+}
+
+#[tauri::command(rename_all = "snake_case")]
+pub async fn get_work_plans(
+    engine: State<'_, EngineHandle>,
+) -> Result<Vec<WorkPlan>, String> {
+    engine.inner().clone().work_plans().await
+}
+
+#[tauri::command(rename_all = "snake_case")]
+pub async fn set_work_plan(
+    node_id: String,
+    num_workers: f64,
+    duration_days: f64,
+    engine: State<'_, EngineHandle>,
+) -> Result<WorkPlan, String> {
+    engine
+        .inner()
+        .clone()
+        .set_work_plan(node_id, num_workers, duration_days)
+        .await
+}
+
+#[tauri::command(rename_all = "snake_case")]
 pub async fn add_node(
     parent_id: Option<String>,
     node: WbsNode,
@@ -70,6 +103,14 @@ pub async fn remove_node(
 }
 
 #[tauri::command(rename_all = "snake_case")]
+pub async fn remove_nodes_batch(
+    ids: Vec<String>,
+    engine: State<'_, EngineHandle>,
+) -> Result<AffectedPatch, String> {
+    engine.inner().clone().remove_nodes_batch(ids).await
+}
+
+#[tauri::command(rename_all = "snake_case")]
 pub async fn import_excel(
     path: String,
     engine: State<'_, EngineHandle>,
@@ -78,9 +119,79 @@ pub async fn import_excel(
 }
 
 #[tauri::command(rename_all = "snake_case")]
+pub async fn undo(engine: State<'_, EngineHandle>) -> Result<EngineSnapshot, String> {
+    engine.inner().clone().undo().await
+}
+
+#[tauri::command(rename_all = "snake_case")]
+pub async fn redo(engine: State<'_, EngineHandle>) -> Result<EngineSnapshot, String> {
+    engine.inner().clone().redo().await
+}
+
+#[tauri::command(rename_all = "snake_case")]
 pub async fn export_excel(
     path: String,
     engine: State<'_, EngineHandle>,
 ) -> Result<u32, String> {
     engine.inner().clone().export(path).await
+}
+
+#[tauri::command(rename_all = "snake_case")]
+pub async fn export_pdf(
+    path: String,
+    engine: State<'_, EngineHandle>,
+) -> Result<u32, String> {
+    engine.inner().clone().export_pdf(path).await
+}
+
+#[tauri::command(rename_all = "snake_case")]
+pub async fn preview_pdf(engine: State<'_, EngineHandle>) -> Result<Vec<u8>, String> {
+    engine.inner().clone().preview_pdf().await
+}
+
+#[tauri::command(rename_all = "snake_case")]
+pub async fn get_analytics(engine: State<'_, EngineHandle>) -> Result<Analytics, String> {
+    engine.inner().clone().analytics().await
+}
+
+#[tauri::command(rename_all = "snake_case")]
+pub async fn set_project_start(
+    date: String,
+    engine: State<'_, EngineHandle>,
+) -> Result<String, String> {
+    engine.inner().clone().set_project_start(date).await
+}
+
+#[tauri::command(rename_all = "snake_case")]
+pub async fn get_regions(master: State<'_, MasterDb>) -> Result<Vec<Region>, String> {
+    let conn = master.inner().open()?;
+    master::regions(&conn)
+}
+
+#[tauri::command(rename_all = "snake_case")]
+pub async fn get_master_stats(master: State<'_, MasterDb>) -> Result<MasterStats, String> {
+    let conn = master.inner().open()?;
+    master::stats(&conn)
+}
+
+#[tauri::command(rename_all = "snake_case")]
+pub async fn get_region(engine: State<'_, EngineHandle>) -> Result<RegionInfo, String> {
+    engine.inner().clone().region().await
+}
+
+#[tauri::command(rename_all = "snake_case")]
+pub async fn set_region(
+    region_id: String,
+    engine: State<'_, EngineHandle>,
+    master: State<'_, MasterDb>,
+) -> Result<EngineSnapshot, String> {
+    let conn = master.inner().open()?;
+    let region = master::region(&conn, &region_id)?
+        .ok_or_else(|| format!("Wilayah {region_id} tidak ditemukan"))?;
+    let label = format!("{} — {}", region.province, region.city_regency);
+    engine
+        .inner()
+        .clone()
+        .set_region(region.id, label, region.multiplier_factor)
+        .await
 }

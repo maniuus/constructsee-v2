@@ -11,6 +11,7 @@ import { formatIDR, formatKoef, formatMoney, formatNumber, parseNumeric } from "
 import { flattenTree, hasAnalysis } from "../../lib/tree";
 import { useWbsStore } from "../../store/useWbsStore";
 import { useUiStore } from "../../store/useUiStore";
+import { useGridNavigation } from "../../hooks/useGridNavigation";
 import type { ComponentItem, ComponentKind, DisplayRow, EditableField, PriceMethod } from "../../types/wbs";
 
 const GRID =
@@ -90,14 +91,14 @@ export function WbsTable() {
   const toggleExpand = useWbsStore((state) => state.toggleExpand);
   const setMethod = useWbsStore((state) => state.setMethod);
   const setActiveCell = useWbsStore((state) => state.setActiveCell);
+  const activeCell = useWbsStore((state) => state.activeCell);
   const totalCost = useWbsStore((state) => state.totalCost);
   const overhead = useWbsStore((state) => state.overhead);
   const ppn = useWbsStore((state) => state.ppn);
   const setPpn = useWbsStore((state) => state.setPpn);
 
   const overheadFactor = 1 + overhead / 100;
-  const overheadValue = totalCost * (overhead / 100);
-  const grandTotal = totalCost + overheadValue;
+  const grandTotal = totalCost;
   const ppnValue = grandTotal * (ppn / 100);
   const grandTotalPlusPpn = grandTotal + ppnValue;
 
@@ -105,6 +106,8 @@ export function WbsTable() {
     () => flattenTree(nodes, roots.filter((id) => (nodes[id]?.children_ids.length ?? 0) > 0)),
     [nodes, roots],
   );
+  const fields: EditableField[] = ["volume", "unit_price"];
+  const activeRowIndex = activeCell ? rows.findIndex((r) => r.kind === "node" && r.node.id === activeCell.rowId) : -1;
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -168,6 +171,43 @@ export function WbsTable() {
         if (target >= 0) focusCell(target, "volume");
         return;
       }
+      if (action === "prev") {
+        if (field === "unit_price") {
+          focusCell(rowIndex, "volume");
+          return;
+        }
+        const target = nearestLeaf(rowIndex, -1);
+        if (target >= 0) focusCell(target, "unit_price");
+        return;
+      }
+      if (action === "left") {
+        if (field === "volume") {
+          const target = nearestLeaf(rowIndex, -1);
+          if (target >= 0) focusCell(target, "unit_price");
+          return;
+        }
+        if (field === "unit_price") {
+          focusCell(rowIndex, "volume");
+          return;
+        }
+        return;
+      }
+      if (action === "right") {
+        if (field === "volume") {
+          focusCell(rowIndex, "unit_price");
+          return;
+        }
+        if (field === "unit_price") {
+          const target = nearestLeaf(rowIndex, 1);
+          if (target >= 0) focusCell(target, "volume");
+          return;
+        }
+        return;
+      }
+      if (field === "volume") {
+        focusCell(rowIndex, "unit_price");
+        return;
+      }
       if (field === "unit_price") {
         focusCell(rowIndex, "volume");
         return;
@@ -177,6 +217,14 @@ export function WbsTable() {
     },
     [focusCell, nearestLeaf],
   );
+
+  useGridNavigation({
+    rowIndex: Math.max(activeRowIndex, 0),
+    activeField: activeCell?.field ?? null,
+    fields,
+    onNavigate: (r, f, a) => navigate(r, f, a as "next" | "prev" | "down" | "up"),
+    focusCell,
+  });
 
   return (
     <div className="relative flex min-h-0 flex-1 flex-col">
@@ -565,7 +613,7 @@ export function WbsTable() {
             </div>
 
             {!loading && rows.length === 0 && (
-              <div className="grid h-48 place-items-center text-[11px] text-muted/60">
+              <div className="calcir-grid grid h-48 place-items-center text-[11px] text-muted/60">
                 Belum ada data WBS. Import workbook Excel untuk memulai.
               </div>
             )}
@@ -682,13 +730,16 @@ function NameCell({ row, onToggle }: { row: DisplayRow; onToggle: () => void }) 
   const hasChildren = row.node.children_ids.length > 0;
   const selected = row.kind === "node" && selectedId === row.node.id;
   const expandable = hasChildren || (row.kind === "node" && hasAnalysis(row.node));
-  const indent = 18 + Math.max(row.depth - 1, 0) * 8;
+  const guides = Math.max(row.depth - 2, 0);
 
   if (row.kind === "item" && row.item) {
     return (
-      <div className="flex min-w-0 items-center gap-1.5 px-2" style={{ paddingLeft: indent + 8 }}>
-        <span className="h-px w-2 shrink-0 bg-muted/30" />
-        <span className="truncate text-[10px] text-muted">{row.item.name}</span>
+      <div className="flex min-w-0 items-center gap-0 px-2" style={{ paddingLeft: 8 }}>
+        {Array.from({ length: guides }).map((_, index) => (
+          <span key={index} className="w-4 shrink-0 self-stretch border-l border-line/50" />
+        ))}
+        <span className="ml-1 h-px w-2 shrink-0 bg-muted/30" />
+        <span className="ml-1.5 truncate text-[10px] text-muted">{row.item.name}</span>
       </div>
     );
   }
@@ -696,12 +747,15 @@ function NameCell({ row, onToggle }: { row: DisplayRow; onToggle: () => void }) 
   if (row.kind === "analysis" && row.componentKind) {
     const meta = COMPONENT_COLUMNS.find((column) => column.key === row.componentKind);
     return (
-      <div className="flex min-w-0 items-center gap-1.5 px-2" style={{ paddingLeft: indent }}>
-        <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${meta?.dot ?? "bg-muted"}`} />
-        <span className={`truncate text-[10px] ${meta?.tone ?? "text-muted"}`}>
+      <div className="flex min-w-0 items-center gap-0 px-2" style={{ paddingLeft: 8 }}>
+        {Array.from({ length: guides }).map((_, index) => (
+          <span key={index} className="w-4 shrink-0 self-stretch border-l border-line/50" />
+        ))}
+        <span className={`ml-1 h-3.5 w-0.5 shrink-0 ${meta?.dot ?? "bg-muted"}`} />
+        <span className={`ml-1.5 truncate text-[10px] ${meta?.tone ?? "text-muted"}`}>
           {ANALYSIS_LABEL[row.componentKind]}
         </span>
-        <span className="shrink-0 text-[8px] uppercase tracking-widest text-muted/40">
+        <span className="ml-1 shrink-0 text-[8px] uppercase tracking-widest text-muted/40">
           komponen dasar
         </span>
       </div>

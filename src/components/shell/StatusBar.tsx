@@ -13,13 +13,12 @@ const syncLabel = (syncing: boolean, lastSyncedAt: number | null): string => {
 
 export function StatusBar() {
   const totalCost = useWbsStore((state) => state.totalCost);
-  const overhead = useWbsStore((state) => state.overhead);
   const syncing = useWbsStore((state) => state.syncing);
   const lastSyncedAt = useWbsStore((state) => state.lastSyncedAt);
   const activeCell = useWbsStore((state) => state.activeCell);
   const nodes = useWbsStore((state) => state.nodes);
 
-  const grandTotal = totalCost * (1 + overhead / 100);
+  const grandTotal = totalCost;
   const activeLabel = activeCell
     ? `${nodes[activeCell.rowId]?.code ?? "?"} · ${activeCell.field === "unit_price" ? "HARGA SATUAN" : "VOLUME"}`
     : "NO CELL";
@@ -28,7 +27,7 @@ export function StatusBar() {
     <footer className="flex h-7 shrink-0 items-center justify-between border-t border-line bg-panel px-3 text-[10px] tracking-wide text-muted">
       <div className="flex items-center gap-4">
         <span className="text-muted/70">TOTAL RAB</span>
-        <span className="font-mono text-[11px] font-semibold text-accent">{formatIDR(grandTotal)}</span>
+        <span className="font-mono text-[11px] font-semibold text-ink">{formatIDR(grandTotal)}</span>
         <span className="text-muted/40">|</span>
         <span className="text-muted/70">ACTIVE</span>
         <span className="font-mono text-ink/80">{activeLabel}</span>

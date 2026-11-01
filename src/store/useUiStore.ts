@@ -6,6 +6,9 @@ interface UiState {
   removeTargetIds: string[] | null;
   bulkMode: boolean;
   bulkSelection: string[];
+  pdfPreviewUrl: string | null;
+  activeSheet: string;
+  regionOpen: boolean;
   openAdd: () => void;
   closeAdd: () => void;
   openAddDirect: () => void;
@@ -16,6 +19,11 @@ interface UiState {
   toggleBulkMode: () => void;
   toggleBulkSelect: (id: string) => void;
   setBulkSelection: (ids: string[]) => void;
+  openPdfPreview: (url: string) => void;
+  closePdfPreview: () => void;
+  setActiveSheet: (id: string) => void;
+  openRegion: () => void;
+  closeRegion: () => void;
 }
 
 export const useUiStore = create<UiState>((set) => ({
@@ -24,6 +32,9 @@ export const useUiStore = create<UiState>((set) => ({
   removeTargetIds: null,
   bulkMode: false,
   bulkSelection: [],
+  pdfPreviewUrl: null,
+  activeSheet: "ahsp",
+  regionOpen: false,
   openAdd: () => set({ addOpen: true }),
   closeAdd: () => set({ addOpen: false }),
   openAddDirect: () => set({ addDirectOpen: true }),
@@ -40,4 +51,17 @@ export const useUiStore = create<UiState>((set) => ({
         : [...state.bulkSelection, id],
     })),
   setBulkSelection: (ids) => set({ bulkSelection: ids }),
+  openPdfPreview: (url) =>
+    set((state) => {
+      if (state.pdfPreviewUrl) URL.revokeObjectURL(state.pdfPreviewUrl);
+      return { pdfPreviewUrl: url };
+    }),
+  closePdfPreview: () =>
+    set((state) => {
+      if (state.pdfPreviewUrl) URL.revokeObjectURL(state.pdfPreviewUrl);
+      return { pdfPreviewUrl: null };
+    }),
+  setActiveSheet: (id) => set({ activeSheet: id }),
+  openRegion: () => set({ regionOpen: true }),
+  closeRegion: () => set({ regionOpen: false }),
 }));
