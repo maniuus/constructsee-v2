@@ -1,0 +1,27 @@
+{
+  "built_at_local": "2026-11-02T15:37:07.8201839+07:00",
+  "branch": "local-build/v1.0.1",
+  "source_head": "59e1fa8",
+  "msi_product_version": "1.0.1",
+  "artifacts": [
+    {
+      "file": "src-tauri/target/release/bundle/msi/ConstrucSee_1.0.1_x64_en-US.msi",
+      "bytes": 14622720,
+      "modified_local": "2026-11-02T15:37:28.6680000+07:00",
+      "sha256": "7847B242E0D07FFDEB891AC8E85E73A8D9A1A1BFD7708616A2004DEF6345DC99",
+      "signature": 2,
+      "file_version": null,
+      "product_version": null
+    },
+    {
+      "file": "src-tauri/target/release/bundle/nsis/ConstrucSee_1.0.1_x64-setup.exe",
+      "bytes": 10598741,
+      "modified_local": "2026-11-02T15:37:51.6165177+07:00",
+      "sha256": "8BA896778B2BE63CCFF47A4AE8DCDBC36180AB66ACB6B4FB7E03A2C64F50CC15",
+      "signature": 2,
+      "file_version": "1.0.1",
+      "product_version": "1.0.1"
+    }
+  ],
+  "build_log": "tauri-build-v1.0.1-20261102-153452.log"
+}

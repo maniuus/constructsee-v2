@@ -1,0 +1,41 @@
+Build started (local): 2026-11-02T15:34:52.3040622+07:00
+Branch: local-build/v1.0.1
+HEAD: 59e1fa8
+Versions: package=1.0.1
+
+> constructsee@1.0.1 tauri
+> tauri build
+
+        Info Looking up installed tauri packages to check mismatched versions...
+        Warn The bundle identifier "com.constructsee.app" set in `"tauri.conf.json" identifier` ends with `.app`. This is not recommended because it conflicts with the application bundle extension on macOS.
+     Running beforeBuildCommand `npm run build`
+
+> constructsee@1.0.1 build
+> tsc && vite build
+
+vite v6.4.5 building for production...
+transforming...
+✓ 2102 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.67 kB │ gzip:   0.39 kB
+dist/assets/index-F6jUpa4D.css   27.41 kB │ gzip:   5.71 kB
+dist/assets/index-CvTFr8sT.js   358.23 kB │ gzip: 101.09 kB
+✓ built in 3.98s
+   Compiling constructsee v1.0.1 (D:\Abimanyu\Dev\20-projects\constructsee_v2\src-tauri)
+    Finished `release` profile [optimized] target(s) in 1m 19s
+       Built application at: D:\Abimanyu\Dev\20-projects\constructsee_v2\src-tauri\target\release\constructsee.exe
+        Info Patching D:\Abimanyu\Dev\20-projects\constructsee_v2\src-tauri\target\release\constructsee.exe with bundle type information: msi
+        Info Target: x64
+     Running candle for "D:\\Abimanyu\\Dev\\20-projects\\constructsee_v2\\src-tauri\\target\\release\\wix\\x64\\main.wxs"
+     Running light to produce D:\Abimanyu\Dev\20-projects\constructsee_v2\src-tauri\target\release\bundle\msi\ConstrucSee_1.0.1_x64_en-US.msi
+        Info Patching D:\Abimanyu\Dev\20-projects\constructsee_v2\src-tauri\target\release\constructsee.exe with bundle type information: nsis
+        Info Target: x64
+     Running makensis to produce D:\Abimanyu\Dev\20-projects\constructsee_v2\src-tauri\target\release\bundle\nsis\ConstrucSee_1.0.1_x64-setup.exe
+    Finished 2 bundles at:
+        D:\Abimanyu\Dev\20-projects\constructsee_v2\src-tauri\target\release\bundle\msi\ConstrucSee_1.0.1_x64_en-US.msi (13.95 MiB)
+        D:\Abimanyu\Dev\20-projects\constructsee_v2\src-tauri\target\release\bundle\nsis\ConstrucSee_1.0.1_x64-setup.exe (10.10 MiB)
+
+
+Build exit code: 0
+Build finished (local): 2026-11-02T15:37:07.8201839+07:00

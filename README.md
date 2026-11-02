@@ -38,12 +38,9 @@ Selengkapnya di [`docs/screenshots/`](docs/screenshots).
 
 ## Unduh & Instalasi
 
-Installer Windows 64-bit tersedia di tab **[Releases](../../releases)**:
+Release **v1.0.1** sudah tayang di tab **[Releases](../../releases)**, tetapi asset installer belum dilampirkan. Build lokal Windows 64-bit menghasilkan `ConstrucSee_1.0.1_x64-setup.exe` (NSIS) dan `ConstrucSee_1.0.1_x64_en-US.msi` (MSI) melalui `npm run tauri -- build`.
 
-- `ConstrucSee_0.1.0_x64-setup.exe` — installer NSIS (disarankan)
-- `ConstrucSee_0.1.0_x64_en-US.msi` — installer MSI
-
-Kebutuhan: **Windows 10/11 64-bit**. WebView2 Runtime dibutuhkan (diunduh otomatis bila belum ada). Installer belum ditandatangani secara digital, jadi SmartScreen dapat menampilkan "Windows protected your PC" → **More info → Run anyway**.
+Kebutuhan: **Windows 10/11 64-bit**. WebView2 Runtime dibutuhkan (diunduh otomatis bila belum ada). Installer lokal belum ditandatangani secara digital, jadi SmartScreen dapat menampilkan "Windows protected your PC" → **More info → Run anyway**.
 
 ## Pengembangan
 

@@ -2,6 +2,13 @@
 
 All notable changes to ConstrucSee v2 are documented in this file.
 
+## [v1.0.1] — 2026-11-02 — Tema light/dark & kalkulator
+
+- Tema light/dark dengan persistensi preferensi UI.
+- Panel kalkulator kanan dengan numpad dan operasi dasar.
+- Toggle ribbon AHSP/View serta penyelarasan judul grup ribbon.
+- Sinkronisasi metadata versi aplikasi ke `1.0.1` untuk distribusi MSI/NSIS.
+
 ## [v1.0.0] — 2026-11-01 — Fase 1–4 Complete
 
 ### Fase 1: Keyboard Ergonomics & Undo/Redo Engine
