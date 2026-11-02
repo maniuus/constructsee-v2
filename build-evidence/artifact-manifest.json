@@ -10,9 +10,9 @@
     {
       "path": "src-tauri/target/release/bundle/msi/ConstrucSee_1.0.1_x64_en-US.msi",
       "bytes": 14622720,
-      "modified_local": "2026-11-02T15:40:34.3220000+07:00",
+      "modified_local": "2026-11-02T15:40:34.322+07:00",
       "sha256": "9054E922C5F94D8DFBF76F891EADD092C701CB37A42B281A992CD77C9FE67E4B",
-      "signature": 2,
+      "signature": "NotSigned",
       "file_version": null,
       "product_version": null
     },
@@ -21,7 +21,7 @@
       "bytes": 10601447,
       "modified_local": "2026-11-02T15:40:56.2819689+07:00",
       "sha256": "ACF22C5696719D6A4A7F20C3742A8FD3D33B2E2A3C709904854D8DCE43EBFB8E",
-      "signature": 2,
+      "signature": "NotSigned",
       "file_version": "1.0.1",
       "product_version": "1.0.1"
     }
