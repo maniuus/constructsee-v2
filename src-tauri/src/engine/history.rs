@@ -36,6 +36,27 @@ pub enum ReversibleCommand {
     SetOverhead { old_value: f64, new_value: f64 },
 }
 
+impl ReversibleCommand {
+    /// Deskripsi singkat untuk panel History.
+    pub fn describe(&self) -> String {
+        match self {
+            ReversibleCommand::UpdateCells { entries } => match entries.as_slice() {
+                [one] => format!("Ubah {} · {}", one.field, one.node_id),
+                many => format!("Ubah {} sel", many.len()),
+            },
+            ReversibleCommand::AddNode { node } => format!("Tambah \"{}\"", node.name),
+            ReversibleCommand::RemoveNodes { removed } => match removed.as_slice() {
+                [one] => format!("Hapus \"{}\"", one.node.name),
+                many => format!("Hapus {} baris", many.len()),
+            },
+            ReversibleCommand::SetOverhead {
+                old_value,
+                new_value,
+            } => format!("Overhead {old_value:.0}% → {new_value:.0}%"),
+        }
+    }
+}
+
 /// Riwayat perintah dua tumpukan (undo/redo) dengan batas memori:
 /// melebihi batas → entri paling lama dibuang; operasi baru setelah undo
 /// memotong tumpukan redo.
@@ -101,6 +122,16 @@ impl CommandHistory {
 
     pub fn can_redo(&self) -> bool {
         !self.redo.is_empty()
+    }
+
+    /// Daftar deskripsi tumpukan undo, urut dari yang paling baru di-undo.
+    pub fn undo_descriptions(&self) -> Vec<String> {
+        self.undo.iter().rev().map(|command| command.describe()).collect()
+    }
+
+    /// Daftar deskripsi tumpukan redo, urut dari yang berikutnya di-redo.
+    pub fn redo_descriptions(&self) -> Vec<String> {
+        self.redo.iter().map(|command| command.describe()).collect()
     }
 }
 

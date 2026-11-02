@@ -392,3 +392,72 @@ pub fn upsert_many(conn: &mut Connection, nodes: &[WbsNode]) -> rusqlite::Result
 
     tx.commit()
 }
+
+/// Hapus seluruh isi proyek (node, resource, rencana kerja, metadata) tanpa
+/// menyentuh skema. Dipakai oleh command `new_project`.
+pub fn clear_project(conn: &mut Connection) -> rusqlite::Result<()> {
+    let tx = conn.transaction()?;
+    tx.execute("DELETE FROM node_resource_items", [])?;
+    tx.execute("DELETE FROM work_plans", [])?;
+    tx.execute("DELETE FROM wbs_nodes", [])?;
+    tx.execute("DELETE FROM project_meta", [])?;
+    tx.commit()
+}
+
+/// Salin seluruh isi proyek dari file `.csee` (SQLite) ke koneksi aktif.
+/// Data proyek saat ini diganti sepenuhnya.
+pub fn import_project(conn: &mut Connection, path: &Path) -> rusqlite::Result<()> {
+    if !path.exists() {
+        return Err(rusqlite::Error::InvalidPath(path.to_path_buf()));
+    }
+
+    clear_project(conn)?;
+
+    let source = path.to_string_lossy().to_string();
+    conn.execute("ATTACH DATABASE ?1 AS src", params![source])?;
+
+    let result = (|| -> rusqlite::Result<()> {
+        let tx = conn.transaction()?;
+        tx.execute(
+            "INSERT INTO wbs_nodes (id, parent_id, children_ids, code, name, unit, volume, unit_price, total_price, is_expanded, components, method)
+             SELECT id, parent_id, children_ids, code, name, unit, volume, unit_price, total_price, is_expanded, components, method FROM src.wbs_nodes",
+            [],
+        )?;
+        tx.execute(
+            "INSERT INTO node_resource_items (node_id, category, ord, name, unit, coefficient, base_price)
+             SELECT node_id, category, ord, name, unit, coefficient, base_price FROM src.node_resource_items",
+            [],
+        )?;
+        tx.execute(
+            "INSERT INTO work_plans (node_id, num_workers, duration_days)
+             SELECT node_id, num_workers, duration_days FROM src.work_plans",
+            [],
+        )?;
+        tx.execute(
+            "INSERT INTO project_meta (key, value) SELECT key, value FROM src.project_meta",
+            [],
+        )?;
+        tx.commit()
+    })();
+
+    let _ = conn.execute("DETACH DATABASE src", []);
+    result
+}
+
+/// Ekspor proyek aktif ke file `.csee` memakai `VACUUM INTO` (snapshot konsisten).
+pub fn export_project(conn: &Connection, path: &Path) -> Result<(), String> {
+    if let Some(parent) = path.parent() {
+        if !parent.as_os_str().is_empty() {
+            std::fs::create_dir_all(parent).map_err(|error| error.to_string())?;
+        }
+    }
+    if path.exists() {
+        std::fs::remove_file(path).map_err(|error| error.to_string())?;
+    }
+    conn.execute(
+        "VACUUM INTO ?1",
+        params![path.to_string_lossy().to_string()],
+    )
+    .map_err(|error| error.to_string())?;
+    Ok(())
+}

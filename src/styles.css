@@ -2,6 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --c-shell: 240 5% 7%;
+  --c-panel: 240 5% 10%;
+  --c-panel2: 240 4% 16%;
+  --c-line: 240 5% 19%;
+  --c-ink: 240 5% 96%;
+  --c-muted: 240 4% 65%;
+  --c-accent: 142 71% 45%;
+  --c-accent2: 160 84% 39%;
+  --c-danger: 0 84% 60%;
+}
+
+:root.light {
+  --c-shell: 240 5% 96%;
+  --c-panel: 0 0% 100%;
+  --c-panel2: 240 5% 90%;
+  --c-line: 240 5% 84%;
+  --c-ink: 240 5% 10%;
+  --c-muted: 240 4% 34%;
+  --c-accent: 142 72% 35%;
+  --c-accent2: 160 84% 30%;
+  --c-danger: 0 72% 51%;
+}
+
 @layer base {
   * {
     @apply border-line;
@@ -20,7 +44,7 @@
   }
 
   ::selection {
-    background: rgba(34, 197, 94, 0.25);
+    background: hsl(var(--c-accent) / 0.25);
   }
 
   ::-webkit-scrollbar {
@@ -29,17 +53,17 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: #121214;
+    background: hsl(var(--c-shell));
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #2e2e33;
-    border: 2px solid #121214;
+    background: hsl(var(--c-line));
+    border: 2px solid hsl(var(--c-shell));
     border-radius: 6px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #3d3d44;
+    background: hsl(var(--c-muted) / 0.6);
   }
 
   input[type="number"]::-webkit-outer-spin-button,
@@ -51,7 +75,7 @@
 
 .calcir-grid {
   background-image:
-    linear-gradient(to right, rgba(46, 46, 51, 0.35) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(46, 46, 51, 0.35) 1px, transparent 1px);
+    linear-gradient(to right, hsl(var(--c-line) / 0.35) 1px, transparent 1px),
+    linear-gradient(to bottom, hsl(var(--c-line) / 0.35) 1px, transparent 1px);
   background-size: 24px 24px;
 }

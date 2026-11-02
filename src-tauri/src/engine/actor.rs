@@ -5,8 +5,8 @@ use tokio::sync::{mpsc, oneshot};
 
 use super::history::{CellChange, CommandHistory, RemovedNode, ReversibleCommand};
 use super::models::{
-    AffectedPatch, DeltaPayload, EngineSnapshot, RegionInfo, WbsComponents, WbsNode, WorkPlan,
-    METHOD_AHSP, METHOD_LANGSUNG,
+    AffectedPatch, DeltaPayload, EngineSnapshot, HistoryView, ProjectInfo, RegionInfo, WbsComponents,
+    WbsNode, WorkPlan, METHOD_AHSP, METHOD_LANGSUNG,
 };
 use super::analytics::{self, Analytics};
 use super::{calc, db, seed};
@@ -40,6 +40,15 @@ pub enum EngineCommand {
     SetProjectStart { date: String, reply: Reply<String> },
     GetRegion { reply: Reply<RegionInfo> },
     SetRegion { region_id: String, region_name: String, multiplier_factor: f64, reply: Reply<EngineSnapshot> },
+    NewProject { reply: Reply<EngineSnapshot> },
+    OpenProject { path: String, reply: Reply<EngineSnapshot> },
+    SaveProject { path: String, reply: Reply<String> },
+    GetProjectInfo { reply: Reply<ProjectInfo> },
+    SetProjectInfo { info: ProjectInfo, reply: Reply<ProjectInfo> },
+    GetHistory { reply: Reply<HistoryView> },
+    IndentNode { item_id: String, reply: Reply<EngineSnapshot> },
+    OutdentNode { item_id: String, reply: Reply<EngineSnapshot> },
+    SetExpandAll { expanded: bool, reply: Reply<EngineSnapshot> },
     Undo { reply: Reply<EngineSnapshot> },
     Redo { reply: Reply<EngineSnapshot> },
     Checkpoint { reply: Reply<()> },
@@ -193,6 +202,42 @@ impl EngineHandle {
 
     pub async fn undo(&self) -> Result<EngineSnapshot, String> {
         self.request(|reply| EngineCommand::Undo { reply }).await
+    }
+
+    pub async fn new_project(&self) -> Result<EngineSnapshot, String> {
+        self.request(|reply| EngineCommand::NewProject { reply }).await
+    }
+
+    pub async fn open_project(&self, path: String) -> Result<EngineSnapshot, String> {
+        self.request(|reply| EngineCommand::OpenProject { path, reply }).await
+    }
+
+    pub async fn save_project(&self, path: String) -> Result<String, String> {
+        self.request(|reply| EngineCommand::SaveProject { path, reply }).await
+    }
+
+    pub async fn project_info(&self) -> Result<ProjectInfo, String> {
+        self.request(|reply| EngineCommand::GetProjectInfo { reply }).await
+    }
+
+    pub async fn set_project_info(&self, info: ProjectInfo) -> Result<ProjectInfo, String> {
+        self.request(|reply| EngineCommand::SetProjectInfo { info, reply }).await
+    }
+
+    pub async fn history(&self) -> Result<HistoryView, String> {
+        self.request(|reply| EngineCommand::GetHistory { reply }).await
+    }
+
+    pub async fn indent_node(&self, item_id: String) -> Result<EngineSnapshot, String> {
+        self.request(|reply| EngineCommand::IndentNode { item_id, reply }).await
+    }
+
+    pub async fn outdent_node(&self, item_id: String) -> Result<EngineSnapshot, String> {
+        self.request(|reply| EngineCommand::OutdentNode { item_id, reply }).await
+    }
+
+    pub async fn set_expand_all(&self, expanded: bool) -> Result<EngineSnapshot, String> {
+        self.request(|reply| EngineCommand::SetExpandAll { expanded, reply }).await
     }
 
     pub async fn redo(&self) -> Result<EngineSnapshot, String> {
@@ -412,6 +457,235 @@ impl EngineState {
         let all: Vec<WbsNode> = self.nodes.values().cloned().collect();
         db::upsert_many(&mut self.conn, &all).map_err(|error| error.to_string())?;
 
+        Ok(self.snapshot())
+    }
+
+    /// Baca ulang seluruh state dari koneksi (dipakai setelah buka project).
+    fn reload(&mut self) -> Result<(), String> {
+        let (nodes, roots) = db::load(&mut self.conn).map_err(|error| error.to_string())?;
+        self.overhead_percent = db::load_setting(&self.conn, "overhead")
+            .and_then(|raw| raw.parse::<f64>().ok())
+            .filter(|value| value.is_finite())
+            .unwrap_or(DEFAULT_OVERHEAD_PERCENT);
+        self.work_plans = db::load_work_plans(&self.conn)
+            .map_err(|error| error.to_string())?
+            .into_iter()
+            .map(|plan| (plan.node_id.clone(), plan))
+            .collect();
+        self.project_start = db::load_setting(&self.conn, "project_start")
+            .filter(|value| chrono::NaiveDate::parse_from_str(value, "%Y-%m-%d").is_ok())
+            .unwrap_or_else(default_project_start);
+        self.region_id = db::load_setting(&self.conn, "region_id").unwrap_or_else(default_region_id);
+        self.region_name = db::load_setting(&self.conn, "region_name").unwrap_or_else(default_region_name);
+        self.region_multiplier = db::load_setting(&self.conn, "region_multiplier")
+            .and_then(|raw| raw.parse::<f64>().ok())
+            .filter(|value| value.is_finite() && *value > 0.0)
+            .unwrap_or(1.0);
+        self.nodes = nodes
+            .into_iter()
+            .map(|node| (node.id.clone(), node))
+            .collect();
+        self.roots = roots;
+        self.history.clear();
+        Ok(())
+    }
+
+    fn new_project(&mut self) -> Result<EngineSnapshot, String> {
+        db::clear_project(&mut self.conn).map_err(|error| error.to_string())?;
+        self.nodes.clear();
+        self.roots.clear();
+        self.work_plans.clear();
+        self.history.clear();
+        self.overhead_percent = DEFAULT_OVERHEAD_PERCENT;
+        self.project_start = default_project_start();
+        self.region_id = default_region_id();
+        self.region_name = default_region_name();
+        self.region_multiplier = 1.0;
+        Ok(self.snapshot())
+    }
+
+    fn open_project(&mut self, path: &str) -> Result<EngineSnapshot, String> {
+        db::import_project(&mut self.conn, Path::new(path)).map_err(|error| error.to_string())?;
+        self.reload()?;
+        Ok(self.snapshot())
+    }
+
+    fn save_project(&mut self, path: &str) -> Result<String, String> {
+        let _ = self
+            .conn
+            .query_row("PRAGMA wal_checkpoint(TRUNCATE)", [], |_row| Ok(()));
+        db::export_project(&self.conn, Path::new(path))?;
+        Ok(path.to_string())
+    }
+
+    fn project_info(&self) -> ProjectInfo {
+        db::load_setting(&self.conn, "project_info")
+            .and_then(|raw| serde_json::from_str::<ProjectInfo>(&raw).ok())
+            .unwrap_or_default()
+    }
+
+    fn set_project_info(&mut self, info: ProjectInfo) -> Result<ProjectInfo, String> {
+        let raw = serde_json::to_string(&info).map_err(|error| error.to_string())?;
+        db::save_setting(&self.conn, "project_info", &raw).map_err(|error| error.to_string())?;
+
+        let start = info.start_date.trim();
+        if !start.is_empty() && chrono::NaiveDate::parse_from_str(start, "%Y-%m-%d").is_ok() {
+            db::save_setting(&self.conn, "project_start", start)
+                .map_err(|error| error.to_string())?;
+            self.project_start = start.to_string();
+        }
+        Ok(info)
+    }
+
+    fn history_view(&self) -> HistoryView {
+        HistoryView {
+            undo: self.history.undo_descriptions(),
+            redo: self.history.redo_descriptions(),
+            can_undo: self.history.can_undo(),
+            can_redo: self.history.can_redo(),
+        }
+    }
+
+    fn siblings_of(&self, node: &WbsNode) -> Vec<String> {
+        match &node.parent_id {
+            Some(parent_id) => self
+                .nodes
+                .get(parent_id)
+                .map(|parent| parent.children_ids.clone())
+                .unwrap_or_default(),
+            None => self.roots.clone(),
+        }
+    }
+
+    fn persist_nodes(&mut self, ids: &[String]) -> Result<(), String> {
+        let nodes: Vec<WbsNode> = ids
+            .iter()
+            .filter_map(|id| self.nodes.get(id).cloned())
+            .collect();
+        db::upsert_many(&mut self.conn, &nodes).map_err(|error| error.to_string())
+    }
+
+    /// Jadikan node sebagai anak dari sibling tepat di atasnya.
+    fn indent_node(&mut self, item_id: &str) -> Result<EngineSnapshot, String> {
+        let node = self
+            .nodes
+            .get(item_id)
+            .cloned()
+            .ok_or_else(|| "Baris tidak ditemukan".to_string())?;
+
+        let siblings = self.siblings_of(&node);
+        let position = siblings
+            .iter()
+            .position(|id| id == item_id)
+            .ok_or_else(|| "Baris tidak berada pada daftar sibling".to_string())?;
+        if position == 0 {
+            return Err("Baris pertama tidak dapat di-indent".to_string());
+        }
+        let new_parent_id = siblings[position - 1].clone();
+        if new_parent_id == item_id {
+            return Err("Tidak dapat menjadikan baris sebagai anak dirinya sendiri".to_string());
+        }
+
+        let old_parent_id = node.parent_id.clone();
+
+        match &old_parent_id {
+            Some(parent_id) => {
+                if let Some(parent) = self.nodes.get_mut(parent_id) {
+                    parent.children_ids.retain(|id| id != item_id);
+                }
+            }
+            None => self.roots.retain(|id| id != item_id),
+        }
+
+        if let Some(new_parent) = self.nodes.get_mut(&new_parent_id) {
+            new_parent.children_ids.push(item_id.to_string());
+            new_parent.is_expanded = true;
+        }
+        if let Some(target) = self.nodes.get_mut(item_id) {
+            target.parent_id = Some(new_parent_id.clone());
+        }
+
+        calc::rollup_all(&mut self.nodes);
+
+        let mut affected = vec![item_id.to_string(), new_parent_id.clone()];
+        if let Some(parent_id) = old_parent_id {
+            affected.push(parent_id);
+        }
+        self.persist_nodes(&affected)?;
+        db::save_roots(&self.conn, &self.roots).map_err(|error| error.to_string())?;
+
+        Ok(self.snapshot())
+    }
+
+    /// Keluarkan node satu tingkat: menjadi sibling dari induknya.
+    fn outdent_node(&mut self, item_id: &str) -> Result<EngineSnapshot, String> {
+        let node = self
+            .nodes
+            .get(item_id)
+            .cloned()
+            .ok_or_else(|| "Baris tidak ditemukan".to_string())?;
+        let parent_id = node
+            .parent_id
+            .clone()
+            .ok_or_else(|| "Baris sudah berada di level teratas".to_string())?;
+        let parent = self
+            .nodes
+            .get(&parent_id)
+            .cloned()
+            .ok_or_else(|| "Induk tidak ditemukan".to_string())?;
+
+        if let Some(parent_mut) = self.nodes.get_mut(&parent_id) {
+            parent_mut.children_ids.retain(|id| id != item_id);
+        }
+
+        let grandparent_id = parent.parent_id.clone();
+        match &grandparent_id {
+            Some(gp_id) => {
+                if let Some(grandparent) = self.nodes.get_mut(gp_id) {
+                    let insert_at = grandparent
+                        .children_ids
+                        .iter()
+                        .position(|id| id == &parent_id)
+                        .map(|index| index + 1)
+                        .unwrap_or(grandparent.children_ids.len());
+                    grandparent.children_ids.insert(insert_at, item_id.to_string());
+                }
+            }
+            None => {
+                let insert_at = self
+                    .roots
+                    .iter()
+                    .position(|id| id == &parent_id)
+                    .map(|index| index + 1)
+                    .unwrap_or(self.roots.len());
+                self.roots.insert(insert_at, item_id.to_string());
+            }
+        }
+
+        if let Some(target) = self.nodes.get_mut(item_id) {
+            target.parent_id = grandparent_id.clone();
+        }
+
+        calc::rollup_all(&mut self.nodes);
+
+        let mut affected = vec![item_id.to_string(), parent_id.clone()];
+        if let Some(gp_id) = grandparent_id {
+            affected.push(gp_id);
+        }
+        self.persist_nodes(&affected)?;
+        db::save_roots(&self.conn, &self.roots).map_err(|error| error.to_string())?;
+
+        Ok(self.snapshot())
+    }
+
+    fn set_expand_all(&mut self, expanded: bool) -> Result<EngineSnapshot, String> {
+        for node in self.nodes.values_mut() {
+            if !node.children_ids.is_empty() {
+                node.is_expanded = expanded;
+            }
+        }
+        let all: Vec<WbsNode> = self.nodes.values().cloned().collect();
+        db::upsert_many(&mut self.conn, &all).map_err(|error| error.to_string())?;
         Ok(self.snapshot())
     }
 
@@ -1287,6 +1561,33 @@ async fn run(mut state: EngineState, mut rx: mpsc::Receiver<EngineCommand>) {
                 reply,
             } => {
                 let _ = reply.send(state.set_region(region_id, region_name, multiplier_factor));
+            }
+            EngineCommand::NewProject { reply } => {
+                let _ = reply.send(state.new_project());
+            }
+            EngineCommand::OpenProject { path, reply } => {
+                let _ = reply.send(state.open_project(&path));
+            }
+            EngineCommand::SaveProject { path, reply } => {
+                let _ = reply.send(state.save_project(&path));
+            }
+            EngineCommand::GetProjectInfo { reply } => {
+                let _ = reply.send(Ok(state.project_info()));
+            }
+            EngineCommand::SetProjectInfo { info, reply } => {
+                let _ = reply.send(state.set_project_info(info));
+            }
+            EngineCommand::GetHistory { reply } => {
+                let _ = reply.send(Ok(state.history_view()));
+            }
+            EngineCommand::IndentNode { item_id, reply } => {
+                let _ = reply.send(state.indent_node(&item_id));
+            }
+            EngineCommand::OutdentNode { item_id, reply } => {
+                let _ = reply.send(state.outdent_node(&item_id));
+            }
+            EngineCommand::SetExpandAll { expanded, reply } => {
+                let _ = reply.send(state.set_expand_all(expanded));
             }
             EngineCommand::Undo { reply } => {
                 let _ = reply.send(state.perform_undo().map(|_| state.snapshot()));

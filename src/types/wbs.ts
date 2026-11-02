@@ -130,3 +130,19 @@ export interface DisplayRow {
   componentKind?: ComponentKind;
   item?: ComponentItem;
 }
+
+export interface ProjectInfo {
+  name: string;
+  location: string;
+  owner: string;
+  contractor: string;
+  contract_no: string;
+  start_date: string;
+}
+
+export interface HistoryView {
+  undo: string[];
+  redo: string[];
+  can_undo: boolean;
+  can_redo: boolean;
+}

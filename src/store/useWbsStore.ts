@@ -9,8 +9,10 @@ import type {
   Analytics,
   EditableField,
   EngineSnapshot,
+  HistoryView,
   MasterStats,
   PriceMethod,
+  ProjectInfo,
   Region,
   RegionInfo,
   WbsComponents,
@@ -49,6 +51,8 @@ interface WbsState {
   regionMultiplier: number;
   regions: Region[];
   masterStats: MasterStats | null;
+  projectInfo: ProjectInfo;
+  history: HistoryView;
   load: () => Promise<void>;
   selectRow: (id: string) => void;
   setActiveCell: (cell: ActiveCell | null) => void;
@@ -75,6 +79,16 @@ interface WbsState {
   setRegion: (regionId: string) => Promise<void>;
   undo: () => Promise<void>;
   redo: () => Promise<void>;
+  newProject: () => Promise<void>;
+  openProject: () => Promise<void>;
+  saveProject: () => Promise<void>;
+  loadProjectInfo: () => Promise<void>;
+  saveProjectInfo: (info: ProjectInfo) => Promise<void>;
+  loadHistory: () => Promise<void>;
+  indentNode: (itemId: string) => Promise<void>;
+  outdentNode: (itemId: string) => Promise<void>;
+  expandAll: () => Promise<void>;
+  collapseAll: () => Promise<void>;
 }
 
 const normalizeNode = (node: WbsNode): WbsNode => {
@@ -124,6 +138,15 @@ export const useWbsStore = create<WbsState>((set, get) => ({
   regionMultiplier: 1,
   regions: [],
   masterStats: null,
+  projectInfo: {
+    name: "",
+    location: "",
+    owner: "",
+    contractor: "",
+    contract_no: "",
+    start_date: "",
+  },
+  history: { undo: [], redo: [], can_undo: false, can_redo: false },
 
   load: async () => {
     set({ loading: true });
@@ -167,6 +190,7 @@ export const useWbsStore = create<WbsState>((set, get) => ({
 
     await get().loadWorkPlans();
     await get().loadRegion();
+    await get().loadProjectInfo();
   },
 
   selectRow: (id) => set({ selectedId: id }),
@@ -471,5 +495,92 @@ export const useWbsStore = create<WbsState>((set, get) => ({
     } finally {
       set({ syncing: false, lastSyncedAt: Date.now() });
     }
+  },
+
+  newProject: async () => {
+    if (!isTauriRuntime()) return;
+    set({ syncing: true });
+    try {
+      const snapshot = await safeInvoke<EngineSnapshot>("new_project");
+      if (snapshot) {
+        set({ ...ingest(snapshot), selectedId: null });
+        await get().loadProjectInfo();
+        await get().loadRegion();
+      }
+    } finally {
+      set({ syncing: false, lastSyncedAt: Date.now() });
+    }
+  },
+
+  openProject: async () => {
+    if (!isTauriRuntime()) return;
+    const path = await open({
+      multiple: false,
+      filters: [{ name: "ConstrucSee Project", extensions: ["csee", "db"] }],
+    });
+    if (!path) return;
+    set({ syncing: true });
+    try {
+      const snapshot = await safeInvoke<EngineSnapshot>("open_project", { path });
+      if (snapshot) {
+        set({ ...ingest(snapshot), selectedId: snapshot.roots[0] ?? null });
+        await get().loadProjectInfo();
+        await get().loadRegion();
+        await get().loadWorkPlans();
+      }
+    } finally {
+      set({ syncing: false, lastSyncedAt: Date.now() });
+    }
+  },
+
+  saveProject: async () => {
+    if (!isTauriRuntime()) return;
+    const path = await save({
+      defaultPath: "Proyek-ConstrucSee.csee",
+      filters: [{ name: "ConstrucSee Project", extensions: ["csee"] }],
+    });
+    if (!path) return;
+    set({ syncing: true });
+    try {
+      const written = await safeInvoke<string>("save_project", { path });
+      set({ lastSyncedAt: written ? Date.now() : get().lastSyncedAt });
+    } finally {
+      set({ syncing: false });
+    }
+  },
+
+  loadProjectInfo: async () => {
+    const info = await safeInvoke<ProjectInfo>("get_project_info");
+    if (info) set({ projectInfo: info });
+  },
+
+  saveProjectInfo: async (info) => {
+    const saved = await safeInvoke<ProjectInfo>("set_project_info", { info });
+    if (saved) set({ projectInfo: saved });
+  },
+
+  loadHistory: async () => {
+    const history = await safeInvoke<HistoryView>("get_history");
+    if (history) set({ history });
+  },
+
+  indentNode: async (itemId) => {
+    const snapshot = await safeInvoke<EngineSnapshot>("indent_node", { item_id: itemId });
+    if (snapshot) set((state) => ({ ...ingest(snapshot), selectedId: state.selectedId }));
+  },
+
+  outdentNode: async (itemId) => {
+    const snapshot = await safeInvoke<EngineSnapshot>("outdent_node", { item_id: itemId });
+    if (snapshot) set((state) => ({ ...ingest(snapshot), selectedId: state.selectedId }));
+  },
+
+  expandAll: async () => {
+    const snapshot = await safeInvoke<EngineSnapshot>("set_expand_all", { expanded: true });
+    if (snapshot) set((state) => ({ ...ingest(snapshot), selectedId: state.selectedId }));
+  },
+
+  collapseAll: async () => {
+    const snapshot = await safeInvoke<EngineSnapshot>("set_expand_all", { expanded: false });
+    if (snapshot) set((state) => ({ ...ingest(snapshot), selectedId: state.selectedId }));
   },
 }));

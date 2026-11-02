@@ -3,7 +3,8 @@ use tauri::State;
 use crate::engine::actor::EngineHandle;
 use crate::engine::analytics::Analytics;
 use crate::engine::models::{
-    AffectedPatch, DeltaPayload, EngineSnapshot, RegionInfo, WbsNode, WorkPlan,
+    AffectedPatch, DeltaPayload, EngineSnapshot, HistoryView, ProjectInfo, RegionInfo, WbsNode,
+    WorkPlan,
 };
 use crate::master::{self, MasterDb, MasterStats, Region};
 
@@ -160,6 +161,69 @@ pub async fn set_project_start(
     engine: State<'_, EngineHandle>,
 ) -> Result<String, String> {
     engine.inner().clone().set_project_start(date).await
+}
+
+#[tauri::command(rename_all = "snake_case")]
+pub async fn new_project(engine: State<'_, EngineHandle>) -> Result<EngineSnapshot, String> {
+    engine.inner().clone().new_project().await
+}
+
+#[tauri::command(rename_all = "snake_case")]
+pub async fn open_project(
+    path: String,
+    engine: State<'_, EngineHandle>,
+) -> Result<EngineSnapshot, String> {
+    engine.inner().clone().open_project(path).await
+}
+
+#[tauri::command(rename_all = "snake_case")]
+pub async fn save_project(
+    path: String,
+    engine: State<'_, EngineHandle>,
+) -> Result<String, String> {
+    engine.inner().clone().save_project(path).await
+}
+
+#[tauri::command(rename_all = "snake_case")]
+pub async fn get_project_info(engine: State<'_, EngineHandle>) -> Result<ProjectInfo, String> {
+    engine.inner().clone().project_info().await
+}
+
+#[tauri::command(rename_all = "snake_case")]
+pub async fn set_project_info(
+    info: ProjectInfo,
+    engine: State<'_, EngineHandle>,
+) -> Result<ProjectInfo, String> {
+    engine.inner().clone().set_project_info(info).await
+}
+
+#[tauri::command(rename_all = "snake_case")]
+pub async fn get_history(engine: State<'_, EngineHandle>) -> Result<HistoryView, String> {
+    engine.inner().clone().history().await
+}
+
+#[tauri::command(rename_all = "snake_case")]
+pub async fn indent_node(
+    item_id: String,
+    engine: State<'_, EngineHandle>,
+) -> Result<EngineSnapshot, String> {
+    engine.inner().clone().indent_node(item_id).await
+}
+
+#[tauri::command(rename_all = "snake_case")]
+pub async fn outdent_node(
+    item_id: String,
+    engine: State<'_, EngineHandle>,
+) -> Result<EngineSnapshot, String> {
+    engine.inner().clone().outdent_node(item_id).await
+}
+
+#[tauri::command(rename_all = "snake_case")]
+pub async fn set_expand_all(
+    expanded: bool,
+    engine: State<'_, EngineHandle>,
+) -> Result<EngineSnapshot, String> {
+    engine.inner().clone().set_expand_all(expanded).await
 }
 
 #[tauri::command(rename_all = "snake_case")]

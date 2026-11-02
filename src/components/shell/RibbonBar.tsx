@@ -5,12 +5,7 @@ import {
   Save,
   Undo,
   Redo,
-  Scissors,
-  Copy,
-  Clipboard,
   Sliders,
-  DatabasePlus,
-  PlusCircle,
   Trash2,
   IndentIncrease,
   IndentDecrease,
@@ -31,17 +26,17 @@ import {
   TrendingUp,
   PanelLeft,
   PanelRight,
-  Settings,
   RefreshCw,
-  Eye,
+  Info,
+  History,
   type LucideIcon,
 } from "lucide-react";
 import { useWbsStore } from "../../store/useWbsStore";
 import { useUiStore } from "../../store/useUiStore";
 
-type Tab = "Home" | "WBS Engine" | "AHSP & Reference" | "Excel & Export" | "View";
+type Tab = "Home" | "WBS" | "AHSP & Reference" | "Excel & Export" | "View";
 
-const TABS: Tab[] = ["Home", "WBS Engine", "AHSP & Reference", "Excel & Export", "View"];
+const TABS: Tab[] = ["Home", "WBS", "AHSP & Reference", "Excel & Export", "View"];
 
 interface RibbonButtonProps {
   label: string;
@@ -49,16 +44,31 @@ interface RibbonButtonProps {
   hint?: string;
   onClick?: () => void;
   disabled?: boolean;
+  compact?: boolean;
 }
 
-function RibbonButton({ label, icon: Icon, hint, onClick, disabled }: RibbonButtonProps) {
+function RibbonButton({ label, icon: Icon, hint, onClick, disabled, compact }: RibbonButtonProps) {
+  if (compact) {
+    return (
+      <button
+        type="button"
+        title={hint ?? label}
+        onClick={onClick}
+        disabled={disabled}
+        className="flex h-[16px] min-w-[68px] items-center gap-1 rounded-sm border border-transparent px-1 text-[9px] text-muted transition hover:border-line hover:bg-panel2 hover:text-ink disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-transparent disabled:hover:bg-transparent"
+      >
+        <Icon size={11} className="text-accent" strokeWidth={1.75} />
+        <span className="whitespace-nowrap">{label}</span>
+      </button>
+    );
+  }
   return (
     <button
       type="button"
       title={hint ?? label}
       onClick={onClick}
       disabled={disabled}
-      className="flex h-[52px] min-w-[64px] flex-col items-center justify-center gap-1 rounded-sm border border-transparent px-2 text-[10px] text-muted transition hover:border-line hover:bg-panel2 hover:text-ink disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-transparent disabled:hover:bg-transparent"
+      className="flex h-[52px] min-w-[54px] flex-col items-center justify-center gap-0.5 rounded-sm border border-transparent px-1 text-[10px] text-muted transition hover:border-line hover:bg-panel2 hover:text-ink disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-transparent disabled:hover:bg-transparent"
     >
       <Icon size={15} className="text-accent" strokeWidth={1.75} />
       <span className="whitespace-nowrap">{label}</span>
@@ -68,9 +78,9 @@ function RibbonButton({ label, icon: Icon, hint, onClick, disabled }: RibbonButt
 
 function Group({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <div className="flex items-stretch gap-1 border-r border-line px-2 last:border-r-0">
-      <div className="flex items-center gap-1">{children}</div>
-      <span className="self-end pb-1 text-[9px] uppercase tracking-widest text-muted/60">
+    <div className="flex h-full shrink-0 flex-col border-r border-line px-1.5 last:border-r-0">
+      <div className="flex flex-1 items-center justify-center gap-0.5">{children}</div>
+      <span className="pb-0.5 text-center text-[9px] uppercase tracking-widest text-muted/60">
         {title}
       </span>
     </div>
@@ -88,7 +98,22 @@ export function RibbonBar() {
   const canRedo = useWbsStore((state) => state.canRedo);
   const undo = useWbsStore((state) => state.undo);
   const redo = useWbsStore((state) => state.redo);
-  const openRegion = useWbsStore((state) => state.openRegion);
+  const selectedId = useWbsStore((state) => state.selectedId);
+  const removeNode = useWbsStore((state) => state.removeNode);
+  const indentNode = useWbsStore((state) => state.indentNode);
+  const outdentNode = useWbsStore((state) => state.outdentNode);
+  const expandAll = useWbsStore((state) => state.expandAll);
+  const collapseAll = useWbsStore((state) => state.collapseAll);
+  const newProject = useWbsStore((state) => state.newProject);
+  const openProject = useWbsStore((state) => state.openProject);
+  const saveProject = useWbsStore((state) => state.saveProject);
+  const openProjectInfo = useUiStore((state) => state.openProjectInfo);
+  const openHistory = useUiStore((state) => state.openHistory);
+  const openOptions = useUiStore((state) => state.openOptions);
+  const calculatorOpen = useUiStore((state) => state.calculatorOpen);
+  const openCalculator = useUiStore((state) => state.openCalculator);
+  const closeCalculator = useUiStore((state) => state.closeCalculator);
+  const openFind = useUiStore((state) => state.openFind);
 
   return (
     <section className="shrink-0 border-b border-line bg-panel">
@@ -113,45 +138,142 @@ export function RibbonBar() {
         </div>
       </div>
 
-      <div className="flex h-[68px] items-center overflow-x-auto px-1">
+      <div className="flex h-[68px] items-center overflow-x-auto px-0.5">
         {tab === "Home" && (
           <>
             <Group title="Project">
-              <RibbonButton label="New" icon={FilePlus} disabled hint="Fase 2: manajemen proyek" />
-              <RibbonButton label="Open" icon={FolderOpen} disabled hint="Fase 2: manajemen proyek" />
-              <RibbonButton label="Save" icon={Save} disabled hint="Fase 2: simpan proyek" />
-              <RibbonButton label="Reload" icon={RefreshCw} onClick={() => void load()} hint="Muat ulang snapshot dari Rust engine" />
+              <RibbonButton
+                label="New"
+                icon={FilePlus}
+                onClick={() => {
+                  if (window.confirm("Buat proyek baru? Seluruh data proyek saat ini akan dihapus.")) {
+                    void newProject();
+                  }
+                }}
+                hint="Proyek baru (kosong)"
+              />
+              <RibbonButton
+                label="Open"
+                icon={FolderOpen}
+                onClick={() => void openProject()}
+                hint="Buka file proyek .csee"
+              />
+              <RibbonButton
+                label="Save"
+                icon={Save}
+                onClick={() => void saveProject()}
+                hint="Simpan proyek ke file .csee"
+              />
             </Group>
-            <Group title="Undo/Redo">
-              <RibbonButton label="Undo" icon={Undo} onClick={() => void undo()} disabled={!canUndo} hint="Batal perubahan terakhir (Ctrl+Z)" />
-              <RibbonButton label="Redo" icon={Redo} onClick={() => void redo()} disabled={!canRedo} hint="Ulang perubahan dibatal (Ctrl+Y)" />
+            <Group title="Edit">
+              <RibbonButton
+                label="Undo"
+                icon={Undo}
+                onClick={() => void undo()}
+                disabled={!canUndo}
+                hint="Batal perubahan terakhir (Ctrl+Z)"
+              />
+              <RibbonButton
+                label="Redo"
+                icon={Redo}
+                onClick={() => void redo()}
+                disabled={!canRedo}
+                hint="Ulang perubahan dibatalkan (Ctrl+Y)"
+              />
+              <RibbonButton
+                label="History"
+                icon={History}
+                onClick={openHistory}
+                hint="Riwayat undo / redo"
+              />
             </Group>
-            <Group title="Clipboard">
-              <RibbonButton label="Cut" icon={Scissors} disabled hint="Fase 2: potong baris" />
-              <RibbonButton label="Copy" icon={Copy} disabled hint="Fase 2: salin baris" />
-              <RibbonButton label="Paste" icon={Clipboard} disabled hint="Fase 2: tempel baris" />
-              <RibbonButton label="Options" icon={Sliders} disabled hint="Fase 2: preferensi" />
+            <Group title="Workspace">
+              <RibbonButton
+                label="Info"
+                icon={Info}
+                onClick={openProjectInfo}
+                hint="Project info (nama, lokasi, pemilik, kontrak)"
+              />
+              <RibbonButton
+                label="Options"
+                icon={Sliders}
+                onClick={openOptions}
+                hint="Preferensi overhead & PPN"
+              />
+              <RibbonButton
+                label="Reload"
+                icon={RefreshCw}
+                onClick={() => void load()}
+                hint="Muat ulang snapshot dari engine"
+              />
             </Group>
           </>
         )}
 
-        {tab === "WBS Engine" && (
+        {tab === "WBS" && (
           <>
             <Group title="Rows">
-              <RibbonButton label="Division" icon={DatabasePlus} disabled hint="Fase 2: tambah divisi" />
-              <RibbonButton label="Item" icon={PlusCircle} disabled hint="Fase 2: tambah item" />
-              <RibbonButton label="Delete" icon={Trash2} disabled hint="Fase 2: hapus baris" />
+              <RibbonButton
+                label="Delete"
+                icon={Trash2}
+                disabled={!selectedId}
+                onClick={() => {
+                  if (selectedId) void removeNode(selectedId);
+                }}
+                hint="Hapus baris terpilih"
+              />
             </Group>
             <Group title="Structure">
-              <RibbonButton label="Indent +" icon={IndentIncrease} disabled hint="Fase 2: naikkan level" />
-              <RibbonButton label="Indent −" icon={IndentDecrease} disabled hint="Fase 2: turunkan level" />
-              <RibbonButton label="Expand" icon={ChevronsDown} disabled hint="Fase 2: bentangkan semua" />
-              <RibbonButton label="Collapse" icon={ChevronsUp} disabled hint="Fase 2: lipat semua" />
+              <RibbonButton
+                label="Indent +"
+                icon={IndentIncrease}
+                disabled={!selectedId}
+                onClick={() => {
+                  if (selectedId) void indentNode(selectedId);
+                }}
+                hint="Jadikan anak dari baris di atasnya"
+              />
+              <RibbonButton
+                label="Indent −"
+                icon={IndentDecrease}
+                disabled={!selectedId}
+                onClick={() => {
+                  if (selectedId) void outdentNode(selectedId);
+                }}
+                hint="Keluarkan satu tingkat"
+              />
+              <RibbonButton
+                label="Expand All"
+                icon={ChevronsDown}
+                onClick={() => void expandAll()}
+                hint="Bentangkan seluruh struktur"
+              />
+              <RibbonButton
+                label="Collapse All"
+                icon={ChevronsUp}
+                onClick={() => void collapseAll()}
+                hint="Lipat seluruh struktur"
+              />
             </Group>
-            <Group title="Engine">
-              <RibbonButton label="Reload" icon={RefreshCw} onClick={() => void load()} hint="Sinkronisasi ulang dengan engine" />
-              <RibbonButton label="Recalc" icon={Calculator} disabled hint="Propagasi DAG otomatis setiap edit" />
-              <RibbonButton label="Find" icon={Search} disabled hint="Fase 2: cari pekerjaan" />
+            <Group title="Tools">
+              <RibbonButton
+                label="Calculator"
+                icon={Calculator}
+                onClick={() => (calculatorOpen ? closeCalculator() : openCalculator())}
+                hint="Tampilkan/sembunyikan kalkulator di panel kanan (numpad aktif)"
+              />
+              <RibbonButton
+                label="Find"
+                icon={Search}
+                onClick={openFind}
+                hint="Cari pekerjaan (Ctrl+F)"
+              />
+              <RibbonButton
+                label="Reload"
+                icon={RefreshCw}
+                onClick={() => void load()}
+                hint="Sinkronisasi ulang dengan engine"
+              />
             </Group>
           </>
         )}
@@ -175,15 +297,25 @@ export function RibbonBar() {
                 label="Wilayah"
                 icon={MapPin}
                 onClick={() => {
-                  openRegion('dki-jakarta');
-                  useUiStore.getState().setActiveSheet('analisa');
+                  useUiStore.getState().openRegion();
+                  useUiStore.getState().setActiveSheet("analisa");
                 }}
-                hint="Fase 4: pilih wilayah proyek"
+                hint="Pilih wilayah dan indeks harga proyek"
               />
             </Group>
             <Group title="Pricing">
-              <RibbonButton label="Analisa" icon={PieChart} onClick={() => useUiStore.getState().setActiveSheet("analisa")} hint="Analisa komponen harga satuan" />
-              <RibbonButton label="Bandingkan" icon={GitCompare} disabled hint="Fase 2: bandingkan HSP" />
+              <RibbonButton
+                label="Analisa"
+                icon={PieChart}
+                onClick={() => useUiStore.getState().setActiveSheet("analisa")}
+                hint="Analisa harga satuan & porsi biaya"
+              />
+              <RibbonButton
+                label="Bandingkan"
+                icon={GitCompare}
+                onClick={() => useUiStore.getState().openCompare()}
+                hint="Bandingkan estimasi biaya antar wilayah"
+              />
             </Group>
           </>
         )}
@@ -194,7 +326,9 @@ export function RibbonBar() {
               <RibbonButton label="Import" icon={FileSpreadsheet} onClick={() => void importExcel()} hint="Import .xlsx via calamine" />
               <RibbonButton label="Export" icon={FileText} onClick={() => void exportExcel()} hint="Export .xlsx dengan live formula" />
               <RibbonButton label="PDF" icon={Printer} onClick={() => void exportPdf()} hint="Ekspor RAB ke PDF (F4, standar resmi)" />
-              <RibbonButton label="Preview" icon={Eye} onClick={() => void previewPdf()} hint="Pratinjau PDF tanpa perlu ekspor" />
+            </Group>
+            <Group title="Preview">
+              <RibbonButton label="Preview" icon={FileText} onClick={() => void previewPdf()} hint="Pratinjau PDF tanpa menyimpan" />
             </Group>
             <Group title="Share">
               <RibbonButton label="Share" icon={Share2} disabled hint="Fase 2: bagikan dokumen" />
@@ -206,10 +340,24 @@ export function RibbonBar() {
         {tab === "View" && (
           <>
             <Group title="Panels">
-              <RibbonButton label="Navigator" icon={PanelLeft} disabled hint="Ctrl+[ untuk toggle" />
-              <RibbonButton label="Inspector" icon={PanelRight} disabled hint="Ctrl+] untuk toggle" />
-              <RibbonButton label="Kurva S" icon={TrendingUp} onClick={() => useUiStore.getState().setActiveSheet("kurvaS")} hint="Grafik waktu-biaya & Pareto 80/20" />
-              <RibbonButton label="Settings" icon={Settings} disabled hint="Fase 2: preferensi tampilan" />
+              <RibbonButton
+                label="Navigator"
+                icon={PanelLeft}
+                onClick={() => useUiStore.getState().toggleNavigator()}
+                hint="Tampilkan/sembunyikan Project Navigator (Ctrl+[)"
+              />
+              <RibbonButton
+                label="Inspector"
+                icon={PanelRight}
+                onClick={() => useUiStore.getState().toggleInspector()}
+                hint="Tampilkan/sembunyikan Properties Inspector (Ctrl+])"
+              />
+              <RibbonButton
+                label="Kurva S"
+                icon={TrendingUp}
+                onClick={() => useUiStore.getState().setActiveSheet("kurvaS")}
+                hint="Grafik waktu-biaya"
+              />
             </Group>
           </>
         )}

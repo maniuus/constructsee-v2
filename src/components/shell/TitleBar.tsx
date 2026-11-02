@@ -1,5 +1,7 @@
 import { getCurrentWindow } from "@tauri-apps/api/window";
+import { Moon, Sun } from "lucide-react";
 import { isTauriRuntime } from "../../lib/tauriBridge";
+import { useUiStore } from "../../store/useUiStore";
 
 const windowAction = (action: "minimize" | "toggle" | "close") => {
   if (!isTauriRuntime()) return;
@@ -10,6 +12,9 @@ const windowAction = (action: "minimize" | "toggle" | "close") => {
 };
 
 export function TitleBar() {
+  const theme = useUiStore((state) => state.theme);
+  const toggleTheme = useUiStore((state) => state.toggleTheme);
+
   return (
     <header className="relative z-20 flex h-9 shrink-0 items-center justify-between border-b border-line bg-panel pl-3 select-none">
       <div data-tauri-drag-region className="flex flex-1 items-center gap-2.5">
@@ -25,6 +30,19 @@ export function TitleBar() {
       </div>
 
       <div className="flex h-full items-stretch">
+        <button
+          type="button"
+          aria-label={theme === "light" ? "Aktifkan tema gelap" : "Aktifkan tema terang"}
+          title={theme === "light" ? "Tema gelap" : "Tema terang"}
+          onClick={toggleTheme}
+          className="grid w-11 place-items-center text-muted transition hover:bg-panel2 hover:text-ink"
+        >
+          {theme === "light" ? (
+            <Moon size={13} strokeWidth={1.75} />
+          ) : (
+            <Sun size={13} strokeWidth={1.75} />
+          )}
+        </button>
         <button
           type="button"
           aria-label="Minimize"

@@ -45,6 +45,15 @@ pub fn run() {
             commands::get_master_stats,
             commands::get_region,
             commands::set_region,
+            commands::new_project,
+            commands::open_project,
+            commands::save_project,
+            commands::get_project_info,
+            commands::set_project_info,
+            commands::get_history,
+            commands::indent_node,
+            commands::outdent_node,
+            commands::set_expand_all,
             commands::undo,
             commands::redo
         ])

@@ -2,8 +2,10 @@ import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } f
 import { ProjectNavigator } from "../navigator/ProjectNavigator";
 import { Sheets } from "../sheets/Sheets";
 import { PropertiesInspector } from "../inspector/PropertiesInspector";
+import { CalculatorPanel } from "../inspector/CalculatorPanel";
 import { DialogHost } from "../ahsp/Dialogs";
 import { useWbsStore } from "../../store/useWbsStore";
+import { useUiStore } from "../../store/useUiStore";
 
 const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max);
@@ -17,8 +19,13 @@ interface DragState {
 export function Workspace() {
   const [leftWidth, setLeftWidth] = useState(250);
   const [rightWidth, setRightWidth] = useState(330);
-  const [leftCollapsed, setLeftCollapsed] = useState(false);
-  const [rightCollapsed, setRightCollapsed] = useState(false);
+  const navigatorOpen = useUiStore((state) => state.navigatorOpen);
+  const inspectorOpen = useUiStore((state) => state.inspectorOpen);
+  const setNavigatorOpen = useUiStore((state) => state.setNavigatorOpen);
+  const setInspectorOpen = useUiStore((state) => state.setInspectorOpen);
+  const leftCollapsed = !navigatorOpen;
+  const rightCollapsed = !inspectorOpen;
+  const calculatorOpen = useUiStore((state) => state.calculatorOpen);
   const drag = useRef<DragState | null>(null);
 
   useEffect(() => {
@@ -26,10 +33,10 @@ export function Workspace() {
       if (!event.ctrlKey || event.altKey || event.shiftKey) return;
       if (event.key === "[") {
         event.preventDefault();
-        setLeftCollapsed((value) => !value);
+        useUiStore.getState().toggleNavigator();
       } else if (event.key === "]") {
         event.preventDefault();
-        setRightCollapsed((value) => !value);
+        useUiStore.getState().toggleInspector();
       }
     };
     window.addEventListener("keydown", onKeyDown);
@@ -95,7 +102,7 @@ export function Workspace() {
         <aside className="flex w-8 shrink-0 flex-col items-center gap-2 border-r border-line bg-panel py-2">
           <button
             type="button"
-            onClick={() => setLeftCollapsed(false)}
+            onClick={() => setNavigatorOpen(true)}
             title="Buka Project Navigator"
             aria-label="Expand Project Navigator"
             className="grid h-6 w-6 shrink-0 place-items-center rounded-sm text-muted transition-colors hover:bg-panel2 hover:text-accent"
@@ -108,7 +115,7 @@ export function Workspace() {
         </aside>
       ) : (
         <aside style={{ width: leftWidth }} className="flex min-w-0 shrink-0 flex-col bg-panel">
-          <ProjectNavigator onCollapse={() => setLeftCollapsed(true)} />
+          <ProjectNavigator onCollapse={() => setNavigatorOpen(false)} />
         </aside>
       )}
 
@@ -144,7 +151,7 @@ export function Workspace() {
         <aside className="flex w-8 shrink-0 flex-col items-center gap-2 border-l border-line bg-panel py-2">
           <button
             type="button"
-            onClick={() => setRightCollapsed(false)}
+            onClick={() => setInspectorOpen(true)}
             title="Buka Properties Inspector"
             aria-label="Expand Properties Inspector"
             className="grid h-6 w-6 shrink-0 place-items-center rounded-sm text-muted transition-colors hover:bg-panel2 hover:text-accent"
@@ -157,7 +164,12 @@ export function Workspace() {
         </aside>
       ) : (
         <aside style={{ width: rightWidth }} className="flex min-w-0 shrink-0 flex-col bg-panel">
-          <PropertiesInspector onCollapse={() => setRightCollapsed(true)} />
+          <div className="flex min-h-0 flex-1 flex-col">
+            <PropertiesInspector onCollapse={() => setInspectorOpen(false)} />
+          </div>
+          {calculatorOpen && (
+            <CalculatorPanel onClose={() => useUiStore.getState().closeCalculator()} />
+          )}
         </aside>
       )}
 

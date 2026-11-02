@@ -9,6 +9,7 @@ import type {
   MasterStats,
   ParetoItem,
   PriceMethod,
+  ProjectInfo,
   Region,
   RegionInfo,
   SCurvePoint,
@@ -255,6 +256,14 @@ const MOCK_REGIONS: Region[] = [
 let regionId = "national";
 let regionName = "NASIONAL";
 let regionMultiplier = 1;
+let mockProjectInfo: ProjectInfo = {
+  name: "",
+  location: "",
+  owner: "",
+  contractor: "",
+  contract_no: "",
+  start_date: projectStart,
+};
 
 const regionInfo = (): RegionInfo => ({
   region_id: regionId,
@@ -717,6 +726,77 @@ const removeNodesBatch = (ids: string[]): AffectedPatch => {
   return { nodes: affected, total_cost: computeTotal(current) };
 };
 
+const indentNode = (itemId: string): EngineSnapshot => {
+  const current = ensureState();
+  const node = current.nodes[itemId];
+  if (!node) throw new Error("Baris tidak ditemukan");
+  const siblings = node.parent_id
+    ? current.nodes[node.parent_id].children_ids
+    : current.roots;
+  const position = siblings.indexOf(itemId);
+  if (position <= 0) throw new Error("Baris pertama tidak dapat di-indent");
+  const newParentId = siblings[position - 1];
+  const parent = node.parent_id ? current.nodes[node.parent_id] : null;
+  if (parent) {
+    parent.children_ids = parent.children_ids.filter((id) => id !== itemId);
+  } else {
+    current.roots = current.roots.filter((id) => id !== itemId);
+  }
+  current.nodes[newParentId].children_ids.push(itemId);
+  current.nodes[newParentId].is_expanded = true;
+  node.parent_id = newParentId;
+  rollup(current.nodes);
+  return snapshot();
+};
+
+const outdentNode = (itemId: string): EngineSnapshot => {
+  const current = ensureState();
+  const node = current.nodes[itemId];
+  if (!node) throw new Error("Baris tidak ditemukan");
+  if (!node.parent_id) throw new Error("Baris sudah berada di level teratas");
+  const parent = current.nodes[node.parent_id];
+  parent.children_ids = parent.children_ids.filter((id) => id !== itemId);
+  const grandparentId = parent.parent_id;
+  if (grandparentId) {
+    const gp = current.nodes[grandparentId];
+    const at = gp.children_ids.indexOf(parent.id);
+    gp.children_ids.splice(at >= 0 ? at + 1 : gp.children_ids.length, 0, itemId);
+  } else {
+    const at = current.roots.indexOf(parent.id);
+    current.roots.splice(at >= 0 ? at + 1 : current.roots.length, 0, itemId);
+  }
+  node.parent_id = grandparentId;
+  rollup(current.nodes);
+  return snapshot();
+};
+
+const expandAll = (expanded: boolean): EngineSnapshot => {
+  const current = ensureState();
+  for (const node of Object.values(current.nodes)) {
+    if (node.children_ids.length > 0) node.is_expanded = expanded;
+  }
+  return snapshot();
+};
+
+const newProject = (): EngineSnapshot => {
+  state = { nodes: {}, roots: [] };
+  overheadPercent = 10;
+  projectStart = new Date().toISOString().slice(0, 10);
+  workPlans = {};
+  regionId = "national";
+  regionName = "NASIONAL";
+  regionMultiplier = 1;
+  mockProjectInfo = {
+    name: "",
+    location: "",
+    owner: "",
+    contractor: "",
+    contract_no: "",
+    start_date: projectStart,
+  };
+  return snapshot();
+};
+
 export async function mockInvoke<T>(
   command: string,
   args?: Record<string, unknown>,
@@ -813,6 +893,28 @@ export async function mockInvoke<T>(
       regionMultiplier = region.multiplier_factor;
       return snapshot() as T;
     }
+    case "new_project":
+      return newProject() as T;
+    case "open_project":
+      return snapshot() as T;
+    case "save_project":
+      return String(args?.path ?? "") as T;
+    case "get_project_info":
+      return { ...mockProjectInfo } as T;
+    case "set_project_info":
+      mockProjectInfo = { ...(args?.info as ProjectInfo) };
+      if (/^\d{4}-\d{2}-\d{2}$/.test(mockProjectInfo.start_date)) {
+        projectStart = mockProjectInfo.start_date;
+      }
+      return { ...mockProjectInfo } as T;
+    case "get_history":
+      return { undo: [], redo: [], can_undo: false, can_redo: false } as T;
+    case "indent_node":
+      return indentNode(String(args?.item_id)) as T;
+    case "outdent_node":
+      return outdentNode(String(args?.item_id)) as T;
+    case "set_expand_all":
+      return expandAll(Boolean(args?.expanded)) as T;
     case "import_excel":
       throw new Error("Import Excel hanya tersedia pada runtime desktop Tauri.");
     case "export_excel":

@@ -327,3 +327,23 @@ pub struct AffectedPatch {
     pub nodes: Vec<WbsNode>,
     pub total_cost: f64,
 }
+
+/// Metadata header proyek (dipakai pada dokumen RAB/PDF dan dialog Project Info).
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
+pub struct ProjectInfo {
+    pub name: String,
+    pub location: String,
+    pub owner: String,
+    pub contractor: String,
+    pub contract_no: String,
+    pub start_date: String,
+}
+
+/// Ringkasan riwayat undo/redo untuk panel History.
+#[derive(Debug, Clone, Serialize)]
+pub struct HistoryView {
+    pub undo: Vec<String>,
+    pub redo: Vec<String>,
+    pub can_undo: bool,
+    pub can_redo: bool,
+}

@@ -4,7 +4,7 @@ import { useWbsStore } from "../../store/useWbsStore";
 import type { ParetoItem, SCurvePoint, ScheduleItem } from "../../types/wbs";
 
 const NUM = "font-mono tabular-nums";
-const ACCENT = "#22C55E";
+const ACCENT = "hsl(var(--c-accent))";
 const ALIGN = { left: "text-left", right: "text-right", center: "text-center" } as const;
 
 function Th({
@@ -101,11 +101,11 @@ function SCurveChart({ points }: { points: SCurvePoint[] }) {
               y1={y(value)}
               x2={W - padR}
               y2={y(value)}
-              stroke="#2E2E33"
+              stroke="hsl(var(--c-line))"
               strokeWidth={1}
               strokeDasharray="3 4"
             />
-            <text x={padL - 7} y={y(value) + 3} textAnchor="end" fontSize={9} fill="#A1A1AA" fontFamily="monospace">
+            <text x={padL - 7} y={y(value) + 3} textAnchor="end" fontSize={9} fill="hsl(var(--c-muted))" fontFamily="monospace">
               {value}%
             </text>
           </g>
@@ -133,11 +133,11 @@ function SCurveChart({ points }: { points: SCurvePoint[] }) {
           const showLabel = index % labelStep === 0 || index === n - 1;
           return (
             <g key={`dot-${point.week}`}>
-              <circle cx={x(index)} cy={y(point.cumulative)} r={2.6} fill="#121214" stroke={ACCENT} strokeWidth={1.5}>
+              <circle cx={x(index)} cy={y(point.cumulative)} r={2.6} fill="hsl(var(--c-shell))" stroke={ACCENT} strokeWidth={1.5}>
                 <title>{`Minggu ${point.week}${point.date ? ` (${point.date})` : ""}: ${pct(point.cumulative)}`}</title>
               </circle>
               {showLabel && (
-                <text x={x(index)} y={H - 10} textAnchor="middle" fontSize={9} fill="#A1A1AA" fontFamily="monospace">
+                <text x={x(index)} y={H - 10} textAnchor="middle" fontSize={9} fill="hsl(var(--c-muted))" fontFamily="monospace">
                   {point.week}
                 </text>
               )}
@@ -145,7 +145,7 @@ function SCurveChart({ points }: { points: SCurvePoint[] }) {
           );
         })}
 
-        <text x={W / 2} y={H - 1} textAnchor="middle" fontSize={8.5} fill="#71717A" fontFamily="monospace">
+        <text x={W / 2} y={H - 1} textAnchor="middle" fontSize={8.5} fill="hsl(var(--c-muted))" fontFamily="monospace">
           minggu
         </text>
       </svg>

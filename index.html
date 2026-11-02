@@ -1,11 +1,21 @@
 <!doctype html>
-<html lang="id" class="dark">
+<html lang="id">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ConstrucSee</title>
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("construcsee-theme");
+          if (stored === "light") {
+            document.documentElement.classList.add("light");
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
-  <body class="bg-[#121214]">
+  <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

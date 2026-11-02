@@ -4,15 +4,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        shell: "#121214",
-        panel: "#18181B",
-        panel2: "#27272A",
-        line: "#2E2E33",
-        ink: "#F4F4F5",
-        muted: "#A1A1AA",
-        accent: "#22C55E",
-        accent2: "#10B981",
-        danger: "#EF4444",
+        shell: "hsl(var(--c-shell) / <alpha-value>)",
+        panel: "hsl(var(--c-panel) / <alpha-value>)",
+        panel2: "hsl(var(--c-panel2) / <alpha-value>)",
+        line: "hsl(var(--c-line) / <alpha-value>)",
+        ink: "hsl(var(--c-ink) / <alpha-value>)",
+        muted: "hsl(var(--c-muted) / <alpha-value>)",
+        accent: "hsl(var(--c-accent) / <alpha-value>)",
+        accent2: "hsl(var(--c-accent2) / <alpha-value>)",
+        danger: "hsl(var(--c-danger) / <alpha-value>)",
       },
       fontFamily: {
         sans: ["Inter", "Segoe UI", "system-ui", "sans-serif"],
