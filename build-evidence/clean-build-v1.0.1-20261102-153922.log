@@ -1,0 +1,76 @@
+Verification started: 2026-11-02T15:39:22.7694284+07:00
+Branch: local-build/v1.0.1
+HEAD: 2716aae592caf5107c623778acb4b37af971c304
+Working tree: clean
+
+=== cargo test --lib ===
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.85s
+     Running unittests src\lib.rs (src-tauri\target\debug\deps\constructsee_lib-83175f3de9ebd106.exe)
+
+running 22 tests
+test engine::actor::tests::undo_redo_remove_node_roundtrip ... ok
+test engine::actor::tests::undo_redo_add_node_roundtrip ... ok
+test engine::analytics::tests::missing_duration_defaults_to_one_day ... ok
+test engine::analytics::tests::pareto_marks_critical_group ... ok
+test engine::analytics::tests::sequential_schedule_and_weights ... ok
+test engine::actor::tests::undo_redo_set_overhead_roundtrip ... ok
+test engine::actor::tests::undo_redo_update_cell_roundtrip ... ok
+test engine::history::tests::clear_resets_both_stacks ... ok
+test engine::actor::tests::undo_remove_node_restores_work_plan ... ok
+test engine::history::tests::record_clears_redo ... ok
+test engine::history::tests::record_evicts_oldest_beyond_capacity ... ok
+test engine::history::tests::record_then_undo_redo_roundtrip ... ok
+test engine::actor::tests::record_after_undo_clears_redo ... ok
+test reports::templates::tests::empty_division_is_omitted ... ok
+test reports::templates::tests::grand_total_includes_ppn ... ok
+test reports::templates::tests::fmt_volume_trims_trailing_zero ... ok
+test reports::templates::tests::fmt_idr_indonesian ... ok
+test reports::templates::tests::escape_typst_specials ... ok
+test reports::templates::tests::roman_numerals ... ok
+test reports::templates::tests::terbilang_miliar ... ok
+test engine::actor::tests::set_item_price_undo_restores_components_exactly ... ok
+test reports::pdf::tests::render_rab_pdf_roundtrip ... ok
+
+test result: ok. 22 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.42s
+
+
+cargo test exit code: 0
+
+=== npm run tauri -- build ===
+
+> constructsee@1.0.1 tauri
+> tauri build
+
+        Info Looking up installed tauri packages to check mismatched versions...
+        Warn The bundle identifier "com.constructsee.app" set in `"tauri.conf.json" identifier` ends with `.app`. This is not recommended because it conflicts with the application bundle extension on macOS.
+     Running beforeBuildCommand `npm run build`
+
+> constructsee@1.0.1 build
+> tsc && vite build
+
+vite v6.4.5 building for production...
+transforming...
+✓ 2102 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.67 kB │ gzip:   0.39 kB
+dist/assets/index-F6jUpa4D.css   27.41 kB │ gzip:   5.71 kB
+dist/assets/index-CvTFr8sT.js   358.23 kB │ gzip: 101.09 kB
+✓ built in 3.38s
+   Compiling constructsee v1.0.1 (D:\Abimanyu\Dev\20-projects\constructsee_v2\src-tauri)
+    Finished `release` profile [optimized] target(s) in 53.72s
+       Built application at: D:\Abimanyu\Dev\20-projects\constructsee_v2\src-tauri\target\release\constructsee.exe
+        Info Patching D:\Abimanyu\Dev\20-projects\constructsee_v2\src-tauri\target\release\constructsee.exe with bundle type information: msi
+        Info Target: x64
+     Running candle for "D:\\Abimanyu\\Dev\\20-projects\\constructsee_v2\\src-tauri\\target\\release\\wix\\x64\\main.wxs"
+     Running light to produce D:\Abimanyu\Dev\20-projects\constructsee_v2\src-tauri\target\release\bundle\msi\ConstrucSee_1.0.1_x64_en-US.msi
+        Info Patching D:\Abimanyu\Dev\20-projects\constructsee_v2\src-tauri\target\release\constructsee.exe with bundle type information: nsis
+        Info Target: x64
+     Running makensis to produce D:\Abimanyu\Dev\20-projects\constructsee_v2\src-tauri\target\release\bundle\nsis\ConstrucSee_1.0.1_x64-setup.exe
+    Finished 2 bundles at:
+        D:\Abimanyu\Dev\20-projects\constructsee_v2\src-tauri\target\release\bundle\msi\ConstrucSee_1.0.1_x64_en-US.msi (13.95 MiB)
+        D:\Abimanyu\Dev\20-projects\constructsee_v2\src-tauri\target\release\bundle\nsis\ConstrucSee_1.0.1_x64-setup.exe (10.11 MiB)
+
+
+Build exit code: 0
+Finished: 2026-11-02T15:40:56.3881273+07:00
