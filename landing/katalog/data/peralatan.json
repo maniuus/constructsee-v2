@@ -1,0 +1,980 @@
+[
+  {
+    "id": "AL0001",
+    "nama": "1 Dump Truck",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0002",
+    "nama": "1 Ton Driver Hammer",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0003",
+    "nama": "10 Ton Crawler Crane + leader 14 ton",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0004",
+    "nama": "2 Dump Truck",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0005",
+    "nama": "2 Ton Driver Hammer",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0006",
+    "nama": "2,5 Jack Hammer Drill KW + Genset 5 KW",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0007",
+    "nama": "20 Crawler Crane Ton + leader 14 ton",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0008",
+    "nama": "20”; 5,5HP Chainsaw",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0009",
+    "nama": "3 Dump Truck",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0010",
+    "nama": "3 Ton Driver Hammer",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0011",
+    "nama": "3 Ton, Crane truck Winch 5 Ton *)",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0012",
+    "nama": "35”; 10 HP Chainsaw",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0013",
+    "nama": "5 Ton, Crane truck Winch 8 Ton *)",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0014",
+    "nama": "Alat Las Listrik",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0015",
+    "nama": "Alat las Listrik",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0016",
+    "nama": "Alat Las Listrik 1000 Watt",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0017",
+    "nama": "Alat pancang Hidraulik Pile Driver 2 ton",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0018",
+    "nama": "Alat pancang Hidraulik Pile Driver 3 ton",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0019",
+    "nama": "Alat Pancang Mini Pile Driver (Vibrator) Hammer 500 kg (10 HP)",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0020",
+    "nama": "Alat Pancang Mini Pile Driver (Vibratory) Hammer 50 kg (1 HP)",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0021",
+    "nama": "Asphalt Distributor",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0022",
+    "nama": "baja beton Bender",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0023",
+    "nama": "baja beton Cutter",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0024",
+    "nama": "Bender baja beton",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0025",
+    "nama": "besi beton Cutter",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0026",
+    "nama": "Bor listrik (portable)",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0027",
+    "nama": "Bor: Auger ∅ 20 cm",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0028",
+    "nama": "Bor: Auger ∅ 30 cm",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0029",
+    "nama": "Bor: Auger ∅ 40 cm",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0030",
+    "nama": "Bor: Auger ∅ 50 cm",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0031",
+    "nama": "Bored Pile Machine (Hidraulik) Auger ø 100 cm",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0032",
+    "nama": "Bored Pile Machine (Hidraulik) Auger ø 120 cm",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0033",
+    "nama": "Bored Pile Machine (Hidraulik) Auger ø 60 cm",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0034",
+    "nama": "Bored Pile Machine (Hidraulik) Auger ø 80 cm",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0035",
+    "nama": "Butt Fushion dan Genset",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0036",
+    "nama": "Chainsaw 20”; 5,5HP",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0037",
+    "nama": "Chainsaw 30”; 7,5HP",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0038",
+    "nama": "Colt T-120 (D); R-Blk. 4; 12 m3",
+    "kode": "",
+    "satuan": "Jam"
+  },
+  {
+    "id": "AL0039",
+    "nama": "Colt T-120 (D); R-Blk. 4; 12 m3",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0040",
+    "nama": "Compressor",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0041",
+    "nama": "Concrete Cutter",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0042",
+    "nama": "Concrete Vibrator",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0043",
+    "nama": "Crane truck 10 Ton, Winch 12 Ton *)",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0044",
+    "nama": "Crane Truck 3 T",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0045",
+    "nama": "Crane truck 3 Ton, Winch 5 Ton *)",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0046",
+    "nama": "Crane truck 5 Ton, Winch 8 Ton *)",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0047",
+    "nama": "Crane truck 8 Ton, Winch 10 Ton *)",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0048",
+    "nama": "Crane Truk 3 ton; Winch 5 Ton",
+    "kode": "",
+    "satuan": "Jam"
+  },
+  {
+    "id": "AL0049",
+    "nama": "Crane Truk 3 ton; Winch 5 Ton",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0050",
+    "nama": "Crawler Crane 10 Ton + 14 ton leader",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0051",
+    "nama": "Crawler Crane 10 Ton + leader 14 ton",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0052",
+    "nama": "Crawler Crane 20 Ton + 14 ton leader",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0053",
+    "nama": "Cutter baja beton",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0054",
+    "nama": "Cutter besi beton",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0055",
+    "nama": "dan Jack hammer genset; 12 HP",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0056",
+    "nama": "Drill- Jack Hammer 1,5 KW + Genset 3 KWH",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0057",
+    "nama": "Driver Hammer 1 Ton",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0058",
+    "nama": "Driver Hammer 2 Ton",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0059",
+    "nama": "Driver Hammer 3 Ton",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0060",
+    "nama": "Excavator (Std.); Bucket 0,55 m3; 95 HP *)",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0061",
+    "nama": "Flat deck truck kap 7 ton",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0062",
+    "nama": "Fuso (D); R-Blk. 8; 35 m3",
+    "kode": "",
+    "satuan": "Jam"
+  },
+  {
+    "id": "AL0063",
+    "nama": "Fuso (D); R-Blk. 8; 35 m3",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0064",
+    "nama": "Generator (D): Genset 5 kW",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0065",
+    "nama": "Gergaji Besi (Baja Keras)",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0066",
+    "nama": "Hoist 1 ton",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0067",
+    "nama": "Horizontal Drill Machine 240 HP, Kapasitas 30-40 ton termasuk kelengkapannya",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0068",
+    "nama": "Jack hammer (5 KW) + Genset (12 HP)",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0069",
+    "nama": "Jack Hammer Drill 2,5 KW + Genset 5 KW",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0070",
+    "nama": "kap 7 Flat deck truck ton",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0071",
+    "nama": "Kunci momen",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0072",
+    "nama": "Linggis (baja keras)",
+    "kode": "",
+    "satuan": "buah"
+  },
+  {
+    "id": "AL0073",
+    "nama": "Linggis (baja keras)",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0074",
+    "nama": "Mesin bor",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0075",
+    "nama": "Mesin Bor Cordless Drill Bor",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0076",
+    "nama": "Mesin Bor Listrik",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0077",
+    "nama": "Mesin bor listrik",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0078",
+    "nama": "Mesin Dorong",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0079",
+    "nama": "Mesin Gendong",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0080",
+    "nama": "Mesin Las Geotextile",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0081",
+    "nama": "Mesin Las listrik 150 A",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0082",
+    "nama": "Mesin Las listrik 250 A",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0083",
+    "nama": "Mesin Las listrik 350 A",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0084",
+    "nama": "Mesin Las listrik 500 A",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0085",
+    "nama": "Mesin Molen 1m3",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0086",
+    "nama": "Mesin Poles",
+    "kode": "",
+    "satuan": "unit/hari"
+  },
+  {
+    "id": "AL0087",
+    "nama": "Mobil sedot lumpur kapasitas 3 m3",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0088",
+    "nama": "Mobile 7 ton Crane",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0089",
+    "nama": "Mobile Crane < 3 ton",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0090",
+    "nama": "Mobile crane ≤ 3 ton",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0091",
+    "nama": "Molen 0,35 m3",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0092",
+    "nama": "Molen 0,35 m3 + Automatic feeder",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0093",
+    "nama": "Molen kapasitas 0,35 m3 termasuk feeder",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0094",
+    "nama": "Molen/Beton mixer 0,35 m3",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0095",
+    "nama": "Molen/Beton Mixer 0,35 m3 + feeder Bahan",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0096",
+    "nama": "Molen/Beton mixer 0,35 m3 dilengkapi Automatic Feeder",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0097",
+    "nama": "Pahat beton (baja keras)",
+    "kode": "",
+    "satuan": "buah"
+  },
+  {
+    "id": "AL0098",
+    "nama": "Pahat beton (baja keras)",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0099",
+    "nama": "Palu/godam",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0100",
+    "nama": "Palu/godam (baja keras)",
+    "kode": "",
+    "satuan": "buah"
+  },
+  {
+    "id": "AL0101",
+    "nama": "Peralatan potong pipa T1/manual (gergaji) / saw",
+    "kode": "",
+    "satuan": "Hari"
+  },
+  {
+    "id": "AL0102",
+    "nama": "Peralatan potong pipa T1/manual (gergaji) / saw",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0103",
+    "nama": "Peralatan potong pipa T2/mekanik / cilinder saw",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0104",
+    "nama": "Pick up L300",
+    "kode": "",
+    "satuan": "Jam"
+  },
+  {
+    "id": "AL0105",
+    "nama": "Pompa beton φ 1,5\"; 5 E.45.a KW; 8 bar; T = 5 m'",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0106",
+    "nama": "Pompa beton ∅ 2,5\", E.45.p 75KW; 120 bar, T= 50 m'/H=80 m’",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0107",
+    "nama": "Pompa beton ∅2,5\", E.45.k 20KW; 20 bar, T = 18 m'",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0108",
+    "nama": "Pompa lumpur diesel 10 KW; 5\"",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0109",
+    "nama": "Pompa lumpur diesel 7,5 KW; 4\"",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0110",
+    "nama": "Pompa sedot pasir, diesel 10 KW; 5\"",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0111",
+    "nama": "Pompa sedot pasir, diesel 20 KW; 5\"",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0112",
+    "nama": "Pompa sedot pasir, diesel 7,5 KW; 5\"",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0113",
+    "nama": "Pressure Grout machine 30 KW; 60 - 75 bar (D)",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0114",
+    "nama": "Sewa (1 scaffolding set)",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0115",
+    "nama": "Sewa Alat Las Listrik",
+    "kode": "",
+    "satuan": ""
+  },
+  {
+    "id": "AL0116",
+    "nama": "Sewa Alat Las Listrik",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0117",
+    "nama": "Sewa Boom Lift",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0118",
+    "nama": "Sewa Casing Pipa Baja Diameter 30 cm *)",
+    "kode": "",
+    "satuan": "m1"
+  },
+  {
+    "id": "AL0119",
+    "nama": "Sewa Casing Pipa Baja Diameter 50 cm *)",
+    "kode": "",
+    "satuan": "m1"
+  },
+  {
+    "id": "AL0120",
+    "nama": "Sewa Casing PVC Diameter 20 cm *)",
+    "kode": "",
+    "satuan": "m1"
+  },
+  {
+    "id": "AL0121",
+    "nama": "Sewa crane",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0122",
+    "nama": "Sewa crane",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0123",
+    "nama": "Sewa crane kapasitas 1 ton",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0124",
+    "nama": "Sewa excavator type 225 kapasitas 0,5 - 1,0 m3*)",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0125",
+    "nama": "Sewa excavator type 225 kapasitas 0,5 -1,0 m3",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0126",
+    "nama": "Sewa excavator type 225 kapasitas 0,5 -1,0 m3*)",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0127",
+    "nama": "Sewa Genset 5 KW",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0128",
+    "nama": "Sewa Gondola",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0129",
+    "nama": "Sewa Mesin Hydroseeding 2000L",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0130",
+    "nama": "Sewa Pipa Casing Baja Diameter 40 cm *)",
+    "kode": "",
+    "satuan": "m1"
+  },
+  {
+    "id": "AL0131",
+    "nama": "Sewa pipe support",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0132",
+    "nama": "Sewa Pompa Sedot Ø 5”",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0133",
+    "nama": "Sewa scaffolding",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0134",
+    "nama": "Sewa scaffolding (1 set)",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0135",
+    "nama": "Sewa tripod/tackel",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0136",
+    "nama": "Sewa Tripot/Tackel",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0137",
+    "nama": "Sewa Tripot/ Tackel & handle crane 2 T",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0138",
+    "nama": "Sewa Tripot/Tackel & handle crane 2T",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0139",
+    "nama": "Sewa Tripot/Tackel&handle 2 T crane",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0140",
+    "nama": "Sewa Water Truck",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0141",
+    "nama": "Sprayer Gendong",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0142",
+    "nama": "Stamper D-Drum 550 kg *)",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0143",
+    "nama": "Stamper Kodok 150 kg *)",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0144",
+    "nama": "Stamper Kodok 150 kg*)",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0145",
+    "nama": "Stamper Kuda 70 kg *)",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0146",
+    "nama": "Stamper Smooth Drum 1,5 Ton *)",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0147",
+    "nama": "Stang bor, batang bor diameter 1 1/4\"",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0148",
+    "nama": "Tandon Air Kap. 2 m3",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0149",
+    "nama": "Theodolit",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0150",
+    "nama": "Three Wheel Roller",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0151",
+    "nama": "Tower crane arm 30 m",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0152",
+    "nama": "Tripod 7 meter",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0153",
+    "nama": "Tripod tinggi 7 m kap 2 ton",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0154",
+    "nama": "Vibrator",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0155",
+    "nama": "Vibrator Concrete",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0156",
+    "nama": "Waterpass",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0157",
+    "nama": "Wheel Loader",
+    "kode": "",
+    "satuan": "jam"
+  },
+  {
+    "id": "AL0158",
+    "nama": "∅ Bor: Auger 20 cm",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0159",
+    "nama": "∅ Bor: Auger 30 cm",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0160",
+    "nama": "∅ Bor: Auger 40 cm",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0161",
+    "nama": "∅ Bor: Auger 50 cm",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0162",
+    "nama": "∅3\", Pompa beton 140KW; 180 bar, T = E.45.s 75 m' / H=150",
+    "kode": "",
+    "satuan": "hari"
+  },
+  {
+    "id": "AL0163",
+    "nama": "≤ 3 ton Mobile crane",
+    "kode": "",
+    "satuan": "hari"
+  }
+]
