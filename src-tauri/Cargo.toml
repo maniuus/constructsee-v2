@@ -1,6 +1,6 @@
 [package]
 name = "constructsee"
-version = "0.1.0"
+version = "1.0.0"
 description = "High-Precision Civil Cost Estimation & WBS Engine"
 authors = ["Abimanyu"]
 edition = "2021"
