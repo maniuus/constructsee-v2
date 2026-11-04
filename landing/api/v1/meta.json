@@ -1,0 +1,37 @@
+{
+ "nama": "API AHSP ConstrucSee",
+ "versi": "1.0.0",
+ "sumber": "SE DJBK No. 47/SE/Dk/2026 Lampiran VI — bidang Cipta Karya",
+ "dibangunDari": "Dokumen PDF resmi sebagai satu-satunya sumber primer",
+ "tanggalTerbit": "2026-11-04",
+ "hitungan": {
+  "divisi": 10,
+  "pekerjaanTotal": 3182,
+  "pekerjaanLeaf": 2841,
+  "statusLeaf": {
+   "Tetap": 2110,
+   "Ada Perubahan": 523,
+   "Baru": 208
+  },
+  "itemAnalisa": 2841,
+  "itemBerbaris": 2818,
+  "barisKomponen": 16217,
+  "komponenUnik": {
+   "tenaga": 38,
+   "bahan": 2588,
+   "peralatan": 170,
+   "lainnya": 12
+  }
+ },
+ "berkas": [
+  "meta.json",
+  "pekerjaan.json",
+  "divisi.json",
+  "tenaga.json",
+  "bahan.json",
+  "peralatan.json",
+  "lainnya.json",
+  "analisa.json",
+  "analisa-divisi/analisa-divisi-1.json … analisa-divisi-10.json"
+ ]
+}
