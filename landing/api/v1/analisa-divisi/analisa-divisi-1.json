@@ -1,0 +1,5731 @@
+[
+ {
+  "kode": "1.1.1.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.6
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.2
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK003",
+    "namaTabel": "Tukang batu",
+    "satuan": "OH",
+    "koefisien": 0.2
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.04
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.013
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0001",
+    "namaTabel": "Kayu Kaso 5/7 kelas II",
+    "satuan": "m3",
+    "koefisien": 0.0387
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0002",
+    "namaTabel": "Papan Kayu 2/20",
+    "satuan": "m3",
+    "koefisien": 0.0396
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0003",
+    "namaTabel": "Paku biasa 5 inch",
+    "satuan": "kg",
+    "koefisien": 0.5872
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0004",
+    "namaTabel": "Semen Portland (PC)",
+    "satuan": "kg",
+    "koefisien": 26.406
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0005",
+    "namaTabel": "Pasir Beton",
+    "satuan": "kg",
+    "koefisien": 61.56
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0006",
+    "namaTabel": "Kerikil",
+    "satuan": "kg",
+    "koefisien": 83.349
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0007",
+    "namaTabel": "Air",
+    "satuan": "liter",
+    "koefisien": 17.415
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0008",
+    "namaTabel": "Residu",
+    "satuan": "liter",
+    "koefisien": 0.4
+   }
+  ]
+ },
+ {
+  "kode": "1.1.1.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.25
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.125
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK003",
+    "namaTabel": "Tukang batu",
+    "satuan": "OH",
+    "koefisien": 0.125
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.025
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.008
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0001",
+    "namaTabel": "Kayu Kaso 5/7 kelas II",
+    "satuan": "m3",
+    "koefisien": 0.031
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0009",
+    "namaTabel": "Seng gelombang",
+    "satuan": "lembar",
+    "koefisien": 1.3125
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0003",
+    "namaTabel": "Paku biasa 5 inch",
+    "satuan": "kg",
+    "koefisien": 0.4271
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0004",
+    "namaTabel": "Semen Portland (PC)",
+    "satuan": "kg",
+    "koefisien": 26.406
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0005",
+    "namaTabel": "Pasir beton",
+    "satuan": "kg",
+    "koefisien": 61.56
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0006",
+    "namaTabel": "Kerikil",
+    "satuan": "kg",
+    "koefisien": 83.349
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0007",
+    "namaTabel": "Air",
+    "satuan": "liter",
+    "koefisien": 17.415
+   }
+  ]
+ },
+ {
+  "kode": "1.1.1.3",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.308
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.154
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK003",
+    "namaTabel": "Tukang batu",
+    "satuan": "OH",
+    "koefisien": 0.154
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.031
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.01
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0001",
+    "namaTabel": "Kayu Kaso 5/7 kelas II",
+    "satuan": "m3",
+    "koefisien": 0.0139
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0010",
+    "namaTabel": "Kawat duri",
+    "satuan": "m",
+    "koefisien": 20.4457
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0003",
+    "namaTabel": "Paku biasa 5 inch",
+    "satuan": "kg",
+    "koefisien": 0.4715
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0004",
+    "namaTabel": "Semen Portland (PC)",
+    "satuan": "kg",
+    "koefisien": 26.406
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0005",
+    "namaTabel": "Pasir beton",
+    "satuan": "kg",
+    "koefisien": 61.56
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0006",
+    "namaTabel": "Kerikil",
+    "satuan": "kg",
+    "koefisien": 83.349
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0007",
+    "namaTabel": "Air",
+    "satuan": "liter",
+    "koefisien": 17.415
+   }
+  ]
+ },
+ {
+  "kode": "1.1.1.4",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.2
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK005",
+    "namaTabel": "Tukang besi",
+    "satuan": "OH",
+    "koefisien": 0.1
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK003",
+    "namaTabel": "Tukang tembok",
+    "satuan": "OH",
+    "koefisien": 0.1
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.02
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0011",
+    "namaTabel": "Seng gelombang BJLS-30 (t=0,05)0,9mx1,8 m’",
+    "satuan": "lembar",
+    "koefisien": 1.2
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0012",
+    "namaTabel": "Baja L 40.40.4",
+    "satuan": "kg",
+    "koefisien": 13.5
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0013",
+    "namaTabel": "Kawat seng 3mm Pasangan batu",
+    "satuan": "kg",
+    "koefisien": 0.3
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0014",
+    "namaTabel": "ukuran 20/50, t=40cm",
+    "satuan": "m3",
+    "koefisien": 0.15
+   }
+  ]
+ },
+ {
+  "kode": "1.1.1.5",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.042
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.04
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.004
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.001
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0015",
+    "namaTabel": "Kawat jaring panjang 2,4 m dan aksesoris",
+    "satuan": "lembar",
+    "koefisien": 0.01649
+   }
+  ]
+ },
+ {
+  "kode": "1.1.1.6",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.375
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK002",
+    "namaTabel": "Tukang",
+    "satuan": "OH",
+    "koefisien": 0.125
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0012
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.019
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0016",
+    "namaTabel": "Panel beton pracetak",
+    "satuan": "lembar",
+    "koefisien": 0.986
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0017",
+    "namaTabel": "Kolom beton pracetak",
+    "satuan": "batang",
+    "koefisien": 0.525
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0004",
+    "namaTabel": "Semen Portland (PC)",
+    "satuan": "kg",
+    "koefisien": 45.0
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0018",
+    "namaTabel": "Pasir Beton",
+    "satuan": "m3",
+    "koefisien": 0.074
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0019",
+    "namaTabel": "Kerikil",
+    "satuan": "m3",
+    "koefisien": 0.146
+   }
+  ]
+ },
+ {
+  "kode": "1.1.2.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 1.0
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 1.0
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.1
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK006",
+    "namaTabel": "Tukang cat/pelitur*)",
+    "satuan": "OH",
+    "koefisien": 1.5
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.1
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0020",
+    "namaTabel": "Multiplek tebal 18 mm **) Tiang kayu 8/12",
+    "satuan": "lembar",
+    "koefisien": 0.35
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0021",
+    "namaTabel": "kelas II, tinggi",
+    "satuan": "m3",
+    "koefisien": 0.077
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0022",
+    "namaTabel": "4m Frame besi L.30.30.3",
+    "satuan": "kg",
+    "koefisien": 5.8
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0023",
+    "namaTabel": "***) Paku campuran 5 cm + 7cm",
+    "satuan": "kg",
+    "koefisien": 1.25
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0024",
+    "namaTabel": "Cat kayu",
+    "satuan": "kg",
+    "koefisien": 2.5
+   }
+  ]
+ },
+ {
+  "kode": "1.1.2.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.75
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.75
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.1
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.075
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0025",
+    "namaTabel": "Multiplek tebal 9 mm",
+    "satuan": "lembar",
+    "koefisien": 0.18
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0026",
+    "namaTabel": "*) Tiang kayu 5/7 (II),",
+    "satuan": "m3",
+    "koefisien": 0.021
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0027",
+    "namaTabel": "T= 3 m' Frame aluminium",
+    "satuan": "kg",
+    "koefisien": 0.1
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0028",
+    "namaTabel": "L.10.1 **) Banner plastik 0,6 x",
+    "satuan": "m2",
+    "koefisien": 0.48
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0029",
+    "namaTabel": "0,8 m 2 Paku campuran 5 cm + 7cm",
+    "satuan": "kg",
+    "koefisien": 1.25
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0024",
+    "namaTabel": "Cat kayu",
+    "satuan": "kg",
+    "koefisien": 1.5
+   }
+  ]
+ },
+ {
+  "kode": "1.1.2.3",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 2.0
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 2.0
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK003",
+    "namaTabel": "Tukang batu",
+    "satuan": "OH",
+    "koefisien": 1.0
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.3
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.1
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0030",
+    "namaTabel": "Dolken kayu φ 8- 10/400 cm",
+    "satuan": "m'",
+    "koefisien": 1.25
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0031",
+    "namaTabel": "Kayu",
+    "satuan": "m3",
+    "koefisien": 0.18
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0032",
+    "namaTabel": "Paku biasa",
+    "satuan": "kg",
+    "koefisien": 0.08
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0033",
+    "namaTabel": "Besi Strip",
+    "satuan": "kg",
+    "koefisien": 1.1
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0004",
+    "namaTabel": "Semen Portland (PC)",
+    "satuan": "kg",
+    "koefisien": 35.0
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0034",
+    "namaTabel": "Pasir pasang",
+    "satuan": "m3",
+    "koefisien": 0.15
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0018",
+    "namaTabel": "Pasir beton",
+    "satuan": "m3",
+    "koefisien": 0.1
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0035",
+    "namaTabel": "Koral beton",
+    "satuan": "m3",
+    "koefisien": 0.15
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0036",
+    "namaTabel": "Bata merah",
+    "satuan": "buah",
+    "koefisien": 30.0
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0037",
+    "namaTabel": "Seng pelat",
+    "satuan": "lembar",
+    "koefisien": 0.25
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0038",
+    "namaTabel": "Jendela naco",
+    "satuan": "buah",
+    "koefisien": 0.2
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0039",
+    "namaTabel": "Kaca polos",
+    "satuan": "m2",
+    "koefisien": 0.08
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0040",
+    "namaTabel": "Kunci tanam",
+    "satuan": "buah",
+    "koefisien": 0.15
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0041",
+    "namaTabel": "Plywood 4mm",
+    "satuan": "lembar",
+    "koefisien": 0.06
+   }
+  ]
+ },
+ {
+  "kode": "1.1.2.4",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 1.2
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK003",
+    "namaTabel": "Tukang batu/tembok",
+    "satuan": "OH",
+    "koefisien": 0.4
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.04
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.12
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0042",
+    "namaTabel": "Kaso 5/7",
+    "satuan": "m3",
+    "koefisien": 0.35
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0043",
+    "namaTabel": "Dinding triplek 4mm",
+    "satuan": "lembar",
+    "koefisien": 1.0
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0044",
+    "namaTabel": "Fondasi pasangan",
+    "satuan": "m3",
+    "koefisien": 0.17
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0045",
+    "namaTabel": "batu GRC pelat, t=4mm, uk 122x244 cm",
+    "satuan": "lembar",
+    "koefisien": 1.24
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0046",
+    "namaTabel": "Paku",
+    "satuan": "kg",
+    "koefisien": 0.75
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0047",
+    "namaTabel": "Asbes gelombang",
+    "satuan": "lembar",
+    "koefisien": 0.3
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0048",
+    "namaTabel": "Paku asbes",
+    "satuan": "kg",
+    "koefisien": 0.1
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0049",
+    "namaTabel": "Lantai (Beton lantai kerja) Pintu Double",
+    "satuan": "m3",
+    "koefisien": 0.15
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0050",
+    "namaTabel": "teakwood rangka",
+    "satuan": "m2",
+    "koefisien": 0.1
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0051",
+    "namaTabel": "kayu Frame besi Kaca Nako",
+    "satuan": "daun",
+    "koefisien": 1.0
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0052",
+    "namaTabel": "Cat dinding/plafon",
+    "satuan": "m2",
+    "koefisien": 16.5
+   }
+  ]
+ },
+ {
+  "kode": "1.1.2.5",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OJ",
+    "koefisien": 2.0296
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OJ",
+    "koefisien": 0.1309
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0053",
+    "namaTabel": "Agg Pokok",
+    "satuan": "m3",
+    "koefisien": 1.0594
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0054",
+    "namaTabel": "Agg Pengunci",
+    "satuan": "m3",
+    "koefisien": 0.3311
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0055",
+    "namaTabel": "Agg Penutup",
+    "satuan": "kg",
+    "koefisien": 0.1854
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0056",
+    "namaTabel": "Aspal",
+    "satuan": "kg",
+    "koefisien": 80.0
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0001",
+    "namaTabel": "Wheel Loader",
+    "satuan": "jam",
+    "koefisien": 0.0071
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0002",
+    "namaTabel": "Dump Truck 1",
+    "satuan": "jam",
+    "koefisien": 0.3189
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0003",
+    "namaTabel": "Dump Truck 2",
+    "satuan": "jam",
+    "koefisien": 0.3202
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0004",
+    "namaTabel": "Dump Truck 3",
+    "satuan": "jam",
+    "koefisien": 0.3237
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0005",
+    "namaTabel": "Three Wheel Roller",
+    "satuan": "jam",
+    "koefisien": 0.0655
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0006",
+    "namaTabel": "Asphalt Distributor",
+    "satuan": "jam",
+    "koefisien": 0.0157
+   }
+  ]
+ },
+ {
+  "kode": "1.1.2.6",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Unit Pekerjaan",
+    "komponenId": "LN0001",
+    "namaTabel": "Pembersihan & Pengupasan (Buang Top Soil dan Segala Tanaman)",
+    "satuan": "m2",
+    "koefisien": 1.0476,
+    "referensi": "B.3.4.(1)"
+   },
+   {
+    "grup": "Unit Pekerjaan",
+    "komponenId": "LN0002",
+    "namaTabel": "Penyiapan Badan Jalan (Pemadatan Fondasi Timbunan)",
+    "satuan": "m2",
+    "koefisien": 1.0476,
+    "referensi": "B.3.3"
+   },
+   {
+    "grup": "Unit Pekerjaan",
+    "komponenId": "LN0003",
+    "namaTabel": "Timbunan Pilihan (CBR > 10%)",
+    "satuan": "m3",
+    "koefisien": 0.2048,
+    "referensi": "B.3.2.(2)"
+   },
+   {
+    "grup": "Lainnya",
+    "komponenId": "LN0004",
+    "namaTabel": "Sewa Lahan (Jika di luar Rumija, Luas lahan bisa lebih besar dari contoh)",
+    "satuan": "m2",
+    "koefisien": 1.0476
+   }
+  ]
+ },
+ {
+  "kode": "1.1.2.7",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Unit Pekerjaan",
+    "komponenId": "LN0001",
+    "namaTabel": "Pembersihan & Pengupasan (Buang Top Soil dan Segala Tanaman)",
+    "satuan": "m2",
+    "koefisien": 1.0476,
+    "referensi": "B.3.4.(1)"
+   },
+   {
+    "grup": "Unit Pekerjaan",
+    "komponenId": "LN0005",
+    "namaTabel": "Penyiapan Badan Jalan (Pemadatan Fondasi Timbunan) Lapis Fondasi Aggregat Kelas C",
+    "satuan": "m2",
+    "koefisien": 1.0476,
+    "referensi": "B.3.3"
+   },
+   {
+    "grup": "Unit Pekerjaan",
+    "komponenId": "LN0006",
+    "namaTabel": "(CBR > 30%, ukuran butiran maksimum 2,5 cm)",
+    "satuan": "m3",
+    "koefisien": 0.2048,
+    "referensi": "B.5.2.(2)"
+   },
+   {
+    "grup": "Unit Pekerjaan",
+    "komponenId": "LN0007",
+    "namaTabel": "Lapis Resap Pengikat",
+    "satuan": "liter",
+    "koefisien": 1.0,
+    "referensi": "B.6.1.(1)"
+   },
+   {
+    "grup": "Lainnya",
+    "komponenId": "LN0004",
+    "namaTabel": "Sewa Lahan (Jika di luar Rumija, Luas lahan bisa lebih besar dari contoh)",
+    "satuan": "m2",
+    "koefisien": 1.0476
+   }
+  ]
+ },
+ {
+  "kode": "1.1.3.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.1
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.005
+   }
+  ]
+ },
+ {
+  "kode": "1.1.3.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.03
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.003
+   }
+  ]
+ },
+ {
+  "kode": "1.1.3.3",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.05
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.005
+   }
+  ]
+ },
+ {
+  "kode": "1.1.3.4",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.08
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.008
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0007",
+    "namaTabel": "Chainsaw 20”; 5,5HP",
+    "satuan": "hari",
+    "koefisien": 0.0357
+   }
+  ]
+ },
+ {
+  "kode": "1.1.3.5",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.012
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0012
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0007",
+    "namaTabel": "Chainsaw 20”; 5,5HP",
+    "satuan": "hari",
+    "koefisien": 0.0625
+   }
+  ]
+ },
+ {
+  "kode": "1.1.3.6",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.17
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.017
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0008",
+    "namaTabel": "Chainsaw 30”; 7,5HP",
+    "satuan": "hari",
+    "koefisien": 0.08
+   }
+  ]
+ },
+ {
+  "kode": "1.1.3.7",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.25
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.025
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0009",
+    "namaTabel": "Chainsaw 35”; 10 HP",
+    "satuan": "hari",
+    "koefisien": 0.09
+   }
+  ]
+ },
+ {
+  "kode": "1.1.3.8",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.1429
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0143
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0007",
+    "namaTabel": "Chainsaw 20”; 5,5HP",
+    "satuan": "hari",
+    "koefisien": 0.09
+   }
+  ]
+ },
+ {
+  "kode": "1.1.3.9",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.1675
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0168
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0007",
+    "namaTabel": "Chainsaw 20”; 5,5HP",
+    "satuan": "hari",
+    "koefisien": 0.14
+   }
+  ]
+ },
+ {
+  "kode": "1.1.3.10",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.1825
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0182
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0007",
+    "namaTabel": "Chainsaw 20”; 5,5HP",
+    "satuan": "hari",
+    "koefisien": 0.22
+   }
+  ]
+ },
+ {
+  "kode": "1.1.3.11",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.2613
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0261
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0007",
+    "namaTabel": "Chainsaw 20”; 5,5HP",
+    "satuan": "hari",
+    "koefisien": 0.35
+   }
+  ]
+ },
+ {
+  "kode": "1.1.3.12",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.3433
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0343
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0007",
+    "namaTabel": "Chainsaw 20”; 5,5HP",
+    "satuan": "hari",
+    "koefisien": 0.524
+   }
+  ]
+ },
+ {
+  "kode": "1.1.3.13",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.1507
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0151
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0007",
+    "namaTabel": "Chainsaw 20”; 5,5HP",
+    "satuan": "hari",
+    "koefisien": 0.09
+   }
+  ]
+ },
+ {
+  "kode": "1.1.3.14",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.2495
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.025
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0007",
+    "namaTabel": "Chainsaw 20”; 5,5HP",
+    "satuan": "hari",
+    "koefisien": 0.14
+   }
+  ]
+ },
+ {
+  "kode": "1.1.3.15",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.3083
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0308
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0007",
+    "namaTabel": "Chainsaw 20”; 5,5HP",
+    "satuan": "hari",
+    "koefisien": 0.22
+   }
+  ]
+ },
+ {
+  "kode": "1.1.3.16",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.4713
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0471
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0007",
+    "namaTabel": "Chainsaw 20”; 5,5HP",
+    "satuan": "hari",
+    "koefisien": 0.35
+   }
+  ]
+ },
+ {
+  "kode": "1.1.3.17",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.75
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.075
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0007",
+    "namaTabel": "Chainsaw 20”; 5,5HP",
+    "satuan": "hari",
+    "koefisien": 0.524
+   }
+  ]
+ },
+ {
+  "kode": "1.1.4.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.125
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK021",
+    "namaTabel": "Juru Ukur",
+    "satuan": "OH",
+    "koefisien": 0.25
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK022",
+    "namaTabel": "Pembantu Juru Ukur",
+    "satuan": "OH",
+    "koefisien": 0.25
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK036",
+    "namaTabel": "Tenaga Terampil Operator",
+    "satuan": "OH",
+    "koefisien": 2.0
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK031",
+    "namaTabel": "Tenaga ahli pratama",
+    "satuan": "OH",
+    "koefisien": 2.0
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0057",
+    "namaTabel": "Patok ukur kayu 5/7",
+    "satuan": "m3",
+    "koefisien": 0.151
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0058",
+    "namaTabel": "Paku payung",
+    "satuan": "kg",
+    "koefisien": 0.508
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0010",
+    "namaTabel": "Waterpass",
+    "satuan": "hari",
+    "koefisien": 1.0
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0011",
+    "namaTabel": "Theodolit",
+    "satuan": "hari",
+    "koefisien": 1.0
+   }
+  ]
+ },
+ {
+  "kode": "1.1.4.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.012
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.006
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0006
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0012
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0059",
+    "namaTabel": "Kaso 5/7 cm",
+    "satuan": "m3",
+    "koefisien": 0.013
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0060",
+    "namaTabel": "Kayu papan 3/20 cm",
+    "satuan": "m3",
+    "koefisien": 0.007
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0061",
+    "namaTabel": "Paku campuran 2 cm dan 5 cm",
+    "satuan": "kg",
+    "koefisien": 0.02
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0010",
+    "namaTabel": "Waterpass",
+    "satuan": "hari",
+    "koefisien": 0.006
+   }
+  ]
+ },
+ {
+  "kode": "1.1.4.3",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.008
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.004
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0004
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0008
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0062",
+    "namaTabel": "Kaso 5/7 cm kelas II",
+    "satuan": "m3",
+    "koefisien": 0.0018
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0063",
+    "namaTabel": "Paku payung",
+    "satuan": "buah",
+    "koefisien": 1.1
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0010",
+    "namaTabel": "Waterpass",
+    "satuan": "hari",
+    "koefisien": 0.004
+   }
+  ]
+ },
+ {
+  "kode": "1.1.4.4",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.012
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.006
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0006
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0012
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0064",
+    "namaTabel": "Kayu kaso 5/7 cm kelas II",
+    "satuan": "m3",
+    "koefisien": 0.0035
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0063",
+    "namaTabel": "Paku payung",
+    "satuan": "buah",
+    "koefisien": 1.1
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0010",
+    "namaTabel": "Waterpass",
+    "satuan": "hari",
+    "koefisien": 0.006
+   }
+  ]
+ },
+ {
+  "kode": "1.1.4.5",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Analisa Pekerjaan",
+    "komponenId": "LN0008",
+    "namaTabel": "Galian tanah biasa",
+    "satuan": "m3",
+    "koefisien": 0.273
+   },
+   {
+    "grup": "Analisa Pekerjaan",
+    "komponenId": "LN0009",
+    "namaTabel": "Timbunan pasir",
+    "satuan": "m3",
+    "koefisien": 0.003
+   },
+   {
+    "grup": "Analisa Pekerjaan",
+    "komponenId": "LN0010",
+    "namaTabel": "Pembesian",
+    "satuan": "kg",
+    "koefisien": 2.3
+   },
+   {
+    "grup": "Analisa Pekerjaan",
+    "komponenId": "LN0011",
+    "namaTabel": "Bekisting",
+    "satuan": "m2",
+    "koefisien": 0.4
+   },
+   {
+    "grup": "Analisa Pekerjaan",
+    "komponenId": "LN0012",
+    "namaTabel": "Beton fc' 15 MPa",
+    "satuan": "m3",
+    "koefisien": 0.013
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0065",
+    "namaTabel": "Pen kuningan titik",
+    "satuan": "buah",
+    "koefisien": 1.05
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0066",
+    "namaTabel": "acuan Marmer graphir 10x10 cm",
+    "satuan": "buah",
+    "koefisien": 1.05
+   }
+  ]
+ },
+ {
+  "kode": "1.1.4.6",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Analisa Pekerjaan",
+    "komponenId": "LN0008",
+    "namaTabel": "Galian tanah biasa",
+    "satuan": "m3",
+    "koefisien": 0.3
+   },
+   {
+    "grup": "Analisa Pekerjaan",
+    "komponenId": "LN0009",
+    "namaTabel": "Timbunan pasir",
+    "satuan": "m3",
+    "koefisien": 0.02
+   },
+   {
+    "grup": "Analisa Pekerjaan",
+    "komponenId": "LN0010",
+    "namaTabel": "Pembesian",
+    "satuan": "kg",
+    "koefisien": 4.1
+   },
+   {
+    "grup": "Analisa Pekerjaan",
+    "komponenId": "LN0011",
+    "namaTabel": "Bekisting",
+    "satuan": "m2",
+    "koefisien": 0.86
+   },
+   {
+    "grup": "Analisa Pekerjaan",
+    "komponenId": "LN0012",
+    "namaTabel": "Beton fc' 15 MPa",
+    "satuan": "m3",
+    "koefisien": 0.05
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0065",
+    "namaTabel": "Pen kuningan titik",
+    "satuan": "buah",
+    "koefisien": 1.05
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0067",
+    "namaTabel": "acuan Marmer graphir 12x12 cm",
+    "satuan": "buah",
+    "koefisien": 1.05
+   }
+  ]
+ },
+ {
+  "kode": "1.2.1.1.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.75
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.038
+   }
+  ]
+ },
+ {
+  "kode": "1.2.1.1.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.563
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0563
+   }
+  ]
+ },
+ {
+  "kode": "1.2.1.1.3",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.4
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.04
+   }
+  ]
+ },
+ {
+  "kode": "1.2.1.1.4",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.9
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.045
+   }
+  ]
+ },
+ {
+  "kode": "1.2.1.1.5",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.675
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0675
+   }
+  ]
+ },
+ {
+  "kode": "1.2.1.1.6",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 1.05
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.067
+   }
+  ]
+ },
+ {
+  "kode": "1.2.1.1.7",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.76
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.076
+   }
+  ]
+ },
+ {
+  "kode": "1.2.1.1.8",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.075
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0075
+   }
+  ]
+ },
+ {
+  "kode": "1.2.1.2.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.135
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0135
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0012",
+    "namaTabel": "Jack Hammer Drill- 1,5 KW + Genset 3 KWH",
+    "satuan": "hari",
+    "koefisien": 0.045
+   }
+  ]
+ },
+ {
+  "kode": "1.2.1.2.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.188
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0188
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0012",
+    "namaTabel": "Jack Hammer Drill- 1,5 KW + Genset 3 KWH",
+    "satuan": "hari",
+    "koefisien": 0.047
+   }
+  ]
+ },
+ {
+  "kode": "1.2.1.2.3",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.25
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.025
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0012",
+    "namaTabel": "Jack Hammer Drill- 1,5 KW + Genset 3 KWH",
+    "satuan": "hari",
+    "koefisien": 0.05
+   }
+  ]
+ },
+ {
+  "kode": "1.2.1.2.4",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.075
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0075
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0012",
+    "namaTabel": "Jack Hammer Drill- 1,5 KW + Genset 3 KWH",
+    "satuan": "hari",
+    "koefisien": 0.003
+   }
+  ]
+ },
+ {
+  "kode": "1.2.2.1.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.66
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.066
+   }
+  ]
+ },
+ {
+  "kode": "1.2.2.1.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.8
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.08
+   }
+  ]
+ },
+ {
+  "kode": "1.2.2.1.3",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.92
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.092
+   }
+  ]
+ },
+ {
+  "kode": "1.2.2.1.4",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.1
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.01
+   }
+  ]
+ },
+ {
+  "kode": "1.2.2.2.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.25
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.025
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0013",
+    "namaTabel": "Pompa sedot pasir, diesel 7,5 KW; 5\"",
+    "satuan": "hari",
+    "koefisien": 0.04
+   }
+  ]
+ },
+ {
+  "kode": "1.2.2.2.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.265
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0265
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0013",
+    "namaTabel": "Pompa sedot pasir, diesel 7,5 KW; 5\"",
+    "satuan": "hari",
+    "koefisien": 0.055
+   }
+  ]
+ },
+ {
+  "kode": "1.2.2.2.3",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.28
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.028
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0014",
+    "namaTabel": "Pompa sedot pasir, diesel 10 KW; 5\"",
+    "satuan": "hari",
+    "koefisien": 0.072
+   }
+  ]
+ },
+ {
+  "kode": "1.2.2.2.4",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.015
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0015
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0015",
+    "namaTabel": "Pompa sedot pasir, diesel 20 KW; 5\"",
+    "satuan": "hari",
+    "koefisien": 0.022
+   }
+  ]
+ },
+ {
+  "kode": "1.2.3.1.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 1.351
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.1351
+   }
+  ]
+ },
+ {
+  "kode": "1.2.3.1.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 1.5
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.15
+   }
+  ]
+ },
+ {
+  "kode": "1.2.3.1.3",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 1.65
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.165
+   }
+  ]
+ },
+ {
+  "kode": "1.2.3.1.4",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.14
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.014
+   }
+  ]
+ },
+ {
+  "kode": "1.2.3.2.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.3024
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0302
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0016",
+    "namaTabel": "Jack Hammer Drill 2,5 KW + Genset 5 KW",
+    "satuan": "hari",
+    "koefisien": 0.0756
+   }
+  ]
+ },
+ {
+  "kode": "1.2.3.2.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.395
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0395
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0016",
+    "namaTabel": "Jack Hammer Drill 2,5 KW + Genset 5 KW",
+    "satuan": "hari",
+    "koefisien": 0.079
+   }
+  ]
+ },
+ {
+  "kode": "1.2.3.2.3",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.504
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0504
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0016",
+    "namaTabel": "Jack Hammer Drill 2,5 KW + Genset 5 KW",
+    "satuan": "hari",
+    "koefisien": 0.084
+   }
+  ]
+ },
+ {
+  "kode": "1.2.3.2.4",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.14
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.014
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0016",
+    "namaTabel": "Jack Hammer Drill 2,5 KW + Genset 5 KW",
+    "satuan": "hari",
+    "koefisien": 0.005
+   }
+  ]
+ },
+ {
+  "kode": "1.2.4.1.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 1.5
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.075
+   }
+  ]
+ },
+ {
+  "kode": "1.2.4.1.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 1.25
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.125
+   }
+  ]
+ },
+ {
+  "kode": "1.2.4.1.3",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 1.5
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.06
+   }
+  ]
+ },
+ {
+  "kode": "1.2.4.1.4",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 1.392
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.1392
+   }
+  ]
+ },
+ {
+  "kode": "1.2.4.1.5",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 1.5
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.15
+   }
+  ]
+ },
+ {
+  "kode": "1.2.4.1.6",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.1
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.01
+   }
+  ]
+ },
+ {
+  "kode": "1.2.4.2.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.2268
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0227
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0016",
+    "namaTabel": "Jack Hammer Drill 2,5 KW + Genset 5 KW",
+    "satuan": "hari",
+    "koefisien": 0.063
+   }
+  ]
+ },
+ {
+  "kode": "1.2.4.2.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.3027
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0303
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0016",
+    "namaTabel": "Jack Hammer Drill 2,5 KW + Genset 5 KW",
+    "satuan": "hari",
+    "koefisien": 0.0658
+   }
+  ]
+ },
+ {
+  "kode": "1.2.4.2.3",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.392
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0392
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0016",
+    "namaTabel": "Jack Hammer Drill 2,5 KW + Genset 5 KW",
+    "satuan": "hari",
+    "koefisien": 0.07
+   }
+  ]
+ },
+ {
+  "kode": "1.2.4.2.4",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.1
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.01
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0016",
+    "namaTabel": "Jack Hammer Drill 2,5 KW + Genset 5 KW",
+    "satuan": "hari",
+    "koefisien": 0.004
+   }
+  ]
+ },
+ {
+  "kode": "1.2.5.1.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 1.2
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.06
+   }
+  ]
+ },
+ {
+  "kode": "1.2.5.1.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.83
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.083
+   }
+  ]
+ },
+ {
+  "kode": "1.2.5.1.3",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 1.44
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.072
+   }
+  ]
+ },
+ {
+  "kode": "1.2.5.1.4",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 1.0
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.1
+   }
+  ]
+ },
+ {
+  "kode": "1.2.5.1.5",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 1.15
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.115
+   }
+  ]
+ },
+ {
+  "kode": "1.2.5.1.6",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.15
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.015
+   }
+  ]
+ },
+ {
+  "kode": "1.2.5.2.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.24
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.024
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0017",
+    "namaTabel": "Pompa lumpur diesel 7,5 KW; 4\"",
+    "satuan": "Hari",
+    "koefisien": 0.025
+   }
+  ]
+ },
+ {
+  "kode": "1.2.5.2.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.27
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.027
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0017",
+    "namaTabel": "Pompa lumpur diesel 7,5 KW; 4\"",
+    "satuan": "hari",
+    "koefisien": 0.1
+   }
+  ]
+ },
+ {
+  "kode": "1.2.5.2.3",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.295
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0295
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0018",
+    "namaTabel": "Pompa lumpur diesel 10 KW; 5\"",
+    "satuan": "hari",
+    "koefisien": 0.045
+   }
+  ]
+ },
+ {
+  "kode": "1.2.5.2.4",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.02
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.002
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0018",
+    "namaTabel": "Pompa lumpur diesel 10 KW; 5\"",
+    "satuan": "hari",
+    "koefisien": 0.01
+   }
+  ]
+ },
+ {
+  "kode": "1.3.1.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.5
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.025
+   }
+  ]
+ },
+ {
+  "kode": "1.3.1.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.3
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.015
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0068",
+    "namaTabel": "Pasir uruk",
+    "satuan": "m3",
+    "koefisien": 1.2
+   }
+  ]
+ },
+ {
+  "kode": "1.3.1.3",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.065
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0065
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0068",
+    "namaTabel": "Pasir uruk",
+    "satuan": "m3",
+    "koefisien": 1.2
+   }
+  ]
+ },
+ {
+  "kode": "1.3.1.4",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.1
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.01
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0069",
+    "namaTabel": "Tanah biasa/ liat berpasir *)",
+    "satuan": "m3",
+    "koefisien": 1.4
+   }
+  ]
+ },
+ {
+  "kode": "1.3.1.5",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.125
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0125
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0070",
+    "namaTabel": "Tanah liat (lempung) *)",
+    "satuan": "m3",
+    "koefisien": 1.62
+   }
+  ]
+ },
+ {
+  "kode": "1.3.1.6",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.3
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.015
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0071",
+    "namaTabel": "Batu kerikil uk. 2-3 cm",
+    "satuan": "m3",
+    "koefisien": 1.13
+   }
+  ]
+ },
+ {
+  "kode": "1.3.1.7",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.3
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.015
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0072",
+    "namaTabel": "Tanah Subur",
+    "satuan": "m3",
+    "koefisien": 1.0
+   }
+  ]
+ },
+ {
+  "kode": "1.3.2.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.5
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.025
+   }
+  ]
+ },
+ {
+  "kode": "1.3.2.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.25
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.013
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0073",
+    "namaTabel": "Sirtu",
+    "satuan": "m3",
+    "koefisien": 1.2
+   }
+  ]
+ },
+ {
+  "kode": "1.3.3.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0019",
+    "namaTabel": "Stamper Kuda 70 kg *)",
+    "satuan": "hari",
+    "koefisien": 0.077
+   }
+  ]
+ },
+ {
+  "kode": "1.3.3.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0020",
+    "namaTabel": "Stamper Kodok 150 kg *)",
+    "satuan": "hari",
+    "koefisien": 0.0574
+   }
+  ]
+ },
+ {
+  "kode": "1.3.3.3",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0021",
+    "namaTabel": "Stamper D-Drum 550 kg *)",
+    "satuan": "hari",
+    "koefisien": 0.0183
+   }
+  ]
+ },
+ {
+  "kode": "1.3.3.4",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0022",
+    "namaTabel": "Stamper Smooth Drum 1,5 Ton *)",
+    "satuan": "hari",
+    "koefisien": 0.0089
+   }
+  ]
+ },
+ {
+  "kode": "1.3.3.5",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.3
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.015
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0074",
+    "namaTabel": "Batu kerikil uk. 2-3 cm, 4-5 cm dan 5-7",
+    "satuan": "m3",
+    "koefisien": 1.13
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0023",
+    "namaTabel": "cm Stamper Kodok 150 kg *)",
+    "satuan": "hari",
+    "koefisien": 0.0574
+   }
+  ]
+ },
+ {
+  "kode": "1.3.3.6",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.4
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.02
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0075",
+    "namaTabel": "Makadam (batu pecah 5/7)",
+    "satuan": "m3",
+    "koefisien": 1.13
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0020",
+    "namaTabel": "Stamper Kodok 150 kg *)",
+    "satuan": "hari",
+    "koefisien": 0.0574
+   }
+  ]
+ },
+ {
+  "kode": "1.4.1.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.2104
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0105
+   }
+  ]
+ },
+ {
+  "kode": "1.4.1.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.2254
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0112
+   }
+  ]
+ },
+ {
+  "kode": "1.4.1.3",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.2363
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0118
+   }
+  ]
+ },
+ {
+  "kode": "1.4.1.4",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.2505
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0125
+   }
+  ]
+ },
+ {
+  "kode": "1.4.1.5",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.2722
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0136
+   }
+  ]
+ },
+ {
+  "kode": "1.4.1.6",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.344
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0172
+   }
+  ]
+ },
+ {
+  "kode": "1.4.1.7",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.4843
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0242
+   }
+  ]
+ },
+ {
+  "kode": "1.4.1.8",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.6513
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0325
+   }
+  ]
+ },
+ {
+  "kode": "1.4.1.9",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.8475
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0423
+   }
+  ]
+ },
+ {
+  "kode": "1.4.1.10",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 1.0938
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0546
+   }
+  ]
+ },
+ {
+  "kode": "1.4.1.11",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 1.3777
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0688
+   }
+  ]
+ },
+ {
+  "kode": "1.4.1.12",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.275
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0137
+   }
+  ]
+ },
+ {
+  "kode": "1.4.2.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OJ",
+    "koefisien": 0.9103
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OJ",
+    "koefisien": 0.0455
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0024",
+    "namaTabel": "Mobil sedot lumpur kapasitas 3 m 3",
+    "satuan": "jam",
+    "koefisien": 0.4552
+   }
+  ]
+ },
+ {
+  "kode": "1.4.2.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OJ",
+    "koefisien": 1.004
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OJ",
+    "koefisien": 0.0502
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0024",
+    "namaTabel": "Mobil sedot lumpur kapasitas 3 m 3",
+    "satuan": "jam",
+    "koefisien": 0.502
+   }
+  ]
+ },
+ {
+  "kode": "1.4.2.3",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OJ",
+    "koefisien": 1.0977
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OJ",
+    "koefisien": 0.0549
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0024",
+    "namaTabel": "Mobil sedot lumpur kapasitas 3 m 3",
+    "satuan": "jam",
+    "koefisien": 0.5489
+   }
+  ]
+ },
+ {
+  "kode": "1.4.2.4",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OJ",
+    "koefisien": 1.1914
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OJ",
+    "koefisien": 0.0596
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0024",
+    "namaTabel": "Mobil sedot lumpur kapasitas 3 m 3",
+    "satuan": "jam",
+    "koefisien": 0.5957
+   }
+  ]
+ },
+ {
+  "kode": "1.4.2.5",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OJ",
+    "koefisien": 1.2851
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OJ",
+    "koefisien": 0.0643
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0024",
+    "namaTabel": "Mobil sedot lumpur kapasitas 3 m 3",
+    "satuan": "jam",
+    "koefisien": 0.6426
+   }
+  ]
+ },
+ {
+  "kode": "1.5.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0119
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK011",
+    "namaTabel": "Tukang las geotextile",
+    "satuan": "OH",
+    "koefisien": 0.0024
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0012
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0076",
+    "namaTabel": "Geotextile (> 100 s/d 400 gr/m 2 )",
+    "satuan": "m2",
+    "koefisien": 1.1
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0025",
+    "namaTabel": "Mesin Las Geotextile",
+    "satuan": "hari",
+    "koefisien": 0.00238
+   }
+  ]
+ },
+ {
+  "kode": "1.5.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0016
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK011",
+    "namaTabel": "Tukang las geotextile",
+    "satuan": "OH",
+    "koefisien": 0.0008
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0002
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0076",
+    "namaTabel": "Geotextile (> 100 s/d 400 gr/m 2 )",
+    "satuan": "m2",
+    "koefisien": 1.1
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0025",
+    "namaTabel": "Mesin Las Geotextile",
+    "satuan": "hari",
+    "koefisien": 0.0008
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0026",
+    "namaTabel": "Flat deck truck kap 7 ton",
+    "satuan": "hari",
+    "koefisien": 0.00015
+   }
+  ]
+ },
+ {
+  "kode": "1.5.3",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.016
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK011",
+    "namaTabel": "Tukang las geotextile",
+    "satuan": "OH",
+    "koefisien": 0.0032
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0016
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0077",
+    "namaTabel": "Geotextil tebal (> 400 s/d 800 gr/m2)",
+    "satuan": "m2",
+    "koefisien": 1.2
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0025",
+    "namaTabel": "Mesin Las Geotextile",
+    "satuan": "hari",
+    "koefisien": 0.0032
+   }
+  ]
+ },
+ {
+  "kode": "1.5.4",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0024
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK011",
+    "namaTabel": "Tukang las geotextile",
+    "satuan": "OH",
+    "koefisien": 0.0012
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0002
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0078",
+    "namaTabel": "Geotextile tebal (> 400 s/d 800 gr/m 2 )",
+    "satuan": "m2",
+    "koefisien": 1.2
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0025",
+    "namaTabel": "Mesin Las Geotextile",
+    "satuan": "hari",
+    "koefisien": 0.0012
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0026",
+    "namaTabel": "Flat deck truck kap 7 ton",
+    "satuan": "hari",
+    "koefisien": 0.000147
+   }
+  ]
+ },
+ {
+  "kode": "1.5.5",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.025
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK011",
+    "namaTabel": "Tukang las geotextile",
+    "satuan": "OH",
+    "koefisien": 0.005
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0025
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0079",
+    "namaTabel": "Geotextile (> 800 gr/m ) 2",
+    "satuan": "m2",
+    "koefisien": 1.3
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0025",
+    "namaTabel": "Mesin Las Geotextile",
+    "satuan": "hari",
+    "koefisien": 0.005
+   }
+  ]
+ },
+ {
+  "kode": "1.5.6",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0036
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK011",
+    "namaTabel": "Tukang las geotextile",
+    "satuan": "OH",
+    "koefisien": 0.0018
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0004
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0080",
+    "namaTabel": "Geotextile (> 800 gr/m 2 )",
+    "satuan": "m2",
+    "koefisien": 1.3
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0025",
+    "namaTabel": "Mesin Las Geotextile",
+    "satuan": "hari",
+    "koefisien": 0.0018
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0026",
+    "namaTabel": "Flat deck truck kap 7 ton",
+    "satuan": "hari",
+    "koefisien": 0.000146
+   }
+  ]
+ },
+ {
+  "kode": "1.5.7",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.00476
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK011",
+    "namaTabel": "Tukang las geotextile",
+    "satuan": "OH",
+    "koefisien": 0.00238
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.00024
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 8e-05
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0081",
+    "namaTabel": "Geomembran t = 1,5 mm",
+    "satuan": "m2",
+    "koefisien": 1.1
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0025",
+    "namaTabel": "Mesin Las Geotextile",
+    "satuan": "hari",
+    "koefisien": 0.002381
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0027",
+    "namaTabel": "Flat deck truck kap 7",
+    "satuan": "hari",
+    "koefisien": 0.000143
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0028",
+    "namaTabel": "ton Tripod tinggi 7 m kap 2 ton",
+    "satuan": "hari",
+    "koefisien": 0.002381
+   }
+  ]
+ },
+ {
+  "kode": "1.5.8",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.00842
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK011",
+    "namaTabel": "Tukang las geotextile",
+    "satuan": "OH",
+    "koefisien": 0.00211
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK003",
+    "namaTabel": "Tukang batu/tembok",
+    "satuan": "OH",
+    "koefisien": 0.00211
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.00042
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.00014
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0082",
+    "namaTabel": "Geosynthetic Clay Liner (GCL)",
+    "satuan": "m2",
+    "koefisien": 1.3
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0083",
+    "namaTabel": "Bentonite",
+    "satuan": "kg",
+    "koefisien": 0.0331
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0084",
+    "namaTabel": "Angkur M16 panjang",
+    "satuan": "buah",
+    "koefisien": 21.0
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0029",
+    "namaTabel": "50 cm Flat deck truck kap 7 ton",
+    "satuan": "hari",
+    "koefisien": 0.00015
+   }
+  ]
+ },
+ {
+  "kode": "1.6.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 1.2
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.06
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0030",
+    "namaTabel": "Palu/godam (baja keras)",
+    "satuan": "buah",
+    "koefisien": 0.006
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0031",
+    "namaTabel": "Pahat beton (baja keras)",
+    "satuan": "buah",
+    "koefisien": 0.009
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0032",
+    "namaTabel": "Linggis (baja keras)",
+    "satuan": "buah",
+    "koefisien": 0.02
+   }
+  ]
+ },
+ {
+  "kode": "1.6.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.2
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.01
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0033",
+    "namaTabel": "Jack hammer (5 KW) + Genset (12 HP)",
+    "satuan": "hari",
+    "koefisien": 0.05
+   }
+  ]
+ },
+ {
+  "kode": "1.6.3",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 1.075
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.108
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0085",
+    "namaTabel": "Cuka Bibit",
+    "satuan": "liter",
+    "koefisien": 1.2
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0034",
+    "namaTabel": "Palu/godam",
+    "satuan": "hari",
+    "koefisien": 0.02
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0035",
+    "namaTabel": "Gergaji Besi (Baja Keras)",
+    "satuan": "hari",
+    "koefisien": 0.1
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0036",
+    "namaTabel": "Pahat beton (baja keras)",
+    "satuan": "hari",
+    "koefisien": 0.03
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0037",
+    "namaTabel": "Linggis (baja keras)",
+    "satuan": "hari",
+    "koefisien": 0.05
+   }
+  ]
+ },
+ {
+  "kode": "1.6.4",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 3.6
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.18
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0085",
+    "namaTabel": "Cuka Bibit",
+    "satuan": "liter",
+    "koefisien": 1.2
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0034",
+    "namaTabel": "Palu/godam",
+    "satuan": "hari",
+    "koefisien": 0.02
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0035",
+    "namaTabel": "Gergaji Besi (Baja Keras)",
+    "satuan": "hari",
+    "koefisien": 0.1
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0036",
+    "namaTabel": "Pahat beton (baja keras)",
+    "satuan": "hari",
+    "koefisien": 0.03
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0037",
+    "namaTabel": "Linggis (baja keras)",
+    "satuan": "hari",
+    "koefisien": 0.05
+   }
+  ]
+ },
+ {
+  "kode": "1.6.5",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.2
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.02
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0038",
+    "namaTabel": "Jack hammer dan genset; 12 HP",
+    "satuan": "hari",
+    "koefisien": 0.05
+   }
+  ]
+ },
+ {
+  "kode": "1.6.6",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.4
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.02
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0038",
+    "namaTabel": "Jack hammer dan genset; 12 HP",
+    "satuan": "hari",
+    "koefisien": 0.05
+   }
+  ]
+ },
+ {
+  "kode": "1.6.7",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.3
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.03
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0030",
+    "namaTabel": "Palu/godam (baja keras)",
+    "satuan": "buah",
+    "koefisien": 0.002
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0031",
+    "namaTabel": "Pahat beton (baja keras)",
+    "satuan": "buah",
+    "koefisien": 0.003
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0032",
+    "namaTabel": "Linggis (baja keras)",
+    "satuan": "buah",
+    "koefisien": 0.007
+   }
+  ]
+ },
+ {
+  "kode": "1.6.8",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.15
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.015
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0033",
+    "namaTabel": "Jack hammer (5 kW) + Genset (12 HP)",
+    "satuan": "hari",
+    "koefisien": 0.015
+   }
+  ]
+ },
+ {
+  "kode": "1.6.9",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.089
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.022
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "KepalaTukang",
+    "satuan": "OH",
+    "koefisien": 0.002
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.001
+   }
+  ]
+ },
+ {
+  "kode": "1.6.10",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 11.921
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 1.987
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "KepalaTukang",
+    "satuan": "OH",
+    "koefisien": 0.199
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.066
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0039",
+    "namaTabel": "Hoist 1 ton",
+    "satuan": "hari",
+    "koefisien": 0.5593
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0040",
+    "namaTabel": "Tripod 7 meter",
+    "satuan": "hari",
+    "koefisien": 0.5593
+   }
+  ]
+ },
+ {
+  "kode": "1.6.11",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 10.729
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 1.788
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "KepalaTukang",
+    "satuan": "OH",
+    "koefisien": 0.179
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.06
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0039",
+    "namaTabel": "Hoist 1 ton",
+    "satuan": "hari",
+    "koefisien": 0.5593
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0040",
+    "namaTabel": "Tripod 7 meter",
+    "satuan": "hari",
+    "koefisien": 0.5593
+   }
+  ]
+ },
+ {
+  "kode": "1.6.12",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.1
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.033
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "KepalaTukang",
+    "satuan": "OH",
+    "koefisien": 0.003
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.001
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0041",
+    "namaTabel": "Sewa scaffolding (1 set)",
+    "satuan": "Hari",
+    "koefisien": 0.033
+   }
+  ]
+ },
+ {
+  "kode": "1.6.13",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.2
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.067
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "KepalaTukang",
+    "satuan": "OH",
+    "koefisien": 0.007
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.002
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0041",
+    "namaTabel": "Sewa scaffolding (1 set)",
+    "satuan": "Hari",
+    "koefisien": 0.067
+   }
+  ]
+ },
+ {
+  "kode": "1.6.14",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.04
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.04
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.004
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0013
+   }
+  ]
+ },
+ {
+  "kode": "1.6.15",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0333
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.0333
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0033
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0011
+   }
+  ]
+ },
+ {
+  "kode": "1.6.16",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.25
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK003",
+    "namaTabel": "Tukang batu/tembok",
+    "satuan": "OH",
+    "koefisien": 0.125
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0125
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0042
+   }
+  ]
+ },
+ {
+  "kode": "1.6.17",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.3333
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK003",
+    "namaTabel": "Tukang batu/tembok",
+    "satuan": "OH",
+    "koefisien": 0.1667
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0167
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0056
+   }
+  ]
+ },
+ {
+  "kode": "1.6.18",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.25
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK003",
+    "namaTabel": "Tukang batu/tembok",
+    "satuan": "OH",
+    "koefisien": 0.125
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0125
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0042
+   }
+  ]
+ },
+ {
+  "kode": "1.6.19",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.2
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK003",
+    "namaTabel": "Tukang batu/tembok",
+    "satuan": "OH",
+    "koefisien": 0.1
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.01
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0033
+   }
+  ]
+ },
+ {
+  "kode": "1.6.20",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.2
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK003",
+    "namaTabel": "Tukang batu/tembok",
+    "satuan": "OH",
+    "koefisien": 0.1
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.01
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0033
+   }
+  ]
+ },
+ {
+  "kode": "1.6.21",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.04
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK003",
+    "namaTabel": "Tukang batu/tembok",
+    "satuan": "OH",
+    "koefisien": 0.04
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.004
+   }
+  ]
+ },
+ {
+  "kode": "1.6.22",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0529
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.0265
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0026
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0009
+   }
+  ]
+ },
+ {
+  "kode": "1.6.23",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0063
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.0063
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0006
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0002
+   }
+  ]
+ },
+ {
+  "kode": "1.6.24",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.025
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK005",
+    "namaTabel": "Tukang Besi/ Besi Beton",
+    "satuan": "OH",
+    "koefisien": 0.0125
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0013
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0004
+   }
+  ]
+ },
+ {
+  "kode": "1.6.25",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.2381
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.119
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0119
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.004
+   }
+  ]
+ },
+ {
+  "kode": "1.6.26",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.3333
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.1667
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0167
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0056
+   }
+  ]
+ },
+ {
+  "kode": "1.6.27",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0952
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.0476
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0048
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0016
+   }
+  ]
+ },
+ {
+  "kode": "1.6.28",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.119
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.0595
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.006
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.002
+   }
+  ]
+ },
+ {
+  "kode": "1.6.29",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.1786
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.0893
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0089
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.003
+   }
+  ]
+ },
+ {
+  "kode": "1.6.30",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.25
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.125
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0125
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0042
+   }
+  ]
+ },
+ {
+  "kode": "1.6.31",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0714
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.0357
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0036
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0012
+   }
+  ]
+ },
+ {
+  "kode": "1.6.32",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0893
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.0446
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0045
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0015
+   }
+  ]
+ },
+ {
+  "kode": "1.6.33",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0363
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.0181
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0018
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0006
+   }
+  ]
+ },
+ {
+  "kode": "1.6.34",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0275
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.0092
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0009
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0003
+   }
+  ]
+ },
+ {
+  "kode": "1.6.35",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0229
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.0076
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0008
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0003
+   }
+  ]
+ },
+ {
+  "kode": "1.6.36",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0379
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.0126
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0013
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0004
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0042",
+    "namaTabel": "Mesin Bor Cordless Drill Bor",
+    "satuan": "Hari",
+    "koefisien": 0.1976
+   }
+  ]
+ },
+ {
+  "kode": "1.6.37",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0452
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.0151
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0015
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0005
+   }
+  ]
+ },
+ {
+  "kode": "1.6.38",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0351
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.0117
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0012
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0004
+   }
+  ]
+ },
+ {
+  "kode": "1.6.39",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0373
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.0124
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0012
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0004
+   }
+  ]
+ },
+ {
+  "kode": "1.6.40",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0398
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.0133
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0013
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0004
+   }
+  ]
+ },
+ {
+  "kode": "1.6.41",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0317
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.0106
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0011
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0004
+   }
+  ]
+ },
+ {
+  "kode": "1.6.42",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0667
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.0333
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0033
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0011
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0041",
+    "namaTabel": "Sewa scaffolding (1 set)",
+    "satuan": "Hari",
+    "koefisien": 0.0333
+   }
+  ]
+ },
+ {
+  "kode": "1.6.43",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0333
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK004",
+    "namaTabel": "Tukang Kayu",
+    "satuan": "OH",
+    "koefisien": 0.0167
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0017
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0006
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0041",
+    "namaTabel": "Sewa scaffolding (1 set)",
+    "satuan": "Hari",
+    "koefisien": 0.0167
+   }
+  ]
+ },
+ {
+  "kode": "1.6.44",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0667
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK003",
+    "namaTabel": "Tukang Batu/ Tembok",
+    "satuan": "OH",
+    "koefisien": 0.0333
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0033
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0011
+   }
+  ]
+ },
+ {
+  "kode": "1.6.45",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0444
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK003",
+    "namaTabel": "Tukang Batu/ Tembok",
+    "satuan": "OH",
+    "koefisien": 0.0222
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0022
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0007
+   }
+  ]
+ },
+ {
+  "kode": "1.6.46",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.0595
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK012",
+    "namaTabel": "Tukang Listrik",
+    "satuan": "OH",
+    "koefisien": 0.0595
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.006
+   }
+  ]
+ },
+ {
+  "kode": "1.6.47",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.286
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK012",
+    "namaTabel": "Tukang Listrik",
+    "satuan": "OH",
+    "koefisien": 0.286
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.029
+   }
+  ]
+ },
+ {
+  "kode": "1.6.48",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 1.333
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK012",
+    "namaTabel": "Tukang Listrik",
+    "satuan": "OH",
+    "koefisien": 0.333
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.067
+   }
+  ]
+ }
+]
