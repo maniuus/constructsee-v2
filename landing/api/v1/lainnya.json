@@ -1,0 +1,74 @@
+[
+ {
+  "id": "LN0001",
+  "nama": "Pembersihan & Pengupasan (Buang Top Soil dan Segala Tanaman)",
+  "satuan": "m2",
+  "grup": "Unit Pekerjaan"
+ },
+ {
+  "id": "LN0002",
+  "nama": "Penyiapan Badan Jalan (Pemadatan Fondasi Timbunan)",
+  "satuan": "m2",
+  "grup": "Unit Pekerjaan"
+ },
+ {
+  "id": "LN0003",
+  "nama": "Timbunan Pilihan (CBR > 10%)",
+  "satuan": "m3",
+  "grup": "Unit Pekerjaan"
+ },
+ {
+  "id": "LN0004",
+  "nama": "Sewa Lahan (Jika di luar Rumija, Luas lahan bisa lebih besar dari contoh)",
+  "satuan": "m2",
+  "grup": "Lainnya"
+ },
+ {
+  "id": "LN0005",
+  "nama": "Penyiapan Badan Jalan (Pemadatan Fondasi Timbunan) Lapis Fondasi Aggregat Kelas C",
+  "satuan": "m2",
+  "grup": "Unit Pekerjaan"
+ },
+ {
+  "id": "LN0006",
+  "nama": "(CBR > 30%, ukuran butiran maksimum 2,5 cm)",
+  "satuan": "m3",
+  "grup": "Unit Pekerjaan"
+ },
+ {
+  "id": "LN0007",
+  "nama": "Lapis Resap Pengikat",
+  "satuan": "liter",
+  "grup": "Unit Pekerjaan"
+ },
+ {
+  "id": "LN0008",
+  "nama": "Galian tanah biasa",
+  "satuan": "m3",
+  "grup": "Analisa Pekerjaan"
+ },
+ {
+  "id": "LN0009",
+  "nama": "Timbunan pasir",
+  "satuan": "m3",
+  "grup": "Analisa Pekerjaan"
+ },
+ {
+  "id": "LN0010",
+  "nama": "Pembesian",
+  "satuan": "kg",
+  "grup": "Analisa Pekerjaan"
+ },
+ {
+  "id": "LN0011",
+  "nama": "Bekisting",
+  "satuan": "m2",
+  "grup": "Analisa Pekerjaan"
+ },
+ {
+  "id": "LN0012",
+  "nama": "Beton fc' 15 MPa",
+  "satuan": "m3",
+  "grup": "Analisa Pekerjaan"
+ }
+]

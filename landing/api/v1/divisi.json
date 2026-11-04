@@ -1,0 +1,42 @@
+[
+ {
+  "kode": "1",
+  "nama": "PERSIAPAN LAPANGAN/SITE WORK"
+ },
+ {
+  "kode": "2",
+  "nama": "PEKERJAAN STRUKTUR"
+ },
+ {
+  "kode": "3",
+  "nama": "PEKERJAAN ARSITEKTUR"
+ },
+ {
+  "kode": "4",
+  "nama": "PEKERJAAN LANSEKAP"
+ },
+ {
+  "kode": "5",
+  "nama": "PEKERJAAN MEKANIKAL DAN ELEKTRIKAL"
+ },
+ {
+  "kode": "6",
+  "nama": "PEKERJAAN PLAMBING"
+ },
+ {
+  "kode": "7",
+  "nama": "JALAN PADA PERMUKIMAN"
+ },
+ {
+  "kode": "8",
+  "nama": "DRAINASE JALAN"
+ },
+ {
+  "kode": "9",
+  "nama": "JARINGAN PIPA DI LUAR GEDUNG"
+ },
+ {
+  "kode": "10",
+  "nama": "SISTEM STRUKTUR RISHA"
+ }
+]
