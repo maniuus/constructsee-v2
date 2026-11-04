@@ -1,0 +1,626 @@
+[
+ {
+  "kode": "10.1.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 3.0959
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK005",
+    "namaTabel": "Tukang Besi/Besi Beton",
+    "satuan": "OH",
+    "koefisien": 1.5479
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.1548
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0516
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0174",
+    "namaTabel": "Baja Profil",
+    "satuan": "kg",
+    "koefisien": 51.598
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0175",
+    "namaTabel": "Kawat Las",
+    "satuan": "kg",
+    "koefisien": 0.053
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0102",
+    "namaTabel": "Alat Las Listrik",
+    "satuan": "jam",
+    "koefisien": 0.0333
+   }
+  ]
+ },
+ {
+  "kode": "10.1.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 2.7275
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK005",
+    "namaTabel": "Tukang Besi/Besi Beton",
+    "satuan": "OH",
+    "koefisien": 1.3637
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.1364
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0455
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0174",
+    "namaTabel": "Baja Profil",
+    "satuan": "kg",
+    "koefisien": 45.458
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0175",
+    "namaTabel": "Kawat Las",
+    "satuan": "kg",
+    "koefisien": 0.053
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0102",
+    "namaTabel": "Alat Las Listrik",
+    "satuan": "jam",
+    "koefisien": 0.0333
+   }
+  ]
+ },
+ {
+  "kode": "10.1.3",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 1.4959
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK005",
+    "namaTabel": "Tukang Besi/Besi Beton",
+    "satuan": "OH",
+    "koefisien": 0.7479
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.0748
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.0249
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0174",
+    "namaTabel": "Baja Profil",
+    "satuan": "kg",
+    "koefisien": 24.931
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0175",
+    "namaTabel": "Kawat Las",
+    "satuan": "kg",
+    "koefisien": 0.053
+   },
+   {
+    "grup": "Peralatan",
+    "komponenId": "AL0102",
+    "namaTabel": "Alat Las Listrik",
+    "satuan": "jam",
+    "koefisien": 0.0333
+   }
+  ]
+ },
+ {
+  "kode": "10.1.4",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.071
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK005",
+    "namaTabel": "Tukang Besi/Besi Beton",
+    "satuan": "OH",
+    "koefisien": 0.024
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.005
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0125",
+    "namaTabel": "Minyak Bekisting",
+    "satuan": "liter",
+    "koefisien": 0.072
+   }
+  ]
+ },
+ {
+  "kode": "10.1.5",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.071
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK005",
+    "namaTabel": "Tukang Besi/Besi Beton",
+    "satuan": "OH",
+    "koefisien": 0.024
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.005
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0125",
+    "namaTabel": "Minyak Bekisting",
+    "satuan": "liter",
+    "koefisien": 0.048
+   }
+  ]
+ },
+ {
+  "kode": "10.1.6",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 0.071
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK005",
+    "namaTabel": "Tukang Besi/Besi Beton",
+    "satuan": "OH",
+    "koefisien": 0.024
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.005
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH0125",
+    "namaTabel": "Minyak Bekisting",
+    "satuan": "liter",
+    "koefisien": 0.03
+   }
+  ]
+ },
+ {
+  "kode": "10.1.7",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2559",
+    "namaTabel": "1 kg Penulangan slab untuk BjTP diameter < 12 mm, cara Manual (untuk bangunan gedung)",
+    "satuan": "kg",
+    "koefisien": 6.0755
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2560",
+    "namaTabel": "1 kg Penulangan Wiremesh M6 untuk slab atau dinding atau Ferrocement",
+    "satuan": "m2",
+    "koefisien": 0.2464
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2561",
+    "namaTabel": "secara manual (untuk bangunan gedung) Pembuatan 1 buah Cetakan Panel P1",
+    "satuan": "buah",
+    "koefisien": 0.0025
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2562",
+    "namaTabel": "RISHA (Asumsi 400 kali pakai) Pemasangan dan membuka cetakan 1",
+    "satuan": "unit",
+    "koefisien": 1.0
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2563",
+    "namaTabel": "buah komponen P1 RISHA 1 m beton mutu 3 sedang f'c 25 MPa, Slump (100 ± 25)",
+    "satuan": "m3",
+    "koefisien": 0.0204
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2564",
+    "namaTabel": "mm, agregat maks 19 mm secara semi mekanis Penuangan/Menebar Beton 1 m 3 untuk Kolom Beton Pracetak",
+    "satuan": "m3",
+    "koefisien": 0.0204
+   }
+  ]
+ },
+ {
+  "kode": "10.1.8",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2559",
+    "namaTabel": "1 kg Penulangan slab untuk BjTP diameter < 12 mm, cara Manual (untuk bangunan gedung)",
+    "satuan": "kg",
+    "koefisien": 5.5027
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2560",
+    "namaTabel": "1 kg Penulangan Wiremesh M6 untuk slab atau dinding atau Ferrocement",
+    "satuan": "m2",
+    "koefisien": 0.1344
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2565",
+    "namaTabel": "secara manual (untuk bangunan gedung) Pembuatan 1 buah Cetakan Panel P2",
+    "satuan": "buah",
+    "koefisien": 0.0025
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2562",
+    "namaTabel": "RISHA (Asumsi 400 kali pakai) Pemasangan dan membuka cetakan 1",
+    "satuan": "unit",
+    "koefisien": 1.0
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2566",
+    "namaTabel": "buah komponen P2 RISHA 1 m beton mutu 3 sedang f'c 25 MPa, Slump (100 ± 25)",
+    "satuan": "m3",
+    "koefisien": 0.0145
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2564",
+    "namaTabel": "mm, agregat maks 19 mm secara semi mekanis Penuangan/Menebar Beton 1 m 3 untuk Kolom Beton Pracetak",
+    "satuan": "m3",
+    "koefisien": 0.0145
+   }
+  ]
+ },
+ {
+  "kode": "10.1.9",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2567",
+    "namaTabel": "1 kg Penulangan slab untuk BjTP diameter < 12 mm, cara",
+    "satuan": "kg",
+    "koefisien": 4.2973
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2568",
+    "namaTabel": "Manual (untuk bangunan gedung) Pembuatan 1 buah Cetakan Panel P3",
+    "satuan": "buah",
+    "koefisien": 0.0025
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2562",
+    "namaTabel": "RISHA (Asumsi 400 kali pakai) Pemasangan dan membuka cetakan 1",
+    "satuan": "unit",
+    "koefisien": 1.0
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2569",
+    "namaTabel": "buah komponen P3 RISHA 1 m 3 beton mutu sedang f'c 25 MPa, Slump (100 ± 25)",
+    "satuan": "m3",
+    "koefisien": 0.011
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2570",
+    "namaTabel": "mm, agregat maks 19 mm secara semi mekanis Penuangan/Menebar Beton 1 m untuk 3 Kolom Beton Pracetak",
+    "satuan": "m3",
+    "koefisien": 0.011
+   }
+  ]
+ },
+ {
+  "kode": "10.2.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK001",
+    "namaTabel": "Pekerja",
+    "satuan": "OH",
+    "koefisien": 1.257
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.063
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2571",
+    "namaTabel": "Strapping Band lebar",
+    "satuan": "m",
+    "koefisien": 57.6
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2572",
+    "namaTabel": "15 mm Palet Kayu Uk. 120",
+    "satuan": "buah",
+    "koefisien": 3.0
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2573",
+    "namaTabel": "cm x 120 cm x 10 cm Kaso 5 x 7 Kayu Kelas",
+    "satuan": "m3",
+    "koefisien": 0.0063
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2574",
+    "namaTabel": "3 Papan 2 /20 Kayu Kelas 3",
+    "satuan": "m3",
+    "koefisien": 0.0204
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2575",
+    "namaTabel": "Paku 5 cm",
+    "satuan": "kg",
+    "koefisien": 0.5
+   }
+  ]
+ },
+ {
+  "kode": "10.2.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2576",
+    "namaTabel": "Panel P1",
+    "satuan": "buah",
+    "koefisien": 78.0
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2577",
+    "namaTabel": "Panel P2",
+    "satuan": "buah",
+    "koefisien": 30.0
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2578",
+    "namaTabel": "Panel P3",
+    "satuan": "buah",
+    "koefisien": 30.0
+   }
+  ]
+ },
+ {
+  "kode": "10.3.1",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK015",
+    "namaTabel": "Tukang Ereksi",
+    "satuan": "OH",
+    "koefisien": 8.0
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK003",
+    "namaTabel": "Tukang batu/tembok",
+    "satuan": "OH",
+    "koefisien": 2.0
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.2
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.04
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2579",
+    "namaTabel": "Pengadaan Baut dan Ring Baut dan Mur f12,",
+    "satuan": "buah",
+    "koefisien": 104.0
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2580",
+    "namaTabel": "L=4\", ASTM A307 Baut dan Mur f12,",
+    "satuan": "buah",
+    "koefisien": 133.0
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2581",
+    "namaTabel": "L=6\", ASTM A307 Baut dan Mur f12, L=7\", ASTM A307",
+    "satuan": "buah",
+    "koefisien": 156.0
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2582",
+    "namaTabel": "Ring Pelat",
+    "satuan": "buah",
+    "koefisien": 786.0
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2583",
+    "namaTabel": "Pengadaan Pelat Strip Pelat Strip t=2,6 mm,",
+    "satuan": "buah",
+    "koefisien": 80.0
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2584",
+    "namaTabel": "L=12 cm Pelat Strip t=2,6 mm,",
+    "satuan": "buah",
+    "koefisien": 24.0
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2585",
+    "namaTabel": "L=14 cm Pelat Strip t=2,6 mm,",
+    "satuan": "buah",
+    "koefisien": 174.0
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2586",
+    "namaTabel": "L=17 cm Pelat Strip t=2,6 mm, L=34 cm Pengadaan Angkur Fondasi Angkur Baja Full",
+    "satuan": "buah",
+    "koefisien": 12.0
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2587",
+    "namaTabel": "Drat ASTM 307 Ø 10 mm panjang 35 cm Angkur Baja Full",
+    "satuan": "buah",
+    "koefisien": 30.0
+   },
+   {
+    "grup": "Bahan",
+    "komponenId": "BH2588",
+    "namaTabel": "Drat ASTM 307 Ø 10 mm panjang 65 cm",
+    "satuan": "buah",
+    "koefisien": 15.0
+   }
+  ]
+ },
+ {
+  "kode": "10.3.2",
+  "tipe": "AHSP",
+  "baris": [
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK015",
+    "namaTabel": "Tukang Ereksi",
+    "satuan": "OH",
+    "koefisien": 8.0
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK003",
+    "namaTabel": "Tukang batu/tembok",
+    "satuan": "OH",
+    "koefisien": 2.0
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK018",
+    "namaTabel": "Kepala Tukang",
+    "satuan": "OH",
+    "koefisien": 0.2
+   },
+   {
+    "grup": "Tenaga Kerja",
+    "komponenId": "TK020",
+    "namaTabel": "Mandor",
+    "satuan": "OH",
+    "koefisien": 0.04
+   }
+  ]
+ }
+]
