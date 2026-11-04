@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { X } from "lucide-react";
 import { useErrorStore } from "../../store/useErrorStore";
 
 export function ErrorPopup() {
@@ -25,15 +26,15 @@ export function ErrorPopup() {
         <div className="flex items-center justify-between border-b border-line px-4 py-2.5">
           <div className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 rounded-full bg-danger" />
-            <span className="text-[11px] font-semibold uppercase tracking-widest text-ink">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.1em] text-ink">
               Engine Error
             </span>
-            <span className="font-mono text-[9px] text-muted/60">{errors.length} ACTIVE</span>
+            <span className="font-mono text-[10px] text-muted/60">{errors.length} ACTIVE</span>
           </div>
           <button
             type="button"
             onClick={() => errors.forEach((error) => dismiss(error.id))}
-            className="text-[10px] uppercase tracking-widest text-muted transition hover:text-ink"
+            className="text-[10px] uppercase tracking-[0.1em] text-muted transition hover:text-ink"
           >
             Dismiss all
           </button>
@@ -55,7 +56,7 @@ export function ErrorPopup() {
                   aria-label="Dismiss"
                   className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center border border-line text-[10px] text-muted transition hover:border-danger hover:text-danger"
                 >
-                  ×
+                  <X size={12} />
                 </button>
               </div>
 
@@ -66,13 +67,13 @@ export function ErrorPopup() {
                     onClick={() =>
                       setExpanded((current) => (current === error.id ? null : error.id))
                     }
-                    className="text-[9px] uppercase tracking-widest text-muted transition hover:text-accent"
+                    className="text-[10px] uppercase tracking-[0.1em] text-muted transition hover:text-accent"
                   >
                     {expanded === error.id ? "Hide technical details" : "Show technical details"}
                   </button>
                   {expanded === error.id && (
                     <div className="mt-1.5">
-                      <pre className="max-h-40 overflow-auto border border-line bg-shell p-2 font-mono text-[9.5px] leading-relaxed text-muted">
+                      <pre className="max-h-40 overflow-auto border border-line bg-shell p-2 font-mono text-[10.5px] leading-relaxed text-muted">
                         {error.detail}
                       </pre>
                       <button
@@ -80,7 +81,7 @@ export function ErrorPopup() {
                         onClick={() =>
                           void copy(error.id, `${error.title}\n${error.message}\n${error.detail}`)
                         }
-                        className="mt-1 text-[9px] uppercase tracking-widest text-accent/80 transition hover:text-accent"
+                        className="mt-1 text-[10px] uppercase tracking-[0.1em] text-accent/80 transition hover:text-accent"
                       >
                         {copied === error.id ? "Copied" : "Copy stack trace"}
                       </button>

@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { formatIDR } from "../../lib/format";
 import { orderChildren, orderRoots } from "../../lib/order";
 import { useWbsStore } from "../../store/useWbsStore";
@@ -39,10 +40,12 @@ export function ProjectNavigator({ onCollapse }: { onCollapse?: () => void } = {
               isLeaf: node.children_ids.length === 0,
             });
           }}
-          className={`flex w-full items-center gap-1.5 py-1 pr-2 text-left text-[11px] transition ${
-            selected ? "bg-accent/10 text-ink" : "text-muted hover:bg-panel2/70 hover:text-ink"
+          className={`flex w-full items-center gap-2 border-l-2 py-1.5 pr-2 text-left text-[12px] transition-colors duration-150 ${
+            selected
+              ? "border-accent bg-panel2/70 text-ink"
+              : "border-transparent text-muted hover:bg-panel2/50 hover:text-ink"
           }`}
-          style={{ paddingLeft: 8 + depth * 12 }}
+          style={{ paddingLeft: 10 + depth * 12 }}
         >
           {hasChildren ? (
             <span
@@ -52,20 +55,30 @@ export function ProjectNavigator({ onCollapse }: { onCollapse?: () => void } = {
                 event.stopPropagation();
                 void toggleExpand(id);
               }}
-              className="grid h-3.5 w-3.5 place-items-center text-[9px] text-muted hover:text-accent"
+              className="grid h-4 w-4 place-items-center text-muted hover:text-accent"
             >
-              {node.is_expanded ? "▾" : "▸"}
+              {node.is_expanded ? (
+                <ChevronDown size={12} strokeWidth={2} />
+              ) : (
+                <ChevronRight size={12} strokeWidth={2} />
+              )}
             </span>
           ) : (
-            <span className="h-3.5 w-3.5" />
+            <span className="h-4 w-4" />
           )}
-          <span className="font-mono text-[10px] text-accent/80">{node.code}</span>
-          <span className="min-w-0 flex-1 truncate uppercase tracking-wide">{node.name}</span>
+          <span
+            className={`font-mono text-[10.5px] ${
+              selected ? "text-accent" : "text-muted/70"
+            }`}
+          >
+            {node.code}
+          </span>
+          <span className="min-w-0 flex-1 truncate">{node.name}</span>
         </button>
         {selected && (
           <div
-            className="pb-1 font-mono text-[9.5px] text-muted/70"
-            style={{ paddingLeft: 32 + depth * 12 }}
+            className="pb-1.5 font-mono text-[10px] tabular-nums text-muted/70"
+            style={{ paddingLeft: 34 + depth * 12 }}
           >
             {formatIDR(node.total_price)}
           </div>
@@ -77,22 +90,22 @@ export function ProjectNavigator({ onCollapse }: { onCollapse?: () => void } = {
 
   return (
     <>
-      <div className="flex h-8 shrink-0 items-center justify-between border-b border-line px-3">
-        <span className="flex items-center gap-1.5 text-[9.5px] font-semibold uppercase tracking-[0.16em] text-muted">
+      <div className="flex h-9 shrink-0 items-center justify-between border-b border-line px-3">
+        <span className="flex items-center gap-1.5 text-[10.5px] font-medium uppercase tracking-[0.1em] text-muted">
           {onCollapse && (
             <button
               type="button"
               onClick={onCollapse}
               title="Tutup Project Navigator"
               aria-label="Collapse Project Navigator"
-              className="grid h-5 w-5 shrink-0 place-items-center rounded-sm text-muted transition-colors hover:bg-panel2 hover:text-accent"
+              className="grid h-5 w-5 shrink-0 place-items-center rounded-[4px] text-muted transition-colors hover:bg-panel2 hover:text-accent"
             >
-              ‹
+              <ChevronLeft size={14} strokeWidth={1.75} />
             </button>
           )}
           Project Navigator
         </span>
-        <span className="font-mono text-[9px] text-muted/50">{roots.length} DIVISI</span>
+        <span className="font-mono text-[10px] text-muted/50">{roots.length} DIVISI</span>
       </div>
       <div className="min-h-0 flex-1 overflow-auto py-1">{orderedRoots.map((id) => renderNode(id, 0))}</div>
 
@@ -107,7 +120,7 @@ export function ProjectNavigator({ onCollapse }: { onCollapse?: () => void } = {
             }}
           />
           <div
-            className="fixed z-50 min-w-[184px] rounded-[4px] border border-line bg-panel py-1 text-[11px] shadow-xl"
+            className="fixed z-50 min-w-[196px] rounded-md border border-line bg-panel py-1 text-[12px] shadow-lg"
             style={{ left: ctxMenu.x, top: ctxMenu.y }}
           >
             <div className="relative" onMouseEnter={() => setCtxSub(true)} onMouseLeave={() => setCtxSub(false)}>
@@ -117,10 +130,10 @@ export function ProjectNavigator({ onCollapse }: { onCollapse?: () => void } = {
                 onClick={() => setCtxSub((value) => !value)}
               >
                 <span>Tambah Pekerjaan</span>
-                <span className="text-muted/60">▸</span>
+                <ChevronRight size={12} strokeWidth={1.75} className="text-muted/60" />
               </button>
               {ctxSub && (
-                <div className="absolute left-full top-0 min-w-[160px] rounded-[4px] border border-line bg-panel py-1 text-[11px] shadow-xl">
+                <div className="absolute left-full top-0 min-w-[168px] rounded-md border border-line bg-panel py-1 text-[12px] shadow-lg">
                   <button
                     type="button"
                     className="block w-full px-3 py-1.5 text-left text-ink hover:bg-panel2"

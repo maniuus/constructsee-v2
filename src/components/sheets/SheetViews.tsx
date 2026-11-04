@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import { formatIDR, formatKoef, formatNumber, parseNumeric } from "../../lib/format";
 import {
   collectLeaves,
@@ -9,45 +10,9 @@ import {
 } from "../../lib/sheets";
 import { ANALYSIS_ORDER } from "../../lib/tree";
 import { useWbsStore } from "../../store/useWbsStore";
+import { Th, Td, EmptyRow } from "../ui/primitives";
 
-const ALIGN = { left: "text-left", right: "text-right", center: "text-center" } as const;
 const NUM = "font-mono tabular-nums";
-
-function Th({
-  children,
-  align = "left",
-  className = "",
-}: {
-  children?: ReactNode;
-  align?: keyof typeof ALIGN;
-  className?: string;
-}) {
-  return (
-    <th
-      className={`sticky top-0 z-10 whitespace-nowrap border-b border-line bg-panel2 px-3 py-1.5 text-[8.5px] font-semibold uppercase tracking-widest text-muted ${ALIGN[align]} ${className}`}
-    >
-      {children}
-    </th>
-  );
-}
-
-function Td({
-  children,
-  align = "left",
-  className = "",
-}: {
-  children?: ReactNode;
-  align?: keyof typeof ALIGN;
-  className?: string;
-}) {
-  return (
-    <td
-      className={`border-b border-line/40 px-3 py-1.5 align-middle text-[10.5px] text-ink/90 ${ALIGN[align]} ${className}`}
-    >
-      {children}
-    </td>
-  );
-}
 
 function NumInput({
   value,
@@ -87,7 +52,7 @@ function NumInput({
       }}
       inputMode="decimal"
       title={title}
-      className={`h-6 w-24 rounded-[3px] border border-line/60 bg-shell px-2 text-right font-mono text-[10.5px] text-ink outline-none focus:border-accent ${className}`}
+      className={`h-6 w-24 rounded border border-line/60 bg-shell px-2 text-right font-mono text-[11.5px] text-ink outline-none transition-colors duration-150 focus:border-accent focus:ring-1 focus:ring-inset focus:ring-accent/25 ${className}`}
     />
   );
 }
@@ -103,11 +68,11 @@ function SheetShell({
 }) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div className="flex h-8 shrink-0 items-center justify-between border-b border-line bg-panel/60 px-3">
-        <span className="text-[9.5px] font-semibold uppercase tracking-[0.16em] text-muted">
+      <div className="flex h-9 shrink-0 items-center justify-between border-b border-line bg-panel/60 px-3">
+        <span className="text-[11.5px] font-semibold uppercase tracking-[0.1em] text-muted">
           {title}
         </span>
-        <span className="font-mono text-[9px] text-muted/50">{meta}</span>
+        <span className="font-mono text-[10px] text-muted/50">{meta}</span>
       </div>
       <div className="min-h-0 flex-1 overflow-auto calcir-grid">
         <div className="bg-shell">{children}</div>
@@ -168,23 +133,24 @@ export function VolumeSheet() {
           </tr>
         </thead>
         <tbody>
+          {divisions.length === 0 && <EmptyRow cols={4} label="Belum ada pekerjaan. Tambahkan item dari katalog AHSP." />}
           {divisions.map((division) => {
             const isOpen = !collapsed.has(division.key);
             return (
               <FragmentRows key={division.key}>
                 <tr
                   onClick={() => toggle(division.key)}
-                  className="cursor-pointer border-t-2 border-line/70 bg-panel2/40 hover:bg-panel2/60"
+                  className="cursor-pointer border-t border-line bg-panel2/40 hover:bg-panel2/60"
                 >
-                  <td colSpan={3} className="border-b border-line/40 px-3 py-1.5 text-[10.5px]">
+                  <td colSpan={3} className="border-b border-line/40 px-3 py-1.5 text-[11.5px]">
                     <span className="flex items-center gap-2">
-                      <span className="w-2 text-[9px] text-muted">{isOpen ? "▾" : "▸"}</span>
+                      <span className="flex w-3 items-center text-muted">{isOpen ? <ChevronDown size={12} /> : <ChevronRight size={12} />}</span>
                       <span className={`text-muted/70 ${NUM}`}>{division.code}</span>
                       <span className="font-medium text-ink">{division.label}</span>
                     </span>
                   </td>
                   <td
-                    className={`border-b border-line/40 px-3 py-1.5 text-right text-[10.5px] ${NUM} text-muted`}
+                    className={`border-b border-line/40 px-3 py-1.5 text-right text-[11.5px] ${NUM} text-muted`}
                   >
                     {division.leaves.length} item
                   </td>
@@ -274,23 +240,24 @@ export function RabSheet() {
           </tr>
         </thead>
         <tbody>
+          {divisions.length === 0 && <EmptyRow cols={6} label="Belum ada pekerjaan untuk dihitung." />}
           {divisions.map((division) => {
             const isOpen = !collapsed.has(division.key);
             return (
               <FragmentRows key={division.key}>
                 <tr
                   onClick={() => toggle(division.key)}
-                  className="cursor-pointer border-t-2 border-line/70 bg-panel2/40 hover:bg-panel2/60"
+                  className="cursor-pointer border-t border-line bg-panel2/40 hover:bg-panel2/60"
                 >
-                  <td colSpan={5} className="border-b border-line/40 px-3 py-1.5 text-[10.5px]">
+                  <td colSpan={5} className="border-b border-line/40 px-3 py-1.5 text-[11.5px]">
                     <span className="flex items-center gap-2">
-                      <span className="w-2 text-[9px] text-muted">{isOpen ? "▾" : "▸"}</span>
+                      <span className="flex w-3 items-center text-muted">{isOpen ? <ChevronDown size={12} /> : <ChevronRight size={12} />}</span>
                       <span className={`text-muted/70 ${NUM}`}>{division.code}</span>
                       <span className="font-medium text-ink">{division.label}</span>
                     </span>
                   </td>
                   <td
-                    className={`border-b border-line/40 px-3 py-1.5 text-right text-[10.5px] ${NUM} font-semibold text-ink`}
+                    className={`border-b border-line/40 px-3 py-1.5 text-right text-[11.5px] ${NUM} font-semibold text-ink`}
                   >
                     {formatIDR(division.total)}
                   </td>
@@ -317,15 +284,15 @@ export function RabSheet() {
               </FragmentRows>
             );
           })}
-          <tr className="border-t-2 border-line/70 bg-panel2/40">
+          <tr className="border-t border-line bg-panel2/50">
             <td
               colSpan={5}
-              className="border-b border-line/40 px-3 py-1.5 text-[10.5px] uppercase tracking-wide text-ink/70"
+              className="border-b border-line/40 px-3 py-1.5 text-[11.5px] uppercase tracking-[0.08em] text-ink/70"
             >
               Subtotal RAB
             </td>
             <td
-              className={`border-b border-line/40 px-3 py-1.5 text-right text-[10.5px] ${NUM} text-ink/80`}
+              className={`border-b border-line/40 px-3 py-1.5 text-right text-[11.5px] ${NUM} text-ink/80`}
             >
               {formatIDR(grandTotal)}
             </td>
@@ -334,24 +301,24 @@ export function RabSheet() {
             <tr>
               <td
                 colSpan={5}
-                className="border-b border-line/40 px-3 py-1.5 text-[10.5px] uppercase tracking-wide text-ink/70"
+                className="border-b border-line/40 px-3 py-1.5 text-[11.5px] uppercase tracking-[0.08em] text-ink/70"
               >
                 Overhead ({formatNumber(overhead)}%)
               </td>
-              <td className={`border-b border-line/40 px-3 py-1.5 text-right text-[10.5px] ${NUM} text-ink/80`}>
+              <td className={`border-b border-line/40 px-3 py-1.5 text-right text-[11.5px] ${NUM} text-ink/80`}>
                 {formatIDR(grandTotal * (overhead / 100))}
               </td>
             </tr>
           )}
-          <tr className="border-t-2 border-line/70 bg-panel2/40">
+          <tr className="border-t border-line bg-panel2/50">
             <td
               colSpan={5}
-              className="border-b border-line/40 px-3 py-1.5 text-[10.5px] font-semibold uppercase tracking-wide text-ink"
+              className="border-b border-line/40 px-3 py-1.5 text-[11.5px] font-semibold uppercase tracking-[0.08em] text-ink"
             >
-              Grand Total (incl. Overhead)
+              Grand Total (termasuk overhead)
             </td>
             <td
-              className={`border-b border-line/40 px-3 py-1.5 text-right text-[10.5px] ${NUM} font-semibold text-ink`}
+              className={`border-b border-line/40 px-3 py-1.5 text-right text-[11.5px] ${NUM} font-semibold text-ink`}
             >
               {formatIDR(totalCost)}
             </td>
@@ -392,7 +359,7 @@ export function RekapitulasiSheet() {
   return (
     <SheetShell
       title="Rekapitulasi"
-      meta={`${groups.length} divisi${overhead > 0 ? ` · GRAND TOTAL ${formatIDR(totalCost)}` : ""}`}
+      meta={`${groups.length} divisi${overhead > 0 ? ` · TOTAL ${formatIDR(totalCost)}` : ""}`}
     >
       <table className="w-full border-collapse">
         <thead>
@@ -403,6 +370,7 @@ export function RekapitulasiSheet() {
           </tr>
         </thead>
         <tbody>
+          {groups.length === 0 && <EmptyRow cols={3} label="Belum ada divisi." />}
           {groups.map((group) => {
             const share = grandTotal > 0 ? group.total / grandTotal : 0;
             return (
@@ -419,7 +387,7 @@ export function RekapitulasiSheet() {
                     <span className="flex items-center justify-end gap-2">
                       <span className={`h-1.5 w-16 overflow-hidden rounded-full bg-panel2`}>
                         <span
-                          className="block h-full bg-accent2/70"
+                          className="block h-full bg-accent/70"
                           style={{ width: `${share * 100}%` }}
                         />
                       </span>
@@ -432,8 +400,8 @@ export function RekapitulasiSheet() {
               </tr>
             );
           })}
-          <tr className="border-t-2 border-line/70 bg-panel2/40">
-            <Td className="uppercase tracking-wide text-ink/70">Subtotal RAB</Td>
+          <tr className="border-t border-line bg-panel2/50">
+            <Td className="uppercase tracking-[0.08em] text-ink/70">Subtotal RAB</Td>
             <Td align="right" className={`${NUM} text-ink/80`}>
               {formatIDR(grandTotal)}
             </Td>
@@ -443,7 +411,7 @@ export function RekapitulasiSheet() {
           </tr>
           {overhead > 0 && (
             <tr>
-              <Td className="uppercase tracking-wide text-ink/70">
+              <Td className="uppercase tracking-[0.08em] text-ink/70">
                 Overhead ({formatNumber(overhead)}%)
               </Td>
               <Td align="right" className={`${NUM} text-ink/80`}>
@@ -454,9 +422,9 @@ export function RekapitulasiSheet() {
               </Td>
             </tr>
           )}
-          <tr className="border-t-2 border-line/70 bg-panel2/40">
-            <Td className="font-semibold uppercase tracking-wide text-ink">
-              Grand Total (incl. Overhead)
+          <tr className="border-t border-line bg-panel2/50">
+            <Td className="font-semibold uppercase tracking-[0.08em] text-ink">
+              Grand Total (termasuk overhead)
             </Td>
             <Td align="right" className={`${NUM} font-semibold text-ink`}>
               {formatIDR(totalCost)}
@@ -511,6 +479,7 @@ export function HargaDasarSheet() {
           </tr>
         </thead>
         <tbody>
+          {groups.length === 0 && <EmptyRow cols={4} label="Belum ada harga dasar dari komponen AHSP." />}
           {groups.map((group) => {
             const meta = COMPONENT_META[group.kind];
             const isOpen = !collapsed.has(group.kind);
@@ -519,13 +488,13 @@ export function HargaDasarSheet() {
               <FragmentRows key={group.kind}>
                 <tr
                   onClick={() => toggle(group.kind)}
-                  className="cursor-pointer border-t-2 border-line/70 bg-panel2/40 hover:bg-panel2/60"
+                  className="cursor-pointer border-t border-line bg-panel2/40 hover:bg-panel2/60"
                 >
-                  <td colSpan={4} className="border-b border-line/40 px-3 py-1.5 text-[10.5px]">
+                  <td colSpan={4} className="border-b border-line/40 px-3 py-1.5 text-[11.5px]">
                     <span className="flex items-center gap-2">
-                      <span className="w-2 text-[9px] text-muted">{isOpen ? "▾" : "▸"}</span>
+                      <span className="flex w-3 items-center text-muted">{isOpen ? <ChevronDown size={12} /> : <ChevronRight size={12} />}</span>
                       <span className={`h-1.5 w-1.5 rounded-full ${meta.dot}`} />
-                      <span className={`font-medium ${meta.text}`}>{meta.label}</span>
+                      <span className="font-medium text-ink">{meta.label}</span>
                       <span className="text-muted/60">({meta.letter})</span>
                       <span className="text-muted/50">· {group.items.length}</span>
                       {groupUnfilled > 0 && (
@@ -551,7 +520,7 @@ export function HargaDasarSheet() {
                       </Td>
                       <Td align="right">
                         {item.base_price <= 0 ? (
-                          <span className="rounded-sm border border-danger/40 bg-danger/10 px-1.5 py-0.5 text-[9px] text-danger">
+                          <span className="rounded border border-danger/40 bg-danger/10 px-1.5 py-0.5 text-[10px] text-danger">
                             Belum diisi
                           </span>
                         ) : (
@@ -608,6 +577,7 @@ export function BoqSheet() {
           </tr>
         </thead>
         <tbody>
+          {groups.length === 0 && <EmptyRow cols={5} label="Belum ada material pada komponen AHSP." />}
           {groups.map((group) => {
             const meta = COMPONENT_META[group.kind];
             const isOpen = !collapsed.has(group.kind);
@@ -616,19 +586,19 @@ export function BoqSheet() {
               <FragmentRows key={group.kind}>
                 <tr
                   onClick={() => toggle(group.kind)}
-                  className="cursor-pointer border-t-2 border-line/70 bg-panel2/40 hover:bg-panel2/60"
+                  className="cursor-pointer border-t border-line bg-panel2/40 hover:bg-panel2/60"
                 >
-                  <td colSpan={4} className="border-b border-line/40 px-3 py-1.5 text-[10.5px]">
+                  <td colSpan={4} className="border-b border-line/40 px-3 py-1.5 text-[11.5px]">
                     <span className="flex items-center gap-2">
-                      <span className="w-2 text-[9px] text-muted">{isOpen ? "▾" : "▸"}</span>
+                      <span className="flex w-3 items-center text-muted">{isOpen ? <ChevronDown size={12} /> : <ChevronRight size={12} />}</span>
                       <span className={`h-1.5 w-1.5 rounded-full ${meta.dot}`} />
-                      <span className={`font-medium ${meta.text}`}>{meta.label}</span>
+                      <span className="font-medium text-ink">{meta.label}</span>
                       <span className="text-muted/60">({meta.letter})</span>
                       <span className="text-muted/50">· {group.items.length}</span>
                     </span>
                   </td>
                   <td
-                    className={`border-b border-line/40 px-3 py-1.5 text-right text-[10.5px] ${NUM} font-semibold text-ink`}
+                    className={`border-b border-line/40 px-3 py-1.5 text-right text-[11.5px] ${NUM} font-semibold text-ink`}
                   >
                     {formatIDR(groupTotal)}
                   </td>
@@ -644,7 +614,7 @@ export function BoqSheet() {
                         {item.base_price > 0 ? (
                           formatIDR(item.base_price)
                         ) : (
-                          <span className="rounded-sm border border-danger/40 bg-danger/10 px-1.5 py-0.5 text-[9px] text-danger">
+                          <span className="rounded border border-danger/40 bg-danger/10 px-1.5 py-0.5 text-[10px] text-danger">
                             Belum diisi
                           </span>
                         )}
@@ -660,15 +630,15 @@ export function BoqSheet() {
               </FragmentRows>
             );
           })}
-          <tr className="border-t-2 border-line/70 bg-panel2/40">
+          <tr className="border-t border-line bg-panel2/50">
             <td
               colSpan={4}
-              className="border-b border-line/40 px-3 py-1.5 text-[10.5px] uppercase tracking-wide text-ink/70"
+              className="border-b border-line/40 px-3 py-1.5 text-[11.5px] uppercase tracking-[0.08em] text-ink/70"
             >
               Subtotal BOQ
             </td>
             <td
-              className={`border-b border-line/40 px-3 py-1.5 text-right text-[10.5px] ${NUM} text-ink/80`}
+              className={`border-b border-line/40 px-3 py-1.5 text-right text-[11.5px] ${NUM} text-ink/80`}
             >
               {formatIDR(grandTotal)}
             </td>
@@ -677,24 +647,24 @@ export function BoqSheet() {
             <tr>
               <td
                 colSpan={4}
-                className="border-b border-line/40 px-3 py-1.5 text-[10.5px] uppercase tracking-wide text-ink/70"
+                className="border-b border-line/40 px-3 py-1.5 text-[11.5px] uppercase tracking-[0.08em] text-ink/70"
               >
                 Overhead ({formatNumber(overhead)}%)
               </td>
-              <td className={`border-b border-line/40 px-3 py-1.5 text-right text-[10.5px] ${NUM} text-ink/80`}>
+              <td className={`border-b border-line/40 px-3 py-1.5 text-right text-[11.5px] ${NUM} text-ink/80`}>
                 {formatIDR(grandTotal * (overhead / 100))}
               </td>
             </tr>
           )}
-          <tr className="border-t-2 border-line/70 bg-panel2/40">
+          <tr className="border-t border-line bg-panel2/50">
             <td
               colSpan={4}
-              className="border-b border-line/40 px-3 py-1.5 text-[10.5px] font-semibold uppercase tracking-wide text-ink"
+              className="border-b border-line/40 px-3 py-1.5 text-[11.5px] font-semibold uppercase tracking-[0.08em] text-ink"
             >
-              Grand Total (incl. Overhead)
+              Grand Total (termasuk overhead)
             </td>
             <td
-              className={`border-b border-line/40 px-3 py-1.5 text-right text-[10.5px] ${NUM} font-semibold text-ink`}
+              className={`border-b border-line/40 px-3 py-1.5 text-right text-[11.5px] ${NUM} font-semibold text-ink`}
             >
               {formatIDR(totalCost)}
             </td>
@@ -722,6 +692,7 @@ export function AnalisaSheet() {
           </tr>
         </thead>
         <tbody>
+          {leaves.length === 0 && <EmptyRow cols={7} label="Belum ada analisa pekerjaan." />}
           {leaves.map(({ node }) => (
             <AnalisaBlock key={node.id} id={node.id} />
           ))}
@@ -736,8 +707,8 @@ function AnalisaBlock({ id }: { id: string }) {
   if (!node) return null;
   return (
     <>
-      <tr className="border-t-2 border-line/70 bg-panel2/40">
-        <Td className={`text-accent ${NUM}`}>{node.code}</Td>
+      <tr className="border-t border-line bg-panel2/50">
+        <Td className={`text-muted ${NUM}`}>{node.code}</Td>
         <Td className="font-medium text-ink">{node.name}</Td>
         <Td align="center" className="text-muted">
           {node.unit || "—"}
@@ -745,7 +716,7 @@ function AnalisaBlock({ id }: { id: string }) {
         <Td />
         <Td />
         <Td />
-        <Td align="right" className={`${NUM} font-semibold text-accent`}>
+        <Td align="right" className={`${NUM} font-semibold text-ink`}>
           {formatIDR(node.unit_price)}
         </Td>
       </tr>
@@ -856,6 +827,7 @@ export function RencanaKerjaSheet() {
           </tr>
         </thead>
         <tbody>
+          {leaves.length === 0 && <EmptyRow cols={7} label="Belum ada pekerjaan pada rencana kerja." />}
           {leaves.map(({ node }) => {
             const mandays = tenagaMandays(node);
             const entry = drafts[node.id] ?? { workers: "", duration: "" };
@@ -882,7 +854,7 @@ export function RencanaKerjaSheet() {
                     }}
                     inputMode="decimal"
                     placeholder="—"
-                    className="h-6 w-20 rounded-[3px] border border-line bg-shell px-2 text-right font-mono text-[10.5px] text-ink outline-none placeholder:text-muted/40 transition-colors hover:border-accent/50 focus:border-accent"
+                    className="h-6 w-20 rounded border border-line bg-shell px-2 text-right font-mono text-[11.5px] text-ink outline-none placeholder:text-muted/40 transition-colors hover:border-accent/50 focus:border-accent"
                   />
                 </Td>
                 <Td align="right">
@@ -895,7 +867,7 @@ export function RencanaKerjaSheet() {
                     }}
                     inputMode="decimal"
                     placeholder="—"
-                    className="h-6 w-20 rounded-[3px] border border-line bg-shell px-2 text-right font-mono text-[10.5px] text-ink outline-none placeholder:text-muted/40 transition-colors hover:border-accent/50 focus:border-accent"
+                    className="h-6 w-20 rounded border border-line bg-shell px-2 text-right font-mono text-[11.5px] text-ink outline-none placeholder:text-muted/40 transition-colors hover:border-accent/50 focus:border-accent"
                   />
                 </Td>
               </tr>

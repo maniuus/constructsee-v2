@@ -59,7 +59,7 @@ export function Sheets() {
 
       <div
         role="tablist"
-        className="flex h-8 shrink-0 items-stretch gap-0.5 overflow-x-auto border-t border-line bg-panel px-2 pt-1"
+        className="flex h-9 shrink-0 items-stretch gap-0.5 overflow-x-auto border-t border-line bg-panel px-2 pt-1"
       >
         {SHEETS.map((sheet) => {
           const isActive = sheet.id === active;
@@ -69,7 +69,7 @@ export function Sheets() {
               role="tab"
               aria-selected={isActive}
               onClick={() => setActive(sheet.id)}
-              className={`shrink-0 rounded-t-sm border-x border-t px-3 text-[10px] font-medium transition-colors ${
+              className={`shrink-0 rounded-t-sm border-x border-t px-3.5 text-[11px] font-medium transition-colors ${
                 isActive
                   ? "border-line bg-shell text-ink"
                   : "border-transparent text-muted hover:bg-panel2/60 hover:text-ink/80"

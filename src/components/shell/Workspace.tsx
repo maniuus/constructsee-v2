@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ProjectNavigator } from "../navigator/ProjectNavigator";
 import { Sheets } from "../sheets/Sheets";
 import { PropertiesInspector } from "../inspector/PropertiesInspector";
@@ -107,9 +108,9 @@ export function Workspace() {
             aria-label="Expand Project Navigator"
             className="grid h-6 w-6 shrink-0 place-items-center rounded-sm text-muted transition-colors hover:bg-panel2 hover:text-accent"
           >
-            ›
+            <ChevronRight size={13} />
           </button>
-          <span className="select-none text-[9.5px] font-semibold uppercase tracking-[0.16em] text-muted/60 [writing-mode:vertical-rl]">
+          <span className="select-none text-[10.5px] font-semibold uppercase tracking-[0.1em] text-muted/60 [writing-mode:vertical-rl]">
             Project Navigator
           </span>
         </aside>
@@ -156,9 +157,9 @@ export function Workspace() {
             aria-label="Expand Properties Inspector"
             className="grid h-6 w-6 shrink-0 place-items-center rounded-sm text-muted transition-colors hover:bg-panel2 hover:text-accent"
           >
-            ‹
+            <ChevronLeft size={13} />
           </button>
-          <span className="select-none text-[9.5px] font-semibold uppercase tracking-[0.16em] text-muted/60 [writing-mode:vertical-rl]">
+          <span className="select-none text-[10.5px] font-semibold uppercase tracking-[0.1em] text-muted/60 [writing-mode:vertical-rl]">
             Properties Inspector
           </span>
         </aside>

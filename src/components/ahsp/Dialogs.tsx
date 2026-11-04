@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Overlay } from "../ui/primitives";
 import { useWbsStore } from "../../store/useWbsStore";
 import { useUiStore } from "../../store/useUiStore";
 import { SNI_DIVISIONS } from "../../lib/divisions";
@@ -169,13 +170,13 @@ function AddPekerjaanDialog() {
     <Overlay onClose={close}>
       <div className="flex h-[620px] w-[880px] max-w-[94vw] flex-col rounded-md border border-line bg-panel shadow-2xl">
         <header className="flex h-10 shrink-0 items-center justify-between border-b border-line px-4">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-ink">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.1em] text-ink">
             Tambah Pekerjaan dari AHSP
           </span>
           <button
             type="button"
             onClick={close}
-            className="grid h-6 w-6 place-items-center rounded-sm text-muted transition-colors hover:bg-panel2 hover:text-ink"
+            className="grid h-6 w-6 place-items-center rounded text-muted transition-colors hover:bg-panel2 hover:text-ink"
           >
             ✕
           </button>
@@ -189,12 +190,12 @@ function AddPekerjaanDialog() {
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Cari kode atau nama pekerjaan…"
-                className="w-full rounded-[3px] border border-line/60 bg-shell px-2 py-1.5 text-[11px] text-ink outline-none focus:border-accent"
+                className="w-full rounded border border-line/60 bg-shell px-2 py-1.5 text-[11px] text-ink outline-none focus:border-accent"
               />
             </div>
             <div className="flex flex-col gap-1.5 border-b border-line px-2 py-2">
               <label className="flex items-center gap-2">
-                <span className="w-14 shrink-0 text-[9px] uppercase tracking-widest text-muted/60">Divisi</span>
+                <span className="w-14 shrink-0 text-[10px] uppercase tracking-[0.1em] text-muted/60">Divisi</span>
                 <select
                   value={divisionId === "" ? "" : String(divisionId)}
                   onChange={(event) => {
@@ -202,7 +203,7 @@ function AddPekerjaanDialog() {
                     setDivisionId(value === "" ? "" : Number(value));
                     setSubCode("");
                   }}
-                  className="min-w-0 flex-1 rounded-[3px] border border-line/60 bg-shell px-1.5 py-1 text-[10.5px] text-ink outline-none focus:border-accent"
+                  className="min-w-0 flex-1 rounded border border-line/60 bg-shell px-1.5 py-1 text-[11px] text-ink outline-none focus:border-accent"
                 >
                   <option value="">Semua divisi</option>
                   {catalog?.divisions.map((division) => (
@@ -213,12 +214,12 @@ function AddPekerjaanDialog() {
                 </select>
               </label>
               <label className="flex items-center gap-2">
-                <span className="w-14 shrink-0 text-[9px] uppercase tracking-widest text-muted/60">Sub</span>
+                <span className="w-14 shrink-0 text-[10px] uppercase tracking-[0.1em] text-muted/60">Sub</span>
                 <select
                   value={subCode}
                   onChange={(event) => setSubCode(event.target.value)}
                   disabled={divisionId === "" || subdivisions.length === 0}
-                  className="min-w-0 flex-1 rounded-[3px] border border-line/60 bg-shell px-1.5 py-1 text-[10.5px] text-ink outline-none focus:border-accent disabled:opacity-40"
+                  className="min-w-0 flex-1 rounded border border-line/60 bg-shell px-1.5 py-1 text-[11px] text-ink outline-none focus:border-accent disabled:opacity-40"
                 >
                   <option value="">Semua sub divisi</option>
                   {subdivisions.map((sub) => (
@@ -244,7 +245,7 @@ function AddPekerjaanDialog() {
                     className="flex w-8 shrink-0 items-center justify-center"
                   >
                     <span
-                      className={`grid h-4 w-4 place-items-center rounded-[3px] border text-[10px] leading-none transition-colors ${
+                      className={`grid h-4 w-4 place-items-center rounded border text-[10px] leading-none transition-colors ${
                         inCart(item.id)
                           ? "border-accent bg-accent text-shell"
                           : "border-line/70 text-transparent hover:border-accent/60"
@@ -258,13 +259,13 @@ function AddPekerjaanDialog() {
                     onClick={() => setSelected(item)}
                     className="flex min-w-0 flex-1 flex-col items-start gap-0.5 py-1.5 pr-3 text-left"
                   >
-                    <span className="font-mono text-[9.5px] text-accent">{item.code}</span>
-                    <span className="text-[10.5px] leading-snug text-ink/90">{item.name}</span>
+                    <span className="font-mono text-[11px] text-accent">{item.code}</span>
+                    <span className="text-[11px] leading-snug text-ink/90">{item.name}</span>
                   </button>
                 </div>
               ))}
               {results.length === 0 && (
-                <p className="p-3 text-[10.5px] text-muted/60">
+                <p className="p-3 text-[11px] text-muted/60">
                   {catalog ? "Tidak ada pekerjaan cocok." : "Memuat katalog…"}
                 </p>
               )}
@@ -276,18 +277,18 @@ function AddPekerjaanDialog() {
               <>
                 <div className="min-h-0 flex-1 overflow-auto p-3">
                   <div className="mb-2 flex items-center gap-2">
-                    <span className="rounded-sm border border-accent/40 bg-accent/10 px-1.5 py-0.5 font-mono text-[10px] text-accent">
+                    <span className="rounded border border-accent/40 bg-accent/10 px-1.5 py-0.5 font-mono text-[10px] text-accent">
                       {selected.code}
                     </span>
-                    <span className="text-[9px] uppercase tracking-widest text-muted/60">
+                    <span className="text-[10px] uppercase tracking-[0.1em] text-muted/60">
                       {selectedDivision?.name ?? "—"} · {selected.unit}
                     </span>
                   </div>
                   <h3 className="mb-3 text-[12px] font-medium leading-snug text-ink">{selected.name}</h3>
 
-                  <table className="w-full border-collapse text-[10.5px]">
+                  <table className="w-full border-collapse text-[11px]">
                     <thead>
-                      <tr className="border-b border-line text-[8.5px] uppercase tracking-widest text-muted">
+                      <tr className="border-b border-line text-[10px] uppercase tracking-[0.1em] text-muted">
                         <th className="px-2 py-1 text-left font-semibold">Komponen</th>
                         <th className="px-2 py-1 text-right font-semibold">Koef</th>
                         <th className="px-2 py-1 text-right font-semibold">Harga Dasar</th>
@@ -301,7 +302,7 @@ function AddPekerjaanDialog() {
                             <tr key={`${kind}-${index}`} className="border-b border-line/30">
                               <td className="px-2 py-1 text-ink/85">
                                 {index === 0 && (
-                                  <span className="mr-1.5 text-[9px] uppercase tracking-widest text-muted/60">
+                                  <span className="mr-1.5 text-[10px] uppercase tracking-[0.1em] text-muted/60">
                                     {kind}
                                   </span>
                                 )}
@@ -329,8 +330,8 @@ function AddPekerjaanDialog() {
                 </div>
 
                 <div className="shrink-0 border-t border-line px-3 py-2">
-                  <div className="flex items-center justify-between gap-2 text-[9.5px]">
-                    <span className="uppercase tracking-widest text-muted/60">Divisi otomatis</span>
+                  <div className="flex items-center justify-between gap-2 text-[11px]">
+                    <span className="uppercase tracking-[0.1em] text-muted/60">Divisi otomatis</span>
                     <span className="truncate text-muted/80">
                       {targetDivision ? `${targetDivision.code} ${targetDivision.name}` : "—"}
                     </span>
@@ -347,16 +348,16 @@ function AddPekerjaanDialog() {
 
         <div className="flex max-h-[164px] min-h-[76px] shrink-0 flex-col border-t border-line bg-panel2/30">
           <div className="flex h-7 shrink-0 items-center justify-between px-4">
-            <span className="text-[8.5px] font-semibold uppercase tracking-widest text-muted/60">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.1em] text-muted/60">
               Keranjang ({cart.length})
             </span>
-            <span className="font-mono text-[9px] text-muted/50">
+            <span className="font-mono text-[10px] text-muted/50">
               {cart.length > 0 ? "ubah volume bila perlu, lalu Tambahkan Semua" : "belum ada item"}
             </span>
           </div>
           <div className="min-h-0 flex-1 overflow-auto px-2 pb-2">
             {cart.length === 0 ? (
-              <p className="px-2 py-2 text-[10.5px] text-muted/50">
+              <p className="px-2 py-2 text-[11px] text-muted/50">
                 Centang pekerjaan di daftar untuk memasukkannya ke keranjang.
               </p>
             ) : (
@@ -365,16 +366,16 @@ function AddPekerjaanDialog() {
                 return (
                   <div
                     key={entry.uid}
-                    className="flex items-center gap-2 rounded-[3px] px-2 py-1 hover:bg-panel2/60"
+                    className="flex items-center gap-2 rounded px-2 py-1 hover:bg-panel2/60"
                   >
-                    <span className="w-4 shrink-0 text-[9px] text-muted/50">{index + 1}</span>
-                    <span className="w-24 shrink-0 truncate font-mono text-[9.5px] text-accent">
+                    <span className="w-4 shrink-0 text-[10px] text-muted/50">{index + 1}</span>
+                    <span className="w-24 shrink-0 truncate font-mono text-[11px] text-accent">
                       {entry.item.code}
                     </span>
-                    <span className="min-w-0 flex-1 truncate text-[10.5px] text-ink/90">
+                    <span className="min-w-0 flex-1 truncate text-[11px] text-ink/90">
                       {entry.item.name}
                     </span>
-                    <span className="w-10 shrink-0 text-[9.5px] text-muted">{entry.item.unit}</span>
+                    <span className="w-10 shrink-0 text-[11px] text-muted">{entry.item.unit}</span>
                     <input
                       inputMode="decimal"
                       value={entry.volume}
@@ -385,9 +386,9 @@ function AddPekerjaanDialog() {
                           ),
                         )
                       }
-                      className="h-6 w-20 shrink-0 rounded-[3px] border border-line/60 bg-shell px-1.5 text-right font-mono text-[10px] text-ink outline-none focus:border-accent"
+                      className="h-6 w-20 shrink-0 rounded border border-line/60 bg-shell px-1.5 text-right font-mono text-[10px] text-ink outline-none focus:border-accent"
                     />
-                    <span className="w-36 shrink-0 truncate text-[9px] uppercase tracking-wide text-muted/60">
+                    <span className="w-36 shrink-0 truncate text-[10px] uppercase tracking-wide text-muted/60">
                       {division ? `${division.code} ${division.name}` : "—"}
                     </span>
                     <button
@@ -395,7 +396,7 @@ function AddPekerjaanDialog() {
                       onClick={() =>
                         setCart((current) => current.filter((item) => item.uid !== entry.uid))
                       }
-                      className="grid h-5 w-5 shrink-0 place-items-center rounded-sm text-muted transition hover:bg-danger/20 hover:text-danger"
+                      className="grid h-5 w-5 shrink-0 place-items-center rounded text-muted transition hover:bg-danger/20 hover:text-danger"
                     >
                       ✕
                     </button>
@@ -408,9 +409,9 @@ function AddPekerjaanDialog() {
 
         <footer className="flex h-12 shrink-0 items-center justify-between border-t border-line px-4">
           {error ? (
-            <span className="text-[10.5px] text-danger">{error}</span>
+            <span className="text-[11px] text-danger">{error}</span>
           ) : (
-            <span className="text-[10.5px] text-muted/60">
+            <span className="text-[11px] text-muted/60">
               {cart.length === 0
                 ? "Keranjang kosong"
                 : `${cart.length} pekerjaan siap ditambahkan ke divisinya`}
@@ -420,7 +421,7 @@ function AddPekerjaanDialog() {
             <button
               type="button"
               onClick={close}
-              className="rounded-[3px] border border-line px-3 py-1.5 text-[10.5px] text-muted transition hover:bg-panel2 hover:text-ink"
+              className="rounded border border-line px-3 py-1.5 text-[11px] text-muted transition hover:bg-panel2 hover:text-ink"
             >
               Batal
             </button>
@@ -428,7 +429,7 @@ function AddPekerjaanDialog() {
               type="button"
               disabled={cart.length === 0 || busy}
               onClick={() => void submitAll()}
-              className="rounded-[3px] border border-accent/50 bg-accent/20 px-4 py-1.5 text-[10.5px] font-medium text-accent transition hover:bg-accent/30 disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded border border-accent/50 bg-accent/20 px-4 py-1.5 text-[11px] font-medium text-accent transition hover:bg-accent/30 disabled:cursor-not-allowed disabled:opacity-40"
             >
               {busy ? "Menambah…" : `Tambahkan Semua${cart.length > 0 ? ` (${cart.length})` : ""}`}
             </button>
@@ -521,13 +522,13 @@ function AddDirectDialog() {
     <Overlay onClose={close}>
       <div className="w-[520px] max-w-[92vw] rounded-md border border-line bg-panel shadow-2xl">
         <header className="flex h-10 shrink-0 items-center justify-between border-b border-line px-4">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-ink">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.1em] text-ink">
             Tambah Pekerjaan Langsung
           </span>
           <button
             type="button"
             onClick={close}
-            className="grid h-6 w-6 place-items-center rounded-sm text-muted transition-colors hover:bg-panel2 hover:text-ink"
+            className="grid h-6 w-6 place-items-center rounded text-muted transition-colors hover:bg-panel2 hover:text-ink"
           >
             ✕
           </button>
@@ -535,7 +536,7 @@ function AddDirectDialog() {
 
         <div className="grid grid-cols-2 gap-3 px-4 py-4">
           <label className="col-span-2 block">
-            <span className="mb-1 block text-[8.5px] uppercase tracking-widest text-muted/60">
+            <span className="mb-1 block text-[10px] uppercase tracking-[0.1em] text-muted/60">
               Uraian Pekerjaan
             </span>
             <input
@@ -543,29 +544,29 @@ function AddDirectDialog() {
               value={name}
               onChange={(event) => setName(event.target.value)}
               placeholder="mis. Pembersihan lahan & pengukuran"
-              className="w-full rounded-[3px] border border-line/60 bg-shell px-2 py-1.5 text-[11px] text-ink outline-none focus:border-accent"
+              className="w-full rounded border border-line/60 bg-shell px-2 py-1.5 text-[11px] text-ink outline-none focus:border-accent"
             />
           </label>
           <label className="block">
-            <span className="mb-1 block text-[8.5px] uppercase tracking-widest text-muted/60">Satuan</span>
+            <span className="mb-1 block text-[10px] uppercase tracking-[0.1em] text-muted/60">Satuan</span>
             <input
               value={unit}
               onChange={(event) => setUnit(event.target.value)}
               placeholder="m2 / m3 / ls"
-              className="w-full rounded-[3px] border border-line/60 bg-shell px-2 py-1.5 text-[11px] text-ink outline-none focus:border-accent"
+              className="w-full rounded border border-line/60 bg-shell px-2 py-1.5 text-[11px] text-ink outline-none focus:border-accent"
             />
           </label>
           <label className="block">
-            <span className="mb-1 block text-[8.5px] uppercase tracking-widest text-muted/60">Volume</span>
+            <span className="mb-1 block text-[10px] uppercase tracking-[0.1em] text-muted/60">Volume</span>
             <input
               inputMode="decimal"
               value={volume}
               onChange={(event) => setVolume(event.target.value)}
-              className="w-full rounded-[3px] border border-line/60 bg-shell px-2 py-1.5 text-right font-mono text-[11px] text-ink outline-none focus:border-accent"
+              className="w-full rounded border border-line/60 bg-shell px-2 py-1.5 text-right font-mono text-[11px] text-ink outline-none focus:border-accent"
             />
           </label>
           <label className="block">
-            <span className="mb-1 block text-[8.5px] uppercase tracking-widest text-muted/60">
+            <span className="mb-1 block text-[10px] uppercase tracking-[0.1em] text-muted/60">
               Harga Satuan
             </span>
             <input
@@ -573,17 +574,17 @@ function AddDirectDialog() {
               value={price}
               onChange={(event) => setPrice(event.target.value)}
               placeholder="0"
-              className="w-full rounded-[3px] border border-line/60 bg-shell px-2 py-1.5 text-right font-mono text-[11px] text-ink outline-none focus:border-accent"
+              className="w-full rounded border border-line/60 bg-shell px-2 py-1.5 text-right font-mono text-[11px] text-ink outline-none focus:border-accent"
             />
           </label>
           <label className="block">
-            <span className="mb-1 block text-[8.5px] uppercase tracking-widest text-muted/60">
+            <span className="mb-1 block text-[10px] uppercase tracking-[0.1em] text-muted/60">
               Divisi tujuan
             </span>
             <select
               value={divisionId}
               onChange={(event) => setDivisionId(event.target.value)}
-              className="w-full rounded-[3px] border border-line/60 bg-shell px-2 py-1.5 text-[11px] text-ink outline-none focus:border-accent"
+              className="w-full rounded border border-line/60 bg-shell px-2 py-1.5 text-[11px] text-ink outline-none focus:border-accent"
             >
               {divisions.map((division) => (
                 <option key={division.id} value={division.id}>
@@ -595,8 +596,8 @@ function AddDirectDialog() {
         </div>
 
         <footer className="flex h-12 shrink-0 items-center justify-between border-t border-line px-4">
-          <div className="flex items-baseline gap-2 text-[10.5px] text-muted">
-            <span className="text-[8.5px] uppercase tracking-widest text-muted/60">Total Biaya</span>
+          <div className="flex items-baseline gap-2 text-[11px] text-muted">
+            <span className="text-[10px] uppercase tracking-[0.1em] text-muted/60">Total Biaya</span>
             <span className="font-mono text-[12px] font-semibold text-accent">
               {formatIDR(effectiveVolume * effectivePrice)}
             </span>
@@ -604,12 +605,12 @@ function AddDirectDialog() {
               ({formatNumber(effectiveVolume)} × {formatIDR(effectivePrice)})
             </span>
           </div>
-          {error && <span className="text-[10.5px] text-danger">{error}</span>}
+          {error && <span className="text-[11px] text-danger">{error}</span>}
           <div className="flex gap-2">
             <button
               type="button"
               onClick={close}
-              className="rounded-[3px] border border-line px-3 py-1.5 text-[10.5px] text-muted transition hover:bg-panel2 hover:text-ink"
+              className="rounded border border-line px-3 py-1.5 text-[11px] text-muted transition hover:bg-panel2 hover:text-ink"
             >
               Batal
             </button>
@@ -617,7 +618,7 @@ function AddDirectDialog() {
               type="button"
               disabled={!canSubmit}
               onClick={() => void submit()}
-              className="rounded-[3px] border border-accent/50 bg-accent/20 px-4 py-1.5 text-[10.5px] font-medium text-accent transition hover:bg-accent/30 disabled:cursor-not-allowed disabled:opacity-40"
+              className="rounded border border-accent/50 bg-accent/20 px-4 py-1.5 text-[11px] font-medium text-accent transition hover:bg-accent/30 disabled:cursor-not-allowed disabled:opacity-40"
             >
               {busy ? "Menambah…" : "Tambah Pekerjaan"}
             </button>
@@ -664,7 +665,7 @@ function RemoveConfirmDialog() {
   return (
     <Overlay onClose={cancelRemove}>
       <div className="w-[420px] max-w-[92vw] rounded-md border border-line bg-panel shadow-2xl">
-        <header className="border-b border-line px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-ink">
+        <header className="border-b border-line px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-ink">
           Hapus Pekerjaan
         </header>
         <div className="px-4 py-4">
@@ -674,9 +675,9 @@ function RemoveConfirmDialog() {
                 Hapus <span className="text-ink">{targets.length}</span> pekerjaan terpilih? Tindakan
                 ini tidak dapat dibatalkan.
               </p>
-              <ul className="mt-2 max-h-40 overflow-auto rounded-[3px] border border-line/60 bg-shell/60 py-1">
+              <ul className="mt-2 max-h-40 overflow-auto rounded border border-line/60 bg-shell/60 py-1">
                 {targets.map((node) => (
-                  <li key={node.id} className="flex gap-2 px-2 py-0.5 text-[10.5px] text-muted">
+                  <li key={node.id} className="flex gap-2 px-2 py-0.5 text-[11px] text-muted">
                     <span className="font-mono text-accent/70">{node.code}</span>
                     <span className="truncate text-ink/90">{node.name}</span>
                   </li>
@@ -689,13 +690,13 @@ function RemoveConfirmDialog() {
               Tindakan ini tidak dapat dibatalkan.
             </p>
           )}
-          {error && <p className="mt-2 text-[10.5px] text-danger">{error}</p>}
+          {error && <p className="mt-2 text-[11px] text-danger">{error}</p>}
         </div>
         <footer className="flex justify-end gap-2 border-t border-line px-4 py-3">
           <button
             type="button"
             onClick={cancelRemove}
-            className="rounded-[3px] border border-line px-3 py-1.5 text-[10.5px] text-muted transition hover:bg-panel2 hover:text-ink"
+            className="rounded border border-line px-3 py-1.5 text-[11px] text-muted transition hover:bg-panel2 hover:text-ink"
           >
             Batal
           </button>
@@ -703,33 +704,12 @@ function RemoveConfirmDialog() {
             type="button"
             disabled={busy}
             onClick={() => void confirm()}
-            className="rounded-[3px] border border-danger/50 bg-danger/20 px-4 py-1.5 text-[10.5px] font-medium text-danger transition hover:bg-danger/30 disabled:cursor-not-allowed disabled:opacity-40"
+            className="rounded border border-danger/50 bg-danger/20 px-4 py-1.5 text-[11px] font-medium text-danger transition hover:bg-danger/30 disabled:cursor-not-allowed disabled:opacity-40"
           >
             {busy ? "Menghapus…" : many ? `Hapus ${targets.length}` : "Hapus"}
           </button>
         </footer>
       </div>
     </Overlay>
-  );
-}
-
-function Overlay({ children, onClose }: { children: React.ReactNode; onClose: () => void }) {
-  useEffect(() => {
-    const handler = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [onClose]);
-
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-6"
-      onMouseDown={(event) => {
-        if (event.target === event.currentTarget) onClose();
-      }}
-    >
-      {children}
-    </div>
   );
 }

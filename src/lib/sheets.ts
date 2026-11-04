@@ -12,7 +12,7 @@ export interface ComponentMeta {
 export const COMPONENT_META: Record<ComponentKind, ComponentMeta> = {
   tenaga: { label: "Tenaga Kerja", letter: "A", dot: "bg-accent2", text: "text-accent2" },
   bahan: { label: "Bahan", letter: "B", dot: "bg-accent", text: "text-accent" },
-  alat: { label: "Alat", letter: "C", dot: "bg-amber-400", text: "text-amber-400" },
+  alat: { label: "Alat", letter: "C", dot: "bg-alat", text: "text-alat" },
 };
 
 export interface LeafInfo {

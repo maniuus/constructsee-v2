@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { X } from "lucide-react";
 import { evaluateExpression } from "../../lib/calc";
 
 const CALC_ROWS: string[][] = [
@@ -103,21 +104,21 @@ export function CalculatorPanel({ onClose }: { onClose?: () => void } = {}) {
 
   return (
     <div className="flex h-[318px] shrink-0 flex-col bg-panel">
-      <div className="flex h-8 shrink-0 items-center justify-between border-y border-line px-3">
-        <span className="text-[9.5px] font-semibold uppercase tracking-[0.16em] text-muted">
+      <div className="flex h-9 shrink-0 items-center justify-between border-y border-line px-3">
+        <span className="text-[10.5px] font-medium uppercase tracking-[0.1em] text-muted">
           Calculator
         </span>
         <div className="flex items-center gap-1.5">
-          <span className="font-mono text-[9px] text-muted/50">NUMPAD</span>
+          <span className="font-mono text-[10px] text-muted/50">NUMPAD</span>
           {onClose && (
             <button
               type="button"
               onClick={onClose}
               title="Sembunyikan Calculator"
               aria-label="Sembunyikan Calculator"
-              className="grid h-5 w-5 place-items-center rounded-sm text-muted transition-colors hover:bg-panel2 hover:text-accent"
+              className="grid h-5 w-5 place-items-center rounded-[4px] text-muted transition-colors hover:bg-panel2 hover:text-accent"
             >
-              ×
+              <X size={13} strokeWidth={1.75} />
             </button>
           )}
         </div>
@@ -126,7 +127,7 @@ export function CalculatorPanel({ onClose }: { onClose?: () => void } = {}) {
       <div className="flex min-h-0 flex-1 flex-col gap-2 p-2">
         <input
           ref={inputRef}
-          className="w-full rounded-sm border border-line bg-shell px-2 py-1 text-right font-mono text-[13px] text-ink outline-none focus:border-accent/60"
+          className="w-full rounded border border-line bg-shell px-2 py-1 text-right font-mono text-[14px] tabular-nums text-ink outline-none focus:border-accent/60"
           value={expression}
           onChange={(event) => {
             setResult("");
@@ -137,7 +138,7 @@ export function CalculatorPanel({ onClose }: { onClose?: () => void } = {}) {
           }}
           placeholder="0"
         />
-        <div className="h-5 shrink-0 truncate text-right font-mono text-[11px] text-accent">
+        <div className="h-6 shrink-0 truncate text-right font-mono text-[12px] tabular-nums text-accent">
           {result}
         </div>
         <div className="grid min-h-0 flex-1 grid-cols-4 grid-rows-5 gap-1">
@@ -150,13 +151,13 @@ export function CalculatorPanel({ onClose }: { onClose?: () => void } = {}) {
                 key={key}
                 type="button"
                 onClick={() => handleKey(key)}
-                className={`rounded-sm border text-[12px] transition ${
+                className={`rounded border text-[13px] tabular-nums transition-colors duration-150 ${
                   isEquals
                     ? "border-accent bg-accent font-semibold text-white hover:opacity-90"
                     : isOperator
                       ? "border-accent/40 bg-accent/10 text-accent hover:bg-accent/20"
                       : isAction
-                        ? "border-line bg-shell text-[11px] text-muted hover:bg-panel2"
+                        ? "border-line bg-shell text-[12px] text-muted hover:bg-panel2"
                         : "border-line bg-shell text-ink hover:bg-panel2"
                 }`}
               >

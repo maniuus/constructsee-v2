@@ -7,6 +7,7 @@ import {
   type KeyboardEvent,
 } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import { formatIDR, formatKoef, formatMoney, formatNumber, parseNumeric } from "../../lib/format";
 import { flattenTree, hasAnalysis } from "../../lib/tree";
 import { useWbsStore } from "../../store/useWbsStore";
@@ -15,8 +16,8 @@ import { useGridNavigation } from "../../hooks/useGridNavigation";
 import type { ComponentItem, ComponentKind, DisplayRow, EditableField, PriceMethod } from "../../types/wbs";
 
 const GRID =
-  "grid w-full grid-cols-[76px_minmax(320px,1fr)_36px_64px_72px_56px_112px_104px_104px_104px_120px_80px_120px_120px_120px_140px] min-w-[1748px]";
-const ROW_HEIGHT = 30;
+  "grid w-full grid-cols-[80px_minmax(320px,1fr)_36px_64px_72px_56px_112px_104px_104px_104px_120px_80px_120px_120px_120px_140px] min-w-[1752px]";
+const ROW_HEIGHT = 32;
 const OVERSCAN = 10;
 
 const COMPONENT_COLUMNS: Array<{
@@ -34,8 +35,8 @@ const COMPONENT_COLUMNS: Array<{
     letter: "A",
     tone: "text-accent2",
     dot: "bg-accent2",
-    surface: "bg-gradient-to-r from-accent2/[0.05] to-accent2/[0.01] border-accent2/20",
-    surfaceStrong: "bg-gradient-to-r from-accent2/[0.07] to-accent2/[0.03] border-accent2/30",
+    surface: "bg-panel2/40 border-line/40",
+    surfaceStrong: "bg-panel2/70 border-line/40",
   },
   {
     key: "bahan",
@@ -43,17 +44,17 @@ const COMPONENT_COLUMNS: Array<{
     letter: "B",
     tone: "text-accent",
     dot: "bg-accent",
-    surface: "bg-gradient-to-r from-accent/[0.05] to-accent/[0.01] border-accent/20",
-    surfaceStrong: "bg-gradient-to-r from-accent/[0.07] to-accent/[0.03] border-accent/30",
+    surface: "bg-panel2/40 border-line/40",
+    surfaceStrong: "bg-panel2/70 border-line/40",
   },
   {
     key: "alat",
     label: "Alat",
     letter: "C",
-    tone: "text-amber-400",
-    dot: "bg-amber-400",
-    surface: "bg-gradient-to-r from-amber-400/[0.05] to-amber-400/[0.01] border-amber-400/20",
-    surfaceStrong: "bg-gradient-to-r from-amber-400/[0.07] to-amber-400/[0.03] border-amber-400/30",
+    tone: "text-alat",
+    dot: "bg-alat",
+    surface: "bg-panel2/40 border-line/40",
+    surfaceStrong: "bg-panel2/70 border-line/40",
   },
 ];
 
@@ -230,15 +231,15 @@ export function WbsTable() {
     <div className="relative flex min-h-0 flex-1 flex-col">
       <div className="flex h-8 shrink-0 items-center justify-between border-b border-line bg-panel px-3">
         <div className="flex items-baseline gap-2">
-          <span className="text-[9.5px] font-semibold uppercase tracking-[0.16em] text-muted">
+          <span className="text-[10.5px] font-semibold uppercase tracking-[0.1em] text-muted">
             WBS Engine
           </span>
-          <span className="font-mono text-[9px] text-muted/50">{rows.length} BARIS</span>
+          <span className="font-mono text-[10px] text-muted/50">{rows.length} BARIS</span>
         </div>
         <div className="flex items-center gap-2">
           {bulkMode ? (
             <>
-              <span className="font-mono text-[9px] text-accent">
+              <span className="font-mono text-[10px] text-accent">
                 {bulkSelection.length} dipilih
               </span>
               <button
@@ -267,7 +268,7 @@ export function WbsTable() {
             </>
           ) : (
             <>
-              <div className="flex items-center gap-2 font-mono text-[9px] text-muted/50">
+              <div className="flex items-center gap-2 font-mono text-[10px] text-muted/50">
                 <span>AHSP · 3 KOMPONEN</span>
                 <span className="text-muted/30">|</span>
                 <span>DAG · O(d)</span>
@@ -286,13 +287,13 @@ export function WbsTable() {
 
       <div className="min-h-0 flex-1 overflow-hidden">
         <div ref={scrollRef} className="h-full overflow-auto">
-          <div className="min-w-[1748px]">
+          <div className="min-w-[1752px]">
             <div className="sticky top-0 z-20">
           <div
-            className={`${GRID} min-h-[18px] shrink-0 items-stretch border-b border-line bg-shell text-[8px] uppercase tracking-[0.18em]`}
+            className={`${GRID} min-h-[20px] shrink-0 items-stretch border-b border-line bg-shell text-[10px] uppercase tracking-[0.14em]`}
           >
             <div className="col-span-4" />
-            <div className="flex items-center justify-center border-l border-accent/20 text-accent">
+            <div className="flex items-center justify-center border-l border-line/40 text-muted">
               Input
             </div>
             <div className="col-span-2 flex items-center justify-center border-l border-line/40 text-muted">
@@ -306,7 +307,7 @@ export function WbsTable() {
             </div>
           </div>
           <div
-            className={`${GRID} min-h-[34px] shrink-0 items-stretch border-b border-line bg-panel2 text-[8.5px] uppercase tracking-widest text-muted`}
+            className={`${GRID} min-h-[36px] shrink-0 items-stretch border-b border-line bg-panel2 text-[10px] uppercase tracking-[0.1em] text-muted`}
           >
             <div className="flex items-center px-2 text-center">Kode</div>
             <div className="flex items-center px-2 text-center">Uraian Pekerjaan</div>
@@ -323,7 +324,7 @@ export function WbsTable() {
                 className={`flex flex-col items-center justify-center border-l px-2 text-center leading-tight ${col.surfaceStrong} ${col.tone}`}
               >
                 <span>Harga Satuan ({col.letter})</span>
-                <span className="text-[8px] normal-case tracking-normal text-muted/70">
+                <span className="text-[10px] normal-case tracking-normal text-muted/70">
                   {col.label}
                 </span>
               </div>
@@ -336,7 +337,7 @@ export function WbsTable() {
                 className={`flex flex-col items-center justify-center border-l px-2 text-center leading-tight ${col.surfaceStrong} ${col.tone}`}
               >
                 <span>Subtotal Biaya ({col.letter})</span>
-                <span className="text-[8px] normal-case tracking-normal text-muted/70">
+                <span className="text-[10px] normal-case tracking-normal text-muted/70">
                   {col.label}
                 </span>
               </div>
@@ -375,9 +376,9 @@ export function WbsTable() {
                     key={row.key}
                     data-index={virtualRow.index}
                     ref={virtualizer.measureElement}
-                    className={`${GRID} absolute left-0 top-0 min-h-[30px] items-center border-b border-line/60 py-0.5 text-[11px] ${
+                    className={`${GRID} absolute left-0 top-0 min-h-[32px] items-center border-b border-line/60 py-0.5 text-[12px] ${
                       isChildRow
-                        ? "bg-panel2/20 text-[10px]"
+                        ? "bg-panel2/20 text-[11px]"
                         : selected
                           ? "bg-accent/[0.07]"
                           : "hover:bg-panel2/40"
@@ -397,8 +398,8 @@ export function WbsTable() {
                     }}
                   >
                     <div
-                      className={`flex items-center gap-1.5 px-2 font-mono text-[10px] ${
-                        isChildRow ? "text-muted/40" : "text-accent/80"
+                      className={`flex items-center gap-1.5 px-2 font-mono text-[11px] ${
+                        isChildRow ? "text-muted/40" : "text-muted/80"
                       }`}
                     >
                       {bulkMode && isNode && !isParent ? (
@@ -414,7 +415,7 @@ export function WbsTable() {
                             className="shrink-0"
                           >
                             <span
-                              className={`flex h-3.5 w-3.5 items-center justify-center rounded-[2px] border text-[9px] leading-none ${
+                              className={`flex h-3.5 w-3.5 items-center justify-center rounded-[2px] border text-[10px] leading-none ${
                                 bulkSelection.includes(row.node.id)
                                   ? "border-danger bg-danger/30 text-danger"
                                   : "border-line/70 text-transparent hover:border-danger/60"
@@ -439,7 +440,7 @@ export function WbsTable() {
                       row={row}
                       onToggle={() => void toggleExpand(row.node.id)}
                     />
-                    <div className="px-2 text-center font-mono text-[10px] text-muted/80">
+                    <div className="px-2 text-center font-mono text-[11px] text-muted/80">
                       {isItem
                         ? row.item?.unit || "—"
                         : isAnalysis
@@ -464,10 +465,10 @@ export function WbsTable() {
                         navigate={navigate}
                       />
                     ) : (
-                      <div className="px-2 text-right font-mono text-[10px] text-muted/30">—</div>
+                      <div className="px-2 text-right font-mono text-[11px] text-muted/30">—</div>
                     )}
                     <div
-                      className={`truncate border-l border-line/40 px-2 text-right font-mono text-[10px] ${
+                      className={`truncate border-l border-line/40 px-2 text-right font-mono text-[11px] ${
                         rowCoefficient !== undefined ? "text-muted/90" : "text-muted/30"
                       }`}
                     >
@@ -476,7 +477,7 @@ export function WbsTable() {
                     {isItem && row.item ? (
                       <ItemPriceInput item={row.item} />
                     ) : (
-                      <div className="truncate px-2 text-right font-mono text-[10px] text-muted/30">—</div>
+                      <div className="truncate px-2 text-right font-mono text-[11px] text-muted/30">—</div>
                     )}
                     {COMPONENT_COLUMNS.map((col) => {
                       const active = isChildRow && row.componentKind === col.key;
@@ -515,7 +516,7 @@ export function WbsTable() {
                       return (
                         <div
                           key={col.key}
-                          className={`border-l px-2 text-right font-mono text-[10px] ${surface} ${
+                          className={`border-l px-2 text-right font-mono text-[11px] ${surface} ${
                             muted ? "text-muted/30" : "text-ink/80"
                           }`}
                         >
@@ -538,10 +539,10 @@ export function WbsTable() {
                         </div>
                       )
                     ) : (
-                      <div className="px-2 text-right font-mono text-[10px] text-muted/30">—</div>
+                      <div className="px-2 text-right font-mono text-[11px] text-muted/30">—</div>
                     )}
                     <div
-                      className={`truncate border-l border-line/40 px-2 text-right font-mono text-[10px] ${
+                      className={`truncate border-l border-line/40 px-2 text-right font-mono text-[11px] ${
                         isChildRow && rowCoefficient !== undefined
                           ? "text-ink/80"
                           : "text-muted/30"
@@ -588,7 +589,7 @@ export function WbsTable() {
                       return (
                         <div
                           key={col.key}
-                          className={`border-l px-2 text-right font-mono text-[10px] ${surface} ${
+                          className={`border-l px-2 text-right font-mono text-[11px] ${surface} ${
                             muted ? "text-muted/30" : "text-ink/80"
                           }`}
                         >
@@ -637,8 +638,8 @@ export function WbsTable() {
                   {formatIDR(ppnValue)}
                 </div>
               </div>
-              <div className={`${GRID} min-h-[30px] items-center bg-accent/[0.08]`}>
-                <div style={{ gridColumn: "span 15" }} className="px-3 text-right text-[11px] font-semibold uppercase tracking-wide text-ink">
+              <div className={`${GRID} min-h-[32px] items-center border-t border-line bg-accent/[0.06]`}>
+                <div style={{ gridColumn: "span 15" }} className="px-3 text-right text-[12px] font-semibold uppercase tracking-[0.06em] text-ink">
                   Jumlah Grand Total + PPN
                 </div>
                 <div className="border-l border-line/40 px-2 text-right font-mono text-[11.5px] font-bold text-accent">
@@ -652,7 +653,7 @@ export function WbsTable() {
 
       {loading && (
         <div className="absolute inset-0 z-20 grid place-items-center bg-shell/70 backdrop-blur-[1px]">
-          <div className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-muted">
+          <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.1em] text-muted">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-accent" />
             Memuat Rust engine
           </div>
@@ -670,7 +671,7 @@ export function WbsTable() {
             }}
           />
           <div
-            className="fixed z-50 min-w-[184px] rounded-[4px] border border-line bg-panel py-1 text-[11px] shadow-xl"
+            className="fixed z-50 min-w-[184px] rounded-[4px] border border-line bg-panel py-1 text-[11px] shadow-lg"
             style={{ left: ctxMenu.x, top: ctxMenu.y }}
           >
             <div className="relative" onMouseEnter={() => setCtxSub(true)} onMouseLeave={() => setCtxSub(false)}>
@@ -680,10 +681,10 @@ export function WbsTable() {
                 onClick={() => setCtxSub((value) => !value)}
               >
                 <span>Tambah Pekerjaan</span>
-                <span className="text-muted/60">▸</span>
+                <ChevronRight size={12} className="text-muted/60" />
               </button>
               {ctxSub && (
-                <div className="absolute left-full top-0 min-w-[160px] rounded-[4px] border border-line bg-panel py-1 text-[11px] shadow-xl">
+                <div className="absolute left-full top-0 min-w-[160px] rounded-[4px] border border-line bg-panel py-1 text-[11px] shadow-lg">
                   <button
                     type="button"
                     className="block w-full px-3 py-1.5 text-left text-ink hover:bg-panel2"
@@ -755,7 +756,7 @@ function NameCell({ row, onToggle }: { row: DisplayRow; onToggle: () => void }) 
         <span className={`ml-1.5 truncate text-[10px] ${meta?.tone ?? "text-muted"}`}>
           {ANALYSIS_LABEL[row.componentKind]}
         </span>
-        <span className="ml-1 shrink-0 text-[8px] uppercase tracking-widest text-muted/40">
+        <span className="ml-1 shrink-0 text-[10px] uppercase tracking-[0.1em] text-muted/40">
           komponen dasar
         </span>
       </div>
@@ -772,9 +773,9 @@ function NameCell({ row, onToggle }: { row: DisplayRow; onToggle: () => void }) 
             event.stopPropagation();
             onToggle();
           }}
-          className="mt-0.5 grid h-4 w-4 shrink-0 place-items-center text-[9px] text-muted hover:text-accent"
+          className="mt-0.5 grid h-4 w-4 shrink-0 place-items-center text-[10px] text-muted hover:text-accent"
         >
-          {row.node.is_expanded ? "▾" : "▸"}
+          {row.node.is_expanded ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
         </button>
       ) : (
         <span className="mt-0.5 h-4 w-4 shrink-0" />
@@ -799,7 +800,7 @@ function MethodCell({
   onSelect: (method: PriceMethod) => void;
 }) {
   const base =
-    "rounded-[2px] px-1 py-[1px] text-[9px] uppercase tracking-wide transition-colors";
+    "rounded-[2px] px-1 py-[1px] text-[10px] uppercase tracking-[0.08em] transition-colors";
   return (
     <div className="flex items-center justify-center gap-0.5">
       <button
@@ -858,7 +859,7 @@ function PercentInput({
       onKeyDown={(event) => {
         if (event.key === "Enter" || event.key === "Escape") event.currentTarget.blur();
       }}
-      className="h-[18px] w-10 rounded-[2px] border border-line/60 bg-shell px-1 text-right font-mono text-[10px] text-ink outline-none focus:border-accent"
+      className="h-[18px] w-10 rounded border border-line/60 bg-shell px-1 text-right font-mono text-[11px] text-ink outline-none transition-colors duration-150 focus:border-accent focus:ring-1 focus:ring-inset focus:ring-accent/25"
     />
   );
 }

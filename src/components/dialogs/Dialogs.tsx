@@ -1,71 +1,9 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { X } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Modal, inputClass, labelClass } from "../ui/primitives";
 import { useUiStore } from "../../store/useUiStore";
 import { useWbsStore } from "../../store/useWbsStore";
 import { formatIDR } from "../../lib/format";
 import type { WbsNode } from "../../types/wbs";
-
-function useEscape(onClose: () => void) {
-  useEffect(() => {
-    const handler = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [onClose]);
-}
-
-function Modal({
-  title,
-  subtitle,
-  onClose,
-  width = "max-w-[560px]",
-  children,
-}: {
-  title: string;
-  subtitle?: string;
-  onClose: () => void;
-  width?: string;
-  children: ReactNode;
-}) {
-  useEscape(onClose);
-  return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-6"
-      onMouseDown={(event) => {
-        if (event.target === event.currentTarget) onClose();
-      }}
-    >
-      <div
-        className={`flex max-h-full w-full ${width} flex-col overflow-hidden rounded-sm border border-line bg-panel shadow-2xl`}
-      >
-        <div className="flex items-center justify-between border-b border-line bg-panel2 px-3 py-2">
-          <div className="min-w-0">
-            <div className="text-[11px] font-semibold uppercase tracking-widest text-ink">
-              {title}
-            </div>
-            {subtitle && <div className="text-[9px] text-muted/70">{subtitle}</div>}
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Tutup"
-            title="Tutup (Esc)"
-            className="grid h-6 w-6 place-items-center rounded-sm text-muted transition-colors hover:bg-shell hover:text-accent"
-          >
-            <X size={15} strokeWidth={2} />
-          </button>
-        </div>
-        <div className="flex-1 overflow-y-auto p-4">{children}</div>
-      </div>
-    </div>
-  );
-}
-
-const inputClass =
-  "w-full rounded-sm border border-line bg-shell px-2 py-1.5 text-[11px] text-ink outline-none focus:border-accent";
-
-const labelClass = "text-[9px] font-semibold uppercase tracking-widest text-muted/70";
 
 /* ------------------------------------------------------------------ */
 /* Project Info                                                        */
@@ -152,7 +90,7 @@ function HistoryDialog() {
 
   const Column = ({ title, items, tone }: { title: string; items: string[]; tone: string }) => (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div className={`mb-1 text-[9px] font-semibold uppercase tracking-widest ${tone}`}>
+      <div className={`mb-1 text-[10px] font-semibold uppercase tracking-[0.1em] ${tone}`}>
         {title} ({items.length})
       </div>
       <div className="flex-1 space-y-1 overflow-y-auto rounded-sm border border-line bg-shell p-2">
@@ -351,11 +289,11 @@ function FindDialog() {
                 : "border-line/60 bg-shell text-muted"
             }`}
           >
-            <span className="w-20 shrink-0 truncate font-mono text-[9px] text-muted/80">
+            <span className="w-20 shrink-0 truncate font-mono text-[10px] text-muted/80">
               {node.code || "—"}
             </span>
             <span className="min-w-0 flex-1 truncate">{node.name || "(tanpa nama)"}</span>
-            <span className="shrink-0 text-[9px] text-muted/60">{node.unit}</span>
+            <span className="shrink-0 text-[10px] text-muted/60">{node.unit}</span>
           </button>
         ))}
       </div>
@@ -394,7 +332,7 @@ function CompareDialog() {
         <div className="overflow-auto rounded-sm border border-line">
           <table className="w-full border-collapse text-[10.5px]">
             <thead>
-              <tr className="bg-panel2 text-[9px] uppercase tracking-widest text-muted">
+              <tr className="bg-panel2 text-[10px] uppercase tracking-[0.1em] text-muted">
                 <th className="px-2 py-1.5 text-left font-medium">Wilayah</th>
                 <th className="px-2 py-1.5 text-right font-medium">Faktor</th>
                 <th className="px-2 py-1.5 text-right font-medium">Estimasi Biaya</th>
@@ -412,8 +350,8 @@ function CompareDialog() {
                   >
                     <td className="px-2 py-1.5">
                       <span className="font-medium">{region.province}</span>
-                      <span className="ml-1 text-[9px] text-muted">— {region.city_regency}</span>
-                      {active && <span className="ml-1 text-[8.5px] uppercase">aktif</span>}
+                      <span className="ml-1 text-[10px] text-muted">— {region.city_regency}</span>
+                      {active && <span className="ml-1 text-[10px] uppercase">aktif</span>}
                     </td>
                     <td className="px-2 py-1.5 text-right font-mono">
                       {region.multiplier_factor.toFixed(3)}

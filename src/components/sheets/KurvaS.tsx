@@ -16,7 +16,7 @@ function Th({
 }) {
   return (
     <th
-      className={`sticky top-0 z-10 whitespace-nowrap border-b border-line bg-panel2 px-2.5 py-1.5 text-[8.5px] font-semibold uppercase tracking-widest text-muted ${ALIGN[align]}`}
+      className={`sticky top-0 z-10 whitespace-nowrap border-b border-line bg-panel2 px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-muted ${ALIGN[align]}`}
     >
       {children}
     </th>
@@ -33,7 +33,7 @@ function Td({
   className?: string;
 }) {
   return (
-    <td className={`whitespace-nowrap px-2.5 py-1 text-[10.5px] text-ink/90 ${ALIGN[align]} ${className}`}>
+    <td className={`whitespace-nowrap px-2.5 py-1 text-[11.5px] text-ink/90 ${ALIGN[align]} ${className}`}>
       {children}
     </td>
   );
@@ -46,7 +46,7 @@ function pct(value: number): string {
 function SCurveChart({ points }: { points: SCurvePoint[] }) {
   if (points.length === 0) {
     return (
-      <div className="flex h-[260px] items-center justify-center rounded-[3px] border border-line bg-shell text-[11px] text-muted">
+      <div className="flex h-[260px] items-center justify-center rounded-md border border-line bg-shell text-[12px] text-muted">
         Belum ada data jadwal. Isi durasi di sheet Rencana Kerja.
       </div>
     );
@@ -82,8 +82,8 @@ function SCurveChart({ points }: { points: SCurvePoint[] }) {
   const labelStep = Math.max(1, Math.ceil(n / 12));
 
   return (
-    <div className="rounded-[3px] border border-line bg-shell p-2">
-      <div className="mb-1 flex items-center gap-4 px-1 text-[8.5px] uppercase tracking-widest text-muted/60">
+    <div className="rounded-md border border-line bg-shell p-2">
+      <div className="mb-1 flex items-center gap-4 px-1 text-[10.5px] uppercase tracking-[0.1em] text-muted/60">
         <span className="flex items-center gap-1.5">
           <span className="inline-block h-2 w-2 rounded-sm" style={{ background: ACCENT, opacity: 0.25 }} />
           Bobot mingguan
@@ -105,7 +105,7 @@ function SCurveChart({ points }: { points: SCurvePoint[] }) {
               strokeWidth={1}
               strokeDasharray="3 4"
             />
-            <text x={padL - 7} y={y(value) + 3} textAnchor="end" fontSize={9} fill="hsl(var(--c-muted))" fontFamily="monospace">
+            <text x={padL - 7} y={y(value) + 3} textAnchor="end" fontSize={9.5} fill="hsl(var(--c-muted))" fontFamily="monospace">
               {value}%
             </text>
           </g>
@@ -137,7 +137,7 @@ function SCurveChart({ points }: { points: SCurvePoint[] }) {
                 <title>{`Minggu ${point.week}${point.date ? ` (${point.date})` : ""}: ${pct(point.cumulative)}`}</title>
               </circle>
               {showLabel && (
-                <text x={x(index)} y={H - 10} textAnchor="middle" fontSize={9} fill="hsl(var(--c-muted))" fontFamily="monospace">
+                <text x={x(index)} y={H - 10} textAnchor="middle" fontSize={9.5} fill="hsl(var(--c-muted))" fontFamily="monospace">
                   {point.week}
                 </text>
               )}
@@ -145,7 +145,7 @@ function SCurveChart({ points }: { points: SCurvePoint[] }) {
           );
         })}
 
-        <text x={W / 2} y={H - 1} textAnchor="middle" fontSize={8.5} fill="hsl(var(--c-muted))" fontFamily="monospace">
+        <text x={W / 2} y={H - 1} textAnchor="middle" fontSize={9.5} fill="hsl(var(--c-muted))" fontFamily="monospace">
           minggu
         </text>
       </svg>
@@ -155,8 +155,8 @@ function SCurveChart({ points }: { points: SCurvePoint[] }) {
 
 function WeeklyTable({ points }: { points: SCurvePoint[] }) {
   return (
-    <div className="flex min-h-0 flex-col rounded-[3px] border border-line bg-shell">
-      <div className="flex h-7 shrink-0 items-center border-b border-line px-2.5 text-[8.5px] font-semibold uppercase tracking-widest text-muted">
+    <div className="flex min-h-0 flex-col rounded-md border border-line bg-shell">
+      <div className="flex h-8 shrink-0 items-center border-b border-line px-2.5 text-[10.5px] font-semibold uppercase tracking-[0.1em] text-muted">
         Progres Mingguan
       </div>
       <div className="max-h-[240px] overflow-auto">
@@ -188,7 +188,7 @@ function WeeklyTable({ points }: { points: SCurvePoint[] }) {
 function ParetoTable({ rows }: { rows: ParetoItem[] }) {
   if (rows.length === 0) {
     return (
-      <div className="rounded-[3px] border border-line bg-shell p-4 text-[11px] text-muted">
+      <div className="rounded-md border border-line bg-shell p-4 text-[12px] text-muted">
         Analisa Pareto belum tersedia — rincian resource AHSP belum ada.
       </div>
     );
@@ -196,12 +196,12 @@ function ParetoTable({ rows }: { rows: ParetoItem[] }) {
 
   const visible = rows.slice(0, 60);
   return (
-    <div className="flex min-h-0 flex-col rounded-[3px] border border-line bg-shell">
-      <div className="flex h-7 shrink-0 items-center justify-between border-b border-line px-2.5">
-        <span className="text-[8.5px] font-semibold uppercase tracking-widest text-muted">
+    <div className="flex min-h-0 flex-col rounded-md border border-line bg-shell">
+      <div className="flex h-8 shrink-0 items-center justify-between border-b border-line px-2.5">
+        <span className="text-[10.5px] font-semibold uppercase tracking-[0.1em] text-muted">
           Pareto 80/20 — Resource Kritis
         </span>
-        <span className="font-mono text-[8.5px] text-muted/50">
+        <span className="font-mono text-[10px] text-muted/50">
           {rows.length} resource{rows.length > visible.length ? ` · tampil ${visible.length}` : ""}
         </span>
       </div>
@@ -229,7 +229,7 @@ function ParetoTable({ rows }: { rows: ParetoItem[] }) {
                 <Td align="right" className={NUM}>{pct(row.cumulative_percentage)}</Td>
                 <Td align="center">
                   <span
-                    className={`rounded-sm px-1.5 py-0.5 text-[8.5px] font-semibold uppercase tracking-wider ${
+                    className={`rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] ${
                       row.critical ? "bg-accent/15 text-accent" : "bg-panel2 text-muted/70"
                     }`}
                   >
@@ -248,8 +248,8 @@ function ParetoTable({ rows }: { rows: ParetoItem[] }) {
 function ScheduleTable({ rows }: { rows: ScheduleItem[] }) {
   if (rows.length === 0) return null;
   return (
-    <div className="flex min-h-0 flex-col rounded-[3px] border border-line bg-shell">
-      <div className="flex h-7 shrink-0 items-center border-b border-line px-2.5 text-[8.5px] font-semibold uppercase tracking-widest text-muted">
+    <div className="flex min-h-0 flex-col rounded-md border border-line bg-shell">
+      <div className="flex h-8 shrink-0 items-center border-b border-line px-2.5 text-[10.5px] font-semibold uppercase tracking-[0.1em] text-muted">
         Jadwal Sekuensial
       </div>
       <div className="max-h-[300px] overflow-auto">
@@ -295,10 +295,10 @@ export function KurvaSSheet() {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex h-9 shrink-0 items-center gap-3 border-b border-line bg-panel/60 px-3">
-        <span className="text-[9.5px] font-semibold uppercase tracking-[0.16em] text-muted">
+        <span className="text-[11.5px] font-semibold uppercase tracking-[0.1em] text-muted">
           Kurva S &amp; Pareto
         </span>
-        <label className="flex items-center gap-1.5 text-[9px] uppercase tracking-widest text-muted/60">
+        <label className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.1em] text-muted/60">
           Mulai
           <input
             type="date"
@@ -306,17 +306,17 @@ export function KurvaSSheet() {
             onChange={(event) => {
               if (event.target.value) void setProjectStart(event.target.value);
             }}
-            className="h-6 rounded-[3px] border border-line bg-shell px-2 font-mono text-[10px] text-ink outline-none focus:border-accent"
+            className="h-6 rounded-md border border-line bg-shell px-2 font-mono text-[10px] text-ink outline-none focus:border-accent"
           />
         </label>
         <button
           type="button"
           onClick={() => void loadAnalytics()}
-          className="h-6 rounded-[3px] border border-line px-2 text-[9px] uppercase tracking-widest text-muted transition hover:border-accent/50 hover:text-ink"
+          className="h-6 rounded-md border border-line px-2 text-[10px] uppercase tracking-[0.1em] text-muted transition hover:border-accent/50 hover:text-ink"
         >
           Refresh
         </button>
-        <span className="ml-auto font-mono text-[9px] text-muted/50">
+        <span className="ml-auto font-mono text-[10px] text-muted/50">
           {analytics
             ? `${analytics.s_curve.length} minggu · ${formatNumber(analytics.total_days)} hari · ${formatIDR(analytics.total_cost)}`
             : loading
@@ -327,13 +327,13 @@ export function KurvaSSheet() {
 
       <div className="min-h-0 flex-1 overflow-auto">
         {!analytics ? (
-          <div className="p-6 text-[11px] text-muted">
+          <div className="p-6 text-[12px] text-muted">
             {loading ? "Memuat analitik…" : "Tidak ada data analitik."}
           </div>
         ) : (
           <div className="flex flex-col gap-3 p-3">
             {analytics.warnings.length > 0 && (
-              <ul className="rounded-[3px] border border-line bg-panel2/40 px-3 py-2 text-[10px] text-muted">
+              <ul className="rounded-md border border-line bg-panel2/40 px-3 py-2 text-[11px] text-muted">
                 {analytics.warnings.map((warning) => (
                   <li key={warning}>— {warning}</li>
                 ))}

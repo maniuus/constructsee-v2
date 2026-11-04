@@ -55,9 +55,9 @@ function RibbonButton({ label, icon: Icon, hint, onClick, disabled, compact }: R
         title={hint ?? label}
         onClick={onClick}
         disabled={disabled}
-        className="flex h-[16px] min-w-[68px] items-center gap-1 rounded-sm border border-transparent px-1 text-[9px] text-muted transition hover:border-line hover:bg-panel2 hover:text-ink disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-transparent disabled:hover:bg-transparent"
+        className="group flex h-[18px] min-w-[70px] items-center gap-1 rounded border border-transparent px-1 text-[10px] text-muted transition-colors duration-150 hover:border-line hover:bg-panel2 hover:text-ink outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent/70 disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-transparent disabled:hover:bg-transparent"
       >
-        <Icon size={11} className="text-accent" strokeWidth={1.75} />
+        <Icon size={12} className="text-muted transition-colors duration-150 group-hover:text-accent" strokeWidth={1.5} />
         <span className="whitespace-nowrap">{label}</span>
       </button>
     );
@@ -68,9 +68,9 @@ function RibbonButton({ label, icon: Icon, hint, onClick, disabled, compact }: R
       title={hint ?? label}
       onClick={onClick}
       disabled={disabled}
-      className="flex h-[52px] min-w-[54px] flex-col items-center justify-center gap-0.5 rounded-sm border border-transparent px-1 text-[10px] text-muted transition hover:border-line hover:bg-panel2 hover:text-ink disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-transparent disabled:hover:bg-transparent"
+      className="group flex h-[52px] min-w-[54px] flex-col items-center justify-center gap-0.5 rounded border border-transparent px-1 text-[11px] text-muted transition-colors duration-150 hover:border-line hover:bg-panel2 hover:text-ink outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent/70 disabled:cursor-not-allowed disabled:opacity-35 disabled:hover:border-transparent disabled:hover:bg-transparent"
     >
-      <Icon size={15} className="text-accent" strokeWidth={1.75} />
+      <Icon size={16} className="text-muted transition-colors duration-150 group-hover:text-accent" strokeWidth={1.5} />
       <span className="whitespace-nowrap">{label}</span>
     </button>
   );
@@ -80,7 +80,7 @@ function Group({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div className="flex h-full shrink-0 flex-col border-r border-line px-1.5 last:border-r-0">
       <div className="flex flex-1 items-center justify-center gap-0.5">{children}</div>
-      <span className="pb-0.5 text-center text-[9px] uppercase tracking-widest text-muted/60">
+      <span className="pb-0.5 text-center text-[10px] uppercase tracking-[0.12em] text-muted/55">
         {title}
       </span>
     </div>
@@ -117,22 +117,22 @@ export function RibbonBar() {
 
   return (
     <section className="shrink-0 border-b border-line bg-panel">
-      <div className="flex h-7 items-end gap-1 border-b border-line px-2">
+      <div className="flex h-8 items-end gap-1 border-b border-line px-2">
         {TABS.map((item) => (
           <button
             key={item}
             type="button"
             onClick={() => setTab(item)}
-            className={`h-full rounded-t-sm px-3 text-[10.5px] tracking-wide transition ${
+            className={`h-full rounded-t px-3 text-[11px] tracking-wide transition-colors duration-150 outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-accent/70 ${
               tab === item
-                ? "bg-panel2 text-ink shadow-[inset_0_1px_0_0_#22C55E]"
+                ? "bg-panel2 text-ink shadow-[inset_0_1px_0_0_hsl(var(--c-accent))]"
                 : "text-muted hover:bg-panel2/60 hover:text-ink"
             }`}
           >
             {item}
           </button>
         ))}
-        <div className="ml-auto flex items-center gap-2 pb-1 text-[9px] uppercase tracking-widest text-muted/70">
+        <div className="ml-auto flex items-center gap-2 pb-1 text-[10px] uppercase tracking-[0.1em] text-muted/70">
           <span className="h-1.5 w-1.5 rounded-full bg-accent" />
           MPSC Actor Engine
         </div>
