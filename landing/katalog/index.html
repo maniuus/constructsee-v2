@@ -121,7 +121,7 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:26px 0 34px;colo
 {"@type":"Question","name":"Apa isi katalog AHSP di halaman ini?","acceptedAnswer":{"@type":"Answer","text":"Seluruh item pekerjaan AHSP 2026 bidang Cipta Karya (SE DJBK No. 47/SE/Dk/2026): 2.841 item dari 10 divisi — masing-masing bertanda status Tetap, Ada Perubahan, atau Baru — dan 2.818 analisa harga satuan lengkap dengan rincian komponen tenaga, bahan, dan peralatan beserta koefisiennya."}},
 {"@type":"Question","name":"Apakah katalog ini memuat harga?","acceptedAnswer":{"@type":"Answer","text":"Tidak. AHSP resmi hanya memuat koefisien kebutuhan komponen. Harga dasar upah dan bahan berbeda di setiap daerah dan diisi saat menyusun RAB — di aplikasi ConstrucSee harga dasar menyesuaikan wilayah proyek Anda."}},
 {"@type":"Question","name":"Bisakah menyusun RAB dari explorer ini?","acceptedAnswer":{"@type":"Answer","text":"Explorer ini hanya untuk menelusuri katalog. Untuk menyusun RAB — mengisi volume, menerapkan harga daerah, dan menghitung total otomatis — gunakan aplikasi desktop ConstrucSee yang katalognya sama dengan yang Anda lihat di sini."}},
-{"@type":"Question","name":"Apakah data katalog ini tersedia sebagai API?","acceptedAnswer":{"@type":"Answer","text":"Ya. Seluruh database yang sama tersedia sebagai berkas JSON terbuka di API AHSP ConstrucSee (constructsee.pages.dev/api/), sehingga dapat dibaca aplikasi atau spreadsheet lain."}}]}
+{"@type":"Question","name":"Bagaimana struktur data katalog ini?","acceptedAnswer":{"@type":"Answer","text":"Database yang sama disusun sebagai API terstruktur yang dipakai aplikasi ConstrucSee; struktur dan skema datanya didokumentasikan di halaman API (constructsee.pages.dev/api/). Berkas data utuhnya tidak dibagikan untuk diunduh — seluruh isinya dapat ditelusuri di katalog ini."}}]}
 </script>
 </head>
 <body>
@@ -169,7 +169,7 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:26px 0 34px;colo
 
 <div class="cta">
 <h3>Explorer ini hanya untuk melihat-lihat</h3>
-<p>Menyusun RAB — mengisi volume, memakai harga daerah Anda, dan menghitung total per divisi sampai total proyek secara otomatis — dilakukan di aplikasi ConstrucSee. Katalog di dalamnya persis yang Anda telusuri di sini. Data yang sama juga tersedia terbuka sebagai <a href="/api/">API JSON</a> untuk kebutuhan integrasi.</p>
+<p>Menyusun RAB — mengisi volume, memakai harga daerah Anda, dan menghitung total per divisi sampai total proyek secara otomatis — dilakukan di aplikasi ConstrucSee. Katalog di dalamnya persis yang Anda telusuri di sini. Struktur data yang sama didokumentasikan di <a href="/api/">halaman API</a>.</p>
 <a class="btn" href="/#unduh">Lihat ConstrucSee</a>
 </div>
 
@@ -179,7 +179,7 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:26px 0 34px;colo
 <p><strong>Apa arti status Tetap, Ada Perubahan, dan Baru?</strong>Status resmi dari dokumen AHSP: Tetap berarti analisa tidak berubah dari edisi sebelumnya, Ada Perubahan berarti ada penyesuaian koefisien atau komponen, dan Baru berarti item ini baru diperkenalkan pada edisi 2026.</p>
 <p><strong>Apakah katalog ini memuat harga?</strong>Tidak. AHSP resmi hanya memuat koefisien kebutuhan komponen. Harga dasar upah dan bahan berbeda di setiap daerah dan diisi saat menyusun RAB — di aplikasi ConstrucSee harga dasar menyesuaikan wilayah proyek Anda.</p>
 <p><strong>Bisakah menyusun RAB dari explorer ini?</strong>Explorer ini hanya untuk menelusuri katalog. Untuk menyusun RAB — mengisi volume, menerapkan harga daerah, dan menghitung total otomatis — gunakan aplikasi desktop ConstrucSee yang katalognya sama dengan yang Anda lihat di sini.</p>
-<p><strong>Apakah datanya tersedia sebagai API?</strong>Ya — seluruh database yang sama diterbitkan sebagai berkas JSON terbuka di <a href="/api/">API AHSP ConstrucSee</a>, siap dibaca aplikasi atau perangkat lain.</p>
+<p><strong>Bagaimana struktur data katalog ini?</strong>Database ini disusun sebagai API terstruktur — pekerjaan, analisa, dan katalog komponen yang saling terhubung lewat kode dan id. Skema lengkapnya ada di <a href="/api/">halaman API</a>; berkas data utuhnya tidak dibagikan untuk diunduh, tetapi seluruh isinya dapat ditelusuri di katalog ini.</p>
 </div>
 </main>
 

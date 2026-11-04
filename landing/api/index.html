@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>API AHSP 2026 — Data Terbuka Analisa Harga Satuan (JSON) | ConstrucSee</title>
-<meta name="description" content="API terbuka AHSP 2026 (SE DJBK 47/2026): 2.841 item pekerjaan, 2.818 analisa harga satuan, dan 2.808 komponen terkatalog sebagai berkas JSON — tanpa kunci akses, siap dibaca aplikasi dan spreadsheet.">
+<title>API AHSP 2026 — Struktur Data Analisa Harga Satuan | ConstrucSee</title>
+<meta name="description" content="Dokumentasi struktur data AHSP 2026 (SE DJBK 47/2026) yang dipakai ConstrucSee: 2.841 item pekerjaan, 2.818 analisa harga satuan, dan 2.808 komponen terkatalog — relasi data, skema berkas, dan contoh isinya.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://constructsee.pages.dev/api/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ConstrucSee">
-<meta property="og:title" content="API AHSP 2026 — Data Terbuka Analisa Harga Satuan">
-<meta property="og:description" content="Seluruh database AHSP 2026 bidang Cipta Karya sebagai JSON terbuka: pekerjaan, analisa, dan katalog komponen.">
+<meta property="og:title" content="API AHSP 2026 — Struktur Data Analisa Harga Satuan">
+<meta property="og:description" content="Struktur database AHSP 2026 bidang Cipta Karya yang dipakai ConstrucSee: pekerjaan, analisa, dan katalog komponen.">
 <meta property="og:url" content="https://constructsee.pages.dev/api/">
 <meta property="og:image" content="https://constructsee.pages.dev/og-image.png">
 <meta property="og:locale" content="id_ID">
@@ -65,8 +65,8 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:26px 0 34px;colo
 
 <main class="wrap">
 <div class="crumb"><a href="/">Beranda</a> / API AHSP</div>
-<h1>API AHSP 2026 — data analisa harga satuan sebagai JSON terbuka</h1>
-<p class="lede">Seluruh database yang sama dengan yang Anda telusuri di <a href="/katalog/">katalog</a> dan yang dipakai aplikasi ConstrucSee, diterbitkan sebagai berkas JSON statis: <strong>tanpa kunci akses, tanpa pendaftaran</strong>. Datanya dibangun dari dokumen resmi <strong>SE DJBK No. 47/SE/Dk/2026 Lampiran VI bidang Cipta Karya</strong> sebagai satu-satunya sumber.</p>
+<h1>API AHSP 2026 — struktur data analisa harga satuan</h1>
+<p class="lede">Database yang Anda telusuri di <a href="/katalog/">katalog</a> dan yang dipakai aplikasi ConstrucSee disusun sebagai API terstruktur. Halaman ini mendokumentasikan struktur datanya — relasi antarberkas, skema, dan contoh isinya. Datanya dibangun dari dokumen resmi <strong>SE DJBK No. 47/SE/Dk/2026 Lampiran VI bidang Cipta Karya</strong> sebagai satu-satunya sumber. <strong>Berkas data utuhnya tidak diterbitkan untuk diunduh</strong> — silakan telusuri seluruh isinya secara interaktif di katalog.</p>
 <div class="stats">
 <div class="stat"><b>2.841</b><span>item pekerjaan (leaf)</span></div>
 <div class="stat"><b>2.818</b><span>analisa harga satuan</span></div>
@@ -74,22 +74,33 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:26px 0 34px;colo
 <div class="stat"><b>2.808</b><span>komponen unik</span></div>
 </div>
 
-<h2>Alamat dasar</h2>
-<p><code>https://constructsee.pages.dev/api/v1/</code> — semua berkas di bawah alamat ini adalah JSON (UTF-8) dan dapat diunduh dengan peramban, <code>curl</code>, atau dibaca langsung dari aplikasi Anda. Angka koefisien ditulis sebagai angka JSON biasa (titik desimal).</p>
-
-<h2>Berkas yang tersedia</h2>
+<h2>Berkas penyusun database</h2>
+<p>Database tersusun dari berkas-berkas JSON berikut. Nama berkas di bawah ini adalah nama dataset di dalam sistem ConstrucSee — bukan tautan unduhan.</p>
 <table>
-<tr><th>Berkas</th><th>Isi</th><th>Ukuran ±</th></tr>
-<tr><td class="u"><a href="/api/v1/meta.json">meta.json</a></td><td>Versi API, sumber data, dan hitungan isi setiap berkas. Mulai dari sini untuk memeriksa versi.</td><td>1 KB</td></tr>
-<tr><td class="u"><a href="/api/v1/pekerjaan.json">pekerjaan.json</a></td><td>Daftar lengkap pekerjaan dari akar sampai leaf (3.182 baris): kode, uraian, satuan, level, kode induk, divisi, status (Tetap / Ada Perubahan / Baru), dan penanda leaf.</td><td>675 KB</td></tr>
-<tr><td class="u"><a href="/api/v1/divisi.json">divisi.json</a></td><td>10 divisi pekerjaan.</td><td>1 KB</td></tr>
-<tr><td class="u"><a href="/api/v1/tenaga.json">tenaga.json</a></td><td>Katalog tenaga kerja resmi (38 entri): id TK, nama, kode kelas upah L, dan kelas.</td><td>4 KB</td></tr>
-<tr><td class="u"><a href="/api/v1/bahan.json">bahan.json</a></td><td>Katalog bahan (2.588 entri): id BH, nama, satuan.</td><td>291 KB</td></tr>
-<tr><td class="u"><a href="/api/v1/peralatan.json">peralatan.json</a></td><td>Katalog peralatan (170 entri): id AL, nama, satuan.</td><td>19 KB</td></tr>
-<tr><td class="u"><a href="/api/v1/lainnya.json">lainnya.json</a></td><td>Katalog lainnya/referensi (12 entri): id LN, nama, satuan.</td><td>1 KB</td></tr>
-<tr><td class="u"><a href="/api/v1/analisa.json">analisa.json</a></td><td>Seluruh analisa: per item pekerjaan, baris-baris komponen (grup, id komponen, nama seperti tercetak, satuan, koefisien). 23 item bertipe HSD adalah analisa produktivitas tanpa tabel komponen.</td><td>2,5 MB</td></tr>
-<tr><td class="u">analisa-divisi/analisa-divisi-{1..10}.json</td><td>Isi analisa.json yang dipecah per divisi — unduh hanya divisi yang Anda perlukan. Contoh: <a href="/api/v1/analisa-divisi/analisa-divisi-1.json">analisa-divisi-1.json</a></td><td>13–641 KB</td></tr>
+<tr><th>Dataset</th><th>Isi</th><th>Jumlah</th></tr>
+<tr><td class="u">pekerjaan</td><td>Daftar lengkap pekerjaan dari akar sampai leaf: kode, uraian, satuan, level, kode induk, divisi, status (Tetap / Ada Perubahan / Baru), dan penanda leaf.</td><td>3.182 baris</td></tr>
+<tr><td class="u">divisi</td><td>10 divisi pekerjaan.</td><td>10 baris</td></tr>
+<tr><td class="u">tenaga</td><td>Katalog tenaga kerja resmi: id TK, nama, kode kelas upah L, dan kelas.</td><td>38 entri</td></tr>
+<tr><td class="u">bahan</td><td>Katalog bahan: id BH, nama, satuan.</td><td>2.588 entri</td></tr>
+<tr><td class="u">peralatan</td><td>Katalog peralatan: id AL, nama, satuan.</td><td>170 entri</td></tr>
+<tr><td class="u">lainnya</td><td>Katalog lainnya/referensi: id LN, nama, satuan.</td><td>12 entri</td></tr>
+<tr><td class="u">analisa</td><td>Seluruh analisa: per item pekerjaan, baris-baris komponen (grup, id komponen, nama seperti tercetak di dokumen, satuan, koefisien). 23 item bertipe HSD adalah analisa produktivitas tanpa tabel komponen.</td><td>2.841 item · 16.217 baris</td></tr>
 </table>
+
+<h2>Contoh isi</h2>
+<p>Seperti ini bentuk satu item analisa (dipotong seperlunya) — item pagar sementara 1.1.1.1:</p>
+<pre>{
+  "kode": "1.1.1.1",
+  "tipe": "AHSP",
+  "baris": [
+    {"grup": "Tenaga Kerja", "komponenId": "TK001", "namaTabel": "Pekerja",
+     "satuan": "OH", "koefisien": 0.6},
+    {"grup": "Tenaga Kerja", "komponenId": "TK004", "namaTabel": "Tukang Kayu",
+     "satuan": "OH", "koefisien": 0.2},
+    {"grup": "Bahan", "komponenId": "BH0001", "namaTabel": "Kayu kaso 5/7 kelas II",
+     "satuan": "m3", "koefisien": 0.0387}
+  ]
+}</pre>
 
 <h2>Cara data saling terhubung</h2>
 <ul>
@@ -100,16 +111,8 @@ footer{border-top:1px solid var(--line);margin-top:50px;padding:26px 0 34px;colo
 <li>Data ini <strong>tidak memuat harga</strong> — AHSP resmi memang hanya memuat koefisien; harga dasar diisi saat menyusun RAB sesuai daerah proyek.</li>
 </ul>
 
-<h2>Contoh pemakaian</h2>
-<pre>curl https://constructsee.pages.dev/api/v1/meta.json
-
-# JavaScript: ambil analisa satu pekerjaan lalu tampilkan komponennya
-const analisa = await (await fetch('https://constructsee.pages.dev/api/v1/analisa-divisi/analisa-divisi-5.json')).json();
-const item = analisa.find(a =&gt; a.kode === '5.4.1.18');
-console.log(item.baris); // [{grup, komponenId, namaTabel, satuan, koefisien}, …]</pre>
-
 <h2>Ketentuan</h2>
-<p>Data dasar AHSP adalah dokumen publik pemerintah (SE DJBK Kementerian PUPR). Susunan database ini disediakan apa adanya untuk membantu penyusunan RAB; periksa kembali angka penting ke dokumen resmi sebelum dipakai pada penawaran atau kontrak. Penanda versi ada di <code>meta.json</code> — perubahan struktur hanya terjadi pada kenaikan versi utama (<code>/api/v2/</code>), alamat <code>/api/v1/</code> tidak berubah bentuk.</p>
+<p>Data dasar AHSP adalah dokumen publik pemerintah (SE DJBK Kementerian PUPR). Susunan database ini adalah bagian dari produk ConstrucSee: isinya dapat ditelusuri bebas di <a href="/katalog/">katalog</a>, sedangkan berkas data utuhnya tidak dibagikan untuk diunduh. Periksa kembali angka penting ke dokumen resmi sebelum dipakai pada penawaran atau kontrak.</p>
 <p style="margin-top:18px"><a class="btn" href="/katalog/">Telusuri di Katalog</a></p>
 </main>
 
