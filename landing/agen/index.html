@@ -56,7 +56,7 @@ nav a:hover{color:var(--ink)}
 .frame{border:1px solid var(--line);border-radius:12px;background:var(--panel);overflow:hidden;display:flex;flex-direction:column}
 .frame-head{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid var(--line-soft);font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .frame-head .right{margin-left:auto;font-family:var(--mono);font-size:12px;text-transform:none;letter-spacing:0;color:var(--faint)}
-.map{position:relative;flex:1;min-height:520px;background:
+.map{position:relative;flex:1;min-height:560px;background:
   radial-gradient(circle at 50% 46%, hsl(142 71% 45% / .055), transparent 46%),
   linear-gradient(hsl(240 4% 16% / .20) 1px, transparent 1px),
   linear-gradient(90deg, hsl(240 4% 16% / .20) 1px, transparent 1px);
@@ -79,7 +79,9 @@ nav a:hover{color:var(--ink)}
 .node.hub h3{font-size:17px}
 .node.hub .task{min-height:0}
 @media(max-width:640px){.node{width:150px;padding:9px 11px}.node h3{font-size:12.5px}.node .task{font-size:11px;min-height:30px}.node.hub{width:168px}.map{min-height:480px}}
-.agent-chip{position:absolute;transform:translate(-50%,-50%);z-index:4;background:hsl(142 71% 45% / .14);border:1px solid hsl(142 71% 45% / .6);color:var(--accent-text);font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 9px;border-radius:999px;white-space:nowrap;animation:chipIn .35s ease both}
+.agent-chip{position:absolute;transform:translate(-50%,-50%);z-index:5;background:hsl(240 4% 11%);border:1px solid hsl(142 71% 45% / .65);color:var(--accent-text);font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 9px;border-radius:999px;white-space:nowrap;box-shadow:0 4px 14px hsl(0 0% 0% / .45);animation:chipIn .35s ease both}
+@media(max-width:1180px){.node{width:172px}.node.hub{width:196px}}
+@media(max-width:640px){#node-seo,#node-draftr{left:23%!important}#node-app,#node-jadwal{left:77%!important}}
 .agent-chip.done{background:hsl(240 4% 14%);border-color:var(--line);color:var(--muted)}
 @keyframes chipIn{from{opacity:0;scale:.8}to{opacity:1;scale:1}}
 
@@ -124,6 +126,13 @@ footer{border-top:1px solid var(--line-soft);margin-top:64px;padding:28px 0 40px
 footer .wrap{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
 footer nav{margin-left:auto}
 .note{max-width:74ch}
+@media(max-width:640px){
+  .map{display:flex;flex-direction:column;gap:10px;padding:14px;min-height:0;background:var(--panel)}
+  .map svg{display:none}
+  .node,.node.hub{position:static;transform:none;width:100%}
+  .node .task{min-height:0}
+  .agent-chip{display:none}
+}
 </style>
 </head>
 <body>
@@ -155,30 +164,30 @@ footer nav{margin-left:auto}
       <div class="frame-head">Peta kerja<span class="right">chat utama → side chat → subagen</span></div>
       <div class="map" id="map">
         <svg id="wires" aria-hidden="true"></svg>
-        <div class="node hub" id="node-hub" style="left:50%;top:47%">
+        <div class="node hub" id="node-hub" style="left:50%;top:49%">
           <div class="role"><span class="sdot"></span>Koordinator</div>
           <h3>Muse — Chat Utama</h3>
           <div class="task">Memegang semua tujuan &amp; keputusan, mendelegasikan tugas, memeriksa hasil sebelum disampaikan.</div>
         </div>
-        <div class="node" id="node-seo" style="left:17%;top:19%">
+        <div class="node" id="node-seo" style="left:16%;top:17%">
           <div class="role"><span class="sdot"></span>Side chat</div>
           <h3>Pemasaran &amp; SEO</h3>
           <div class="task">Menunggu tugas…</div>
           <div class="bar"><i></i></div>
         </div>
-        <div class="node" id="node-app" style="left:83%;top:19%">
+        <div class="node" id="node-app" style="left:84%;top:17%">
           <div class="role"><span class="sdot"></span>Side chat</div>
           <h3>Pengembangan Aplikasi</h3>
           <div class="task">Menunggu tugas…</div>
           <div class="bar"><i></i></div>
         </div>
-        <div class="node" id="node-draftr" style="left:17%;top:79%">
+        <div class="node" id="node-draftr" style="left:16%;top:81%">
           <div class="role"><span class="sdot"></span>Side chat</div>
           <h3>Database AHSP &amp; draftr</h3>
           <div class="task">Menunggu tugas…</div>
           <div class="bar"><i></i></div>
         </div>
-        <div class="node" id="node-jadwal" style="left:83%;top:79%">
+        <div class="node" id="node-jadwal" style="left:84%;top:81%">
           <div class="role"><span class="sdot"></span>Otomatis</div>
           <h3>Pekerjaan Terjadwal</h3>
           <div class="task">Menunggu jadwal…</div>
@@ -315,7 +324,8 @@ footer nav{margin-left:auto}
     svg.appendChild(c); packets[s.id] = c;
   });
   function centerOf(el){
-    return { x: el.offsetLeft + el.offsetWidth/2, y: el.offsetTop + el.offsetHeight/2 };
+    var r = el.getBoundingClientRect(), m = map.getBoundingClientRect();
+    return { x: r.left - m.left + r.width/2, y: r.top - m.top + r.height/2 };
   }
   function layoutWires(){
     svg.setAttribute("viewBox", "0 0 " + map.clientWidth + " " + map.clientHeight);
@@ -353,9 +363,27 @@ footer nav{margin-left:auto}
     chip.className = "agent-chip";
     chip.textContent = "subagen #" + agentSeq;
     var nx = node.offsetLeft + node.offsetWidth/2, ny = node.offsetTop + node.offsetHeight/2;
-    var hx = map.clientWidth/2, hy = map.clientHeight*0.47;
-    chip.style.left = (nx + (hx-nx)*0.34 + (Math.random()*36-18)) + "px";
-    chip.style.top  = (ny + (hy-ny)*0.34 + (Math.random()*28-14)) + "px";
+    var hx = map.clientWidth/2, hy = map.clientHeight*0.49;
+    var dx = hx-nx, dy = hy-ny, len = Math.hypot(dx,dy) || 1;
+    var px = -dy/len, py = dx/len;
+    if (ny < hy ? py > 0 : py < 0) { px = -px; py = -py; }
+    var mrect = map.getBoundingClientRect();
+    var boxes = ["node-hub","node-seo","node-app","node-draftr","node-jadwal"].map(function(id){
+      var r = document.getElementById(id).getBoundingClientRect();
+      return { l:r.left-mrect.left, t:r.top-mrect.top, r:r.right-mrect.left, b:r.bottom-mrect.top };
+    });
+    var hw = chip.offsetWidth/2 + 38, hh = chip.offsetHeight/2 + 6;
+    function clearOf(x, y){
+      return boxes.every(function(b){ return x+hw < b.l || x-hw > b.r || y+hh < b.t || y-hh > b.b; });
+    }
+    var off = 26, cxp = nx + dx*0.5, cyp = ny + dy*0.5;
+    for (var k = 0; k < 9; k++){
+      cxp = nx + dx*0.5 + px*off; cyp = ny + dy*0.5 + py*off;
+      if (clearOf(cxp, cyp)) break;
+      off += 22;
+    }
+    chip.style.left = cxp + "px";
+    chip.style.top  = cyp + "px";
     map.appendChild(chip);
 
     log("start","MULAI","Subagen <b>#" + agentSeq + "</b> dikerahkan — " + task + " <b>(" + s.label + ")</b>");
