@@ -172,7 +172,7 @@ footer nav{margin-left:auto}
   </section>
 
   <section class="frame pixel-frame">
-    <div class="frame-head">Kantor pixel — subagen sedang bekerja<span class="right">digambar langsung dengan kode, tanpa berkas gambar</span></div>
+    <div class="frame-head">Kantor pixel — subagen sedang bekerja<span class="right">tampilan isometri · digambar langsung dengan kode, tanpa berkas gambar</span></div>
     <canvas id="game" width="960" height="540"></canvas>
     <div class="pixel-stats">
       <div class="pstat"><span class="dot"></span><div><small>Subagen aktif</small><b id="pActive">0</b></div></div>
@@ -497,7 +497,8 @@ function pick(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
 
 /* ---------- palet ConstrucSee ---------- */
 const C = {
-  wallA:'#19191B', wallB:'#151517', floor:'#232325', floorLine:'#1b1b1e',
+  wallA:'#19191B', wallB:'#151517', floor:'#232325', floorB:'#1f1f22', floorLine:'#1b1b1e',
+  wallL:'#1c1c1f', wallR:'#131315', bg:'#0e0e10',
   baseboard:'#2c2c30', green:'hsl(142,71%,45%)', greenDk:'#14532d',
   wood:'#6e4f30', woodDk:'#4e3620', woodLt:'#86643c',
   deskSide:'#3a3a40', metal:'#33333a'
@@ -560,18 +561,39 @@ const HAIRS = ['#2b2b30','#6b4a2b','#3a3f4a','#57443a','#22201e'];
 /* ============================================================
    MEJA BIDANG
    ============================================================ */
-const DESK_Y = 158;            // permukaan meja (y logis)
+/* ============================================================
+   PROYEKSI ISOMETRI — lantai kisi 10x10 ubin (30x15, rasio 2:1)
+   iso(x, y, z): x ke kanan-bawah, y ke kiri-bawah, z ke atas
+   ============================================================ */
+const FX = 240, FY = 84, TW = 30, TH = 15, DZ = 15;   // DZ = tinggi meja
+function iso(x, y, z){ return [FX + (x - y) * TW / 2, FY + (x + y) * TH / 2 - (z || 0)]; }
+function P(pts, col){                       // poligon isi
+  o.beginPath();
+  pts.forEach((p, i) => i ? o.lineTo(p[0], p[1]) : o.moveTo(p[0], p[1]));
+  o.closePath(); o.fillStyle = col; o.fill();
+}
+function dia(cx, cy, w, h, col){            // belah ketupat (ubin lantai / alas)
+  P([[cx, cy - h / 2], [cx + w / 2, cy], [cx, cy + h / 2], [cx - w / 2, cy]], col);
+}
+function wpL(y, z){ return iso(0, y, z); }  // titik di dinding kiri  (bidang x=0)
+function wpR(x, z){ return iso(x, 0, z); }  // titik di dinding kanan (bidang y=0)
+
+const DESK_Y = 158;            // (lama — tak lagi dipakai untuk geometri)
 const desks = [
-  { id:'seo',    name:'SEO',     cx:62,  monSide: 1, shirt:'#3f7fbf',
+  { id:'seo',    name:'SEO',     fx:0.7, fy:2.2, monSide: 1, shirt:'#3f7fbf',
     tasks:['nulis artikel…','cek indeks…','riset kata kunci…','bikin carousel…','cek sitemap…'] },
-  { id:'app',    name:'Aplikasi', cx:172, monSide:-1, shirt:'#b0623a',
+  { id:'app',    name:'Aplikasi', fx:6.0, fy:2.2, monSide:-1, shirt:'#b0623a',
     tasks:['uji hitung…','bangun UI…','cek katalog…','samakan tampilan…'] },
-  { id:'draftr', name:'draftr',  cx:282, monSide: 1, shirt:'#7a5fd0',
+  { id:'draftr', name:'draftr',  fx:0.7, fy:6.4, monSide: 1, shirt:'#7a5fd0',
     tasks:['gambar simbol…','verifikasi DXF…','atur grid…','terbitkan revisi…'] },
-  { id:'jadwal', name:'Jadwal',  cx:392, monSide:-1, shirt:'#c2a13a',
+  { id:'jadwal', name:'Jadwal',  fx:6.0, fy:6.4, monSide:-1, shirt:'#c2a13a',
     tasks:['briefing pagi…','jadwal video…','cek kalender…','siapkan draf…'] },
 ];
 desks.forEach((d, i) => {
+  // jangkar layar (koordinat logis) hasil proyeksi isometri
+  const cTop = iso(d.fx + 1.6, d.fy + 0.7, DZ);
+  d.cx = cTop[0]; d.cy = cTop[1];                       // pusat permukaan meja
+  d.pillY = iso(d.fx + 1.6, d.fy + 1.4, DZ / 2)[1] + 2; // tengah muka depan meja
   d.state = 'idle';            // idle|spawn|work|done|leave
   d.t = rand(0.2, 1.6) + i * 0.7;   // timer state (detik) — mulai bergiliran
   d.progress = 0;
@@ -599,77 +621,92 @@ const coordPal = { h:'#232326', s:'#e8b08a', e:'#141415', t:'#1fbd59', p:'#26262
    RUANGAN
    ============================================================ */
 const starsWin = [];
-for (let i = 0; i < 26; i++) starsWin.push({ x: 22 + Math.random() * 84, y: 20 + Math.random() * 58, tw: Math.random() * 6.28 });
+for (let i = 0; i < 26; i++) starsWin.push({ y: 1.6 + Math.random() * 3.1, z: 19 + Math.random() * 28, tw: Math.random() * 6.28 });
 
 function drawRoom(t){
-  // dinding & lantai
-  R(o, 0, 0, LW, 168, C.wallA);
-  R(o, 0, 120, LW, 48, C.wallB);
-  R(o, 0, 166, LW, 3, C.baseboard);
-  R(o, 0, 169, LW, LH - 169, C.floor);
-  for (let x = 0; x < LW; x += 42) R(o, x, 169, 1, LH - 169, C.floorLine);
-  R(o, 0, 210, LW, 1, C.floorLine); R(o, 0, 244, LW, 1, C.floorLine);
-
-  // jendela malam (kiri atas)
-  R(o, 16, 14, 96, 70, '#3a3a41'); R(o, 18, 16, 92, 66, '#0d1220');
-  starsWin.forEach(s => { if (Math.sin(t * 1.4 + s.tw) > -0.2) R(o, s.x, s.y, 1, 1, '#cfe4ff'); });
-  R(o, 88, 24, 9, 9, '#e8e4c8'); R(o, 85, 22, 3, 3, '#0d1220');      // bulan sabit
-  R(o, 62, 16, 2, 66, '#3a3a41'); R(o, 18, 48, 92, 2, '#3a3a41');   // kusen
-  R(o, 18, 82, 92, 3, '#26262c');
-
-  // papan tulis (kanan atas): grafik naik hijau
-  R(o, 368, 14, 96, 70, '#3a3a41'); R(o, 370, 16, 92, 66, '#20211f');
-  R(o, 376, 74, 80, 1, '#3d4a40');
-  const pts = [[376,66],[388,60],[398,63],[408,50],[420,54],[432,42],[444,46],[456,32]];
-  for (let i = 0; i < pts.length - 1; i++){
-    const [x1,y1] = pts[i], [x2,y2] = pts[i + 1];
-    const steps = x2 - x1;
-    for (let s = 0; s <= steps; s++) R(o, x1 + s, y1 + (y2 - y1) * (s / steps), 2, 2, C.green);
+  // latar void + dua dinding belakang bertemu di sudut + lantai isometri
+  R(o, 0, 0, LW, LH, C.bg);
+  P([iso(0, 0, 58), iso(0, 10, 58), iso(0, 10, 0), iso(0, 0, 0)], C.wallL);   // dinding kiri
+  P([iso(0, 0, 58), iso(10, 0, 58), iso(10, 0, 0), iso(0, 0, 0)], C.wallR);   // dinding kanan
+  R(o, 239, 27, 2, 57, '#26262b');                                            // sambungan sudut
+  P([iso(0, 0, 4), iso(0, 10, 4), iso(0, 10, 0), iso(0, 0, 0)], C.baseboard); // lis bawah kiri
+  P([iso(0, 0, 4), iso(10, 0, 4), iso(10, 0, 0), iso(0, 0, 0)], C.baseboard); // lis bawah kanan
+  for (let gx = 0; gx < 10; gx++) for (let gy = 0; gy < 10; gy++){
+    const c = iso(gx + 0.5, gy + 0.5, 0);
+    dia(c[0], c[1], TW - 1, TH - 1, (gx + gy) % 2 ? C.floor : C.floorB);
   }
-  [30, 20, 38].forEach((h, i) => R(o, 380 + i * 12, 74 - h * 0.5, 7, h * 0.5, i === 1 ? '#2b7a4b' : '#1f5c38'));
-  R(o, 376, 22, 34, 2, '#4a5548'); R(o, 376, 28, 22, 2, '#39423a');
 
-  // jam dinding (tengah atas) — waktu asli, jarum detik melangkah
-  const jx = 240, jy = 42;
-  o.fillStyle = '#2c2c31'; o.beginPath(); o.arc(jx, jy, 17, 0, 6.29); o.fill();
-  o.fillStyle = '#e8e8e2'; o.beginPath(); o.arc(jx, jy, 15, 0, 6.29); o.fill();
+  // jendela malam di dinding kiri (jajar genjang mengikuti bidang dinding)
+  P([wpL(1.2, 52), wpL(5.0, 52), wpL(5.0, 15), wpL(1.2, 15)], '#3a3a41');
+  P([wpL(1.45, 49.5), wpL(4.75, 49.5), wpL(4.75, 17.5), wpL(1.45, 17.5)], '#0d1220');
+  starsWin.forEach(s => { if (Math.sin(t * 1.4 + s.tw) > -0.2){ const p = wpL(s.y, s.z); R(o, p[0], p[1], 1, 1, '#cfe4ff'); } });
+  const moon = wpL(4.15, 43); R(o, moon[0], moon[1], 6, 6, '#e8e4c8'); R(o, moon[0] - 2, moon[1] - 1, 3, 3, '#0d1220');  // bulan sabit
+  P([wpL(3.02, 49.5), wpL(3.18, 49.5), wpL(3.18, 17.5), wpL(3.02, 17.5)], '#3a3a41');   // kusen tegak
+  P([wpL(1.45, 32.4), wpL(4.75, 32.4), wpL(4.75, 33.9), wpL(1.45, 33.9)], '#3a3a41');   // kusen melintang
+  P([wpL(1.05, 15), wpL(5.15, 15), wpL(5.15, 12.3), wpL(1.05, 12.3)], '#26262c');        // ambang
+
+  // papan tulis di dinding kanan: grafik naik hijau (koordinat bidang dinding)
+  P([wpR(3.5, 49), wpR(7.7, 49), wpR(7.7, 13), wpR(3.5, 13)], '#3a3a41');
+  P([wpR(3.7, 47), wpR(7.5, 47), wpR(7.5, 15), wpR(3.7, 15)], '#20211f');
+  P([wpR(3.9, 16.4), wpR(7.35, 16.4), wpR(7.35, 15.6), wpR(3.9, 15.6)], '#3d4a40');
+  const wpts = [[3.95,22],[4.45,27],[4.95,24],[5.45,33],[5.95,29],[6.45,38],[6.95,34],[7.35,43]];
+  for (let i = 0; i < wpts.length - 1; i++){
+    const [x1, z1] = wpts[i], [x2, z2] = wpts[i + 1];
+    for (let s = 0; s <= 8; s++){ const p = wpR(x1 + (x2 - x1) * s / 8, z1 + (z2 - z1) * s / 8); R(o, p[0], p[1], 2, 2, C.green); }
+  }
+  [15, 10, 19].forEach((h, i) => {
+    const x0 = 4.05 + i * 1.05;
+    P([wpR(x0, 16), wpR(x0 + 0.55, 16), wpR(x0 + 0.55, 16 + h), wpR(x0, 16 + h)], i === 1 ? '#2b7a4b' : '#1f5c38');
+  });
+  P([wpR(3.95, 43.2), wpR(5.3, 43.2), wpR(5.3, 41.6), wpR(3.95, 41.6)], '#4a5548');
+  P([wpR(3.95, 39.6), wpR(4.9, 39.6), wpR(4.9, 38.2), wpR(3.95, 38.2)], '#39423a');
+
+  // jam dinding di dinding kanan — waktu asli, digambar pada bidang dinding
+  const jc = wpR(2.0, 37);
+  o.save(); o.translate(jc[0], jc[1]); o.transform(0.5, 0.25, 0, -1, 0, 0);
+  o.fillStyle = '#2c2c31'; o.beginPath(); o.arc(0, 0, 17, 0, 6.29); o.fill();
+  o.fillStyle = '#e8e8e2'; o.beginPath(); o.arc(0, 0, 15, 0, 6.29); o.fill();
   for (let i = 0; i < 12; i++){
     const a = i / 12 * 6.283, r1 = i % 3 === 0 ? 11 : 13;
-    R(o, jx + Math.cos(a) * r1 - 0.5, jy + Math.sin(a) * r1 - 0.5, 1, 1, '#8a8a86');
+    o.fillStyle = '#8a8a86'; o.fillRect(Math.sin(a) * r1 - 0.6, Math.cos(a) * r1 - 0.6, 1.2, 1.2);
   }
   const now = new Date();
   const sec = now.getSeconds(), min = now.getMinutes() + sec / 60, hr = (now.getHours() % 12) + min / 60;
-  function hand(ang, len, col, w){
+  function hand(f, len, col, w){
     o.strokeStyle = col; o.lineWidth = w; o.beginPath();
-    o.moveTo(jx, jy); o.lineTo(jx + Math.cos(ang) * len, jy + Math.sin(ang) * len); o.stroke();
+    o.moveTo(0, 0); o.lineTo(Math.sin(f * 6.283) * len, Math.cos(f * 6.283) * len); o.stroke();
   }
-  hand(hr / 12 * 6.283 - 1.571, 8, '#26262b', 2);
-  hand(min / 60 * 6.283 - 1.571, 12, '#26262b', 1.6);
-  hand(sec / 60 * 6.283 - 1.571, 13, '#1fbd59', 1);
-  R(o, jx - 1, jy - 1, 2, 2, '#26262b');
+  hand(hr / 12, 8, '#26262b', 2.4);
+  hand(min / 60, 12, '#26262b', 1.8);
+  hand(sec / 60, 13, '#1fbd59', 1.2);
+  o.fillStyle = '#26262b'; o.beginPath(); o.arc(0, 0, 1.6, 0, 6.29); o.fill();
+  o.restore();
 
-  // lampu gantung x2 + cahaya lembut
-  [150, 330].forEach((lx, i) => {
-    R(o, lx, 0, 1, 18, '#3c3c42');
-    R(o, lx - 7, 18, 15, 5, '#2c2c31'); R(o, lx - 4, 23, 9, 2, '#ffd98a');
+  // lampu gantung x2 di atas baris meja belakang + cahaya lembut
+  [231, 310].forEach((lx, i) => {
+    R(o, lx, 0, 1, 32, '#3c3c42');
+    P([[lx - 8, 38], [lx + 8, 38], [lx + 5, 32], [lx - 5, 32]], '#2c2c31');
+    R(o, lx - 4, 38, 9, 2, '#ffd98a');
     o.save(); o.globalAlpha = 0.05 + 0.008 * Math.sin(t * 7 + i * 2);
     o.fillStyle = '#ffdf9e';
-    o.beginPath(); o.moveTo(lx - 4, 25); o.lineTo(lx + 5, 25); o.lineTo(lx + 26, 108); o.lineTo(lx - 25, 108); o.closePath(); o.fill();
+    o.beginPath(); o.moveTo(lx - 4, 40); o.lineTo(lx + 5, 40); o.lineTo(lx + 30, 148); o.lineTo(lx - 29, 148); o.closePath(); o.fill();
     o.restore();
   });
 
-  // tanaman sudut
-  [[8, 196], [452, 200]].forEach(([pxx, py], i) => {
-    R(o, pxx + 4, py + 22, 14, 9, '#7a4436'); R(o, pxx + 2, py + 20, 18, 3, '#8f5240');
+  // tanaman di sudut lantai (pot balok isometri)
+  [[110, 157], [377, 158]].forEach(([pxx, py], i) => {
+    P([[pxx - 9, py - 4], [pxx, py + 1], [pxx, py + 9], [pxx - 9, py + 4]], '#7a4436');
+    P([[pxx, py + 1], [pxx + 9, py - 4], [pxx + 9, py + 4], [pxx, py + 9]], '#6b3a2e');
+    dia(pxx, py - 4, 18, 9, '#8f5240');
     const sway = Math.round(Math.sin(t * 1.2 + i * 2) * 0.7);
-    R(o, pxx + 10, py + 8, 2, 13, '#2b7a4b');
-    [[2,4],[8,0],[14,3],[5,9],[13,10]].forEach(([gx, gy]) => R(o, pxx + gx + sway, py + gy, 5, 3, '#2f8f57'));
-    [[6,2],[12,6]].forEach(([gx, gy]) => R(o, pxx + gx + sway, py + gy, 4, 2, '#1fbd59'));
+    R(o, pxx - 1, py - 16, 2, 12, '#2b7a4b');
+    [[-7,-24],[-2,-28],[4,-25],[-5,-18],[3,-17]].forEach(([gx, gy]) => R(o, pxx + gx + sway, py + gy, 5, 3, '#2f8f57'));
+    [[-3,-22],[2,-20]].forEach(([gx, gy]) => R(o, pxx + gx + sway, py + gy, 4, 2, '#1fbd59'));
   });
 
-  // karpet koordinator
-  R(o, 168, 228, 144, 34, '#1d2b21'); R(o, 172, 232, 136, 26, '#223528');
-  R(o, 172, 232, 136, 1, '#2c4634'); R(o, 172, 257, 136, 1, '#2c4634');
+  // karpet koordinator — belah ketupat besar mengikuti lantai
+  dia(240, 198, 164, 68, '#1d2b21'); dia(240, 198, 148, 60, '#223528');
+  dia(240, 198, 128, 50, '#263b2d');
 }
 
 /* ---------- partikel debu melayang ---------- */
@@ -701,52 +738,61 @@ function drawPaper(dt, t){
    MONITOR + MEJA
    ============================================================ */
 function drawMonitor(d, t){
-  const mx = d.cx + (d.monSide > 0 ? 8 : -44), my = 126;
   const on = d.state === 'work' || d.state === 'spawn' || d.state === 'done';
-  R(o, mx + 14, 150, 8, 6, '#17171a');                       // kaki monitor
-  R(o, mx - 2, 122, 40, 30, '#0b0b0d');                     // bezel
-  R(o, mx, 124, 36, 26, on ? '#0d2016' : '#0a0d0b');        // layar
+  const ax = d.monSide > 0 ? d.fx + 2.25 : d.fx + 0.50, ay = d.fy + 0.28;
+  const B = iso(ax, ay, DZ);                                   // sudut bawah-kiri layar di atas meja
+  const vx = TW / 2 * 1.05, vy = TH / 2 * 1.05;                // vektor lebar layar (arah +x isometri)
+  const BL = B, BR = [B[0] + vx, B[1] + vy], TR = [BR[0], BR[1] - 13], TL = [B[0], B[1] - 13];
+  const ccx = (BL[0] + TR[0]) / 2, ccy = (BL[1] + TR[1]) / 2;  // pusat layar
+  dia(ccx, B[1] + 3, 13, 6, '#17171a');                        // alas monitor di permukaan meja
+  R(o, ccx - 1, ccy + 4, 3, 5, '#17171a');                     // leher monitor
+  P([[BL[0] - 2, BL[1]], [BR[0] + 2, BR[1] + 1], [TR[0] + 2, TR[1] - 2], [TL[0] - 2, TL[1] - 2]], '#0b0b0d');  // bezel
+  P([BL, BR, TR, TL], on ? '#0d2016' : '#0a0d0b');             // layar jajar genjang
+  const ux = 0.894, uy = 0.448;                                // satuan arah layar
   if (on){
     for (let i = 0; i < 5; i++){
-      const w = 6 + ((i * 9 + d.step * 5 + d.cx) % 24);
+      const len = 4 + ((i * 9 + d.step * 5 + Math.round(d.fx * 37)) % 12);
+      const sx = BL[0] + 2, sy = BL[1] - 3 - i * 2.1;
       const col = i % 3 === 2 ? '#7d8a80' : (i % 2 ? '#1fbd59' : '#2b7a4b');
-      R(o, mx + 3, 127 + i * 5, Math.min(w, 31), 2, col);
+      P([[sx, sy], [sx + ux * len, sy + uy * len], [sx + ux * len, sy + uy * len - 1.6], [sx, sy - 1.6]], col);
     }
-    if (Math.floor(t * 2) % 2 === 0) R(o, mx + 3, 147, 4, 2, '#b9ffd6');   // kursor berkedip
+    if (Math.floor(t * 2) % 2 === 0) R(o, BL[0] + 2, BL[1] - 2, 3, 1.5, '#b9ffd6');   // kursor berkedip
   } else {
-    R(o, mx + 30, 145, 3, 2, '#274435');
-    if (Math.floor(t * 1.2) % 2 === 0) R(o, mx + 33, 126, 2, 2, '#7a2d2d'); // lampu standby
+    R(o, TR[0] - 4, TR[1] + 2, 2, 2, '#274435');
+    if (Math.floor(t * 1.2) % 2 === 0) R(o, TR[0] - 4, TR[1] + 2, 2, 2, '#7a2d2d');   // lampu standby
   }
 }
 
 function drawDesk(d, t){
-  const cx = d.cx;
-  // kursi (di belakang pekerja)
-  R(o, cx - 13, 138, 26, 22, '#26262c'); R(o, cx - 13, 138, 26, 3, '#30303a');
+  const fx = d.fx, fy = d.fy, W = 3.2, D = 1.4;
+  const A = iso(fx, fy, DZ), B = iso(fx + W, fy, DZ), Cc = iso(fx + W, fy + D, DZ), Dd = iso(fx, fy + D, DZ);
+  const Cf = iso(fx + W, fy + D, 0), Df = iso(fx, fy + D, 0), Bf = iso(fx + W, fy, 0);
+  // sandaran kursi di belakang pekerja
+  P([iso(fx + 0.85, fy - 0.38, 27), iso(fx + 2.35, fy - 0.38, 27), iso(fx + 2.35, fy - 0.38, 13), iso(fx + 0.85, fy - 0.38, 13)], '#26262c');
+  P([iso(fx + 0.85, fy - 0.38, 27), iso(fx + 2.35, fy - 0.38, 27), iso(fx + 2.35, fy - 0.38, 24.5), iso(fx + 0.85, fy - 0.38, 24.5)], '#30303a');
   // pekerja duduk (digambar sebelum meja agar tertutup meja)
   if (d.state === 'work'){
-    const bob = Math.round(Math.sin(t * 9 + cx) * 0.6);
-    const map = Math.floor(t * 5.5 + cx) % 2 === 0 ? SPR_A : SPR_B;
-    drawSprite(o, map.slice(0, 13), deskPal(d), cx - 12, 126 + bob, 2);
+    const bob = Math.round(Math.sin(t * 9 + d.cx) * 0.6);
+    const map = Math.floor(t * 5.5 + d.cx) % 2 === 0 ? SPR_A : SPR_B;
+    drawSprite(o, map, deskPal(d), d.cx - 12, d.cy - 30 + bob, 2);
   }
-  // monitor + meja
+  // balok meja isometri: atas + muka depan + sisi kanan
+  P([A, B, Cc, Dd], C.woodLt);
+  P([Dd, Cc, Cf, Df], C.wood);
+  P([B, Cc, Cf, Bf], C.woodDk);
+  // laci pada muka depan (interpolasi pada bidang muka)
+  const fp = (u, v) => [Dd[0] + (Cc[0] - Dd[0]) * u + (Df[0] - Dd[0]) * v, Dd[1] + (Cc[1] - Dd[1]) * u + (Df[1] - Dd[1]) * v];
+  P([fp(0.08, 0.25), fp(0.48, 0.25), fp(0.48, 0.72), fp(0.08, 0.72)], C.woodDk);
+  const hd = fp(0.28, 0.46); R(o, hd[0] - 3, hd[1], 6, 2, '#c9c9cf');
+  // monitor, lalu pernak-pernik di permukaan meja
   drawMonitor(d, t);
-  R(o, cx - 16, 152, 20, 3, '#1b1b1f');                        // keyboard
-  R(o, cx - 15, 153, 18, 1, '#2e2e35');
-  R(o, cx - 48, DESK_Y - 3, 96, 5, C.woodLt);                  // permukaan meja
-  R(o, cx - 48, DESK_Y + 2, 96, 3, C.woodDk);
-  R(o, cx - 44, DESK_Y + 5, 88, 26, C.wood);                   // badan meja
-  R(o, cx - 44, DESK_Y + 5, 88, 2, C.woodDk);
-  R(o, cx - 40, DESK_Y + 12, 34, 12, C.woodDk);                // laci
-  R(o, cx - 26, DESK_Y + 17, 6, 2, '#c9c9cf');
-  R(o, cx + 24, DESK_Y + 12, 16, 19, '#413016');               // tumpukan berkas
-  R(o, cx - 47, DESK_Y + 31, 4, 12, '#2c2016'); R(o, cx + 43, DESK_Y + 31, 4, 12, '#2c2016');
-  // cangkir + kertas di meja
-  R(o, cx - 34, DESK_Y - 8, 5, 5, '#b03a3a'); R(o, cx - 34, DESK_Y - 8, 5, 1, '#d98a8a');
-  R(o, cx + 30, DESK_Y - 5, 12, 4, '#dedbd0');
+  const kb = iso(fx + 1.6, fy + 1.02, DZ); dia(kb[0], kb[1], 20, 10, '#1b1b1f'); dia(kb[0], kb[1], 15, 7, '#2e2e35');
+  const cp = iso(fx + 0.32, fy + 0.95, DZ); R(o, cp[0] - 2, cp[1] - 5, 5, 5, '#b03a3a'); R(o, cp[0] - 2, cp[1] - 5, 5, 1, '#d98a8a');
+  const pp = iso(fx + 2.75, fy + 1.02, DZ); dia(pp[0], pp[1], 12, 6, '#dedbd0');
+  const bk = iso(fx + 2.85, fy + 0.30, DZ); dia(bk[0], bk[1], 11, 5.5, '#413016'); dia(bk[0], bk[1] - 3, 9, 4.5, '#57451f');
   // progress bar di atas meja saat bekerja
   if (d.state === 'work' || d.state === 'done'){
-    const bw = 76, bx = cx - bw / 2, by = 112;
+    const bw = 64, bx = d.cx - bw / 2, by = d.cy - 44;
     R(o, bx - 1, by - 1, bw + 2, 6, '#0c0c0e');
     R(o, bx, by, bw, 4, '#26262b');
     R(o, bx, by, bw * (d.state === 'done' ? 1 : d.progress), 4, C.green);
@@ -756,14 +802,18 @@ function drawDesk(d, t){
 /* ---------- pekerja berdiri di samping meja (spawn / done / leave) ---------- */
 function drawStandingWorker(d, t){
   if (d.state !== 'spawn' && d.state !== 'done' && d.state !== 'leave') return;
-  const wx = d.cx + 56 + (d.state === 'leave' ? d.walkX : 0);
+  const sp = iso(d.fx + 3.75, d.fy + 0.75, 0);                 // titik berdiri di lantai, samping meja
+  const ox = d.state === 'leave' ? d.walkX * 0.89 : 0, oy = d.state === 'leave' ? d.walkX * 0.45 : 0;
+  const wx = sp[0] + ox, wy = sp[1] + oy;                       // posisi kaki
+  o.save(); o.globalAlpha = 0.55 * d.alpha;
+  o.fillStyle = '#101012'; o.beginPath(); o.ellipse(wx, wy + 1, 11, 4, 0, 0, 6.29); o.fill(); o.restore();
   const map = Math.floor(t * 6) % 2 === 0 ? SPR_A : SPR_B;
-  drawSprite(o, map, deskPal(d), wx, 168, 2, d.alpha);
+  drawSprite(o, map, deskPal(d), wx - 12, wy - 32, 2, d.alpha);
   // kilau spawn
   if (d.state === 'spawn'){
     o.save(); o.globalAlpha = d.alpha * 0.9;
-    [[-6, 168], [30, 176], [4, 158], [22, 196]].forEach(([sx, sy], i) => {
-      if (Math.floor(t * 6 + i) % 2 === 0){ R(o, wx + sx, sy, 3, 1, '#b9ffd6'); R(o, wx + sx + 1, sy - 1, 1, 3, '#b9ffd6'); }
+    [[-16, -26], [14, -18], [-8, -36], [10, -4]].forEach(([sx, sy], i) => {
+      if (Math.floor(t * 6 + i) % 2 === 0){ R(o, wx + sx, wy + sy, 3, 1, '#b9ffd6'); R(o, wx + sx + 1, wy + sy - 1, 1, 3, '#b9ffd6'); }
     });
     o.restore();
   }
@@ -815,8 +865,8 @@ function updateDesk(d, dt){
       if (d.stepT > 0.28){ d.stepT = 0; d.step++; }
       if (d.t <= 0){
         d.progress = 1; doneCount++;
-        d.floats.push({ kind:'check', x: d.cx + d.monSide * 14, y: 108, life: 1.4 });
-        d.floats.push({ kind:'star',  x: d.cx + 44, y: 118, life: 1.2 });
+        d.floats.push({ kind:'check', x: d.cx + d.monSide * 12, y: d.cy - 38, life: 1.4 });
+        d.floats.push({ kind:'star',  x: d.cx + 30, y: d.cy - 28, life: 1.2 });
         setState(d, 'done', 1.5);
       }
       break;
@@ -835,9 +885,9 @@ function updateDesk(d, dt){
    KOORDINATOR — Muse, Chat Utama (lebih besar, di depan)
    ============================================================ */
 function drawCoordinator(t){
-  const cx = 240, feet = 260;
+  const cx = 240, feet = 226;
   const bob = Math.round(Math.sin(t * 2.1) * 0.8);
-  R(o, cx - 20, feet - 1, 40, 3, '#101012');                       // bayangan
+  o.fillStyle = '#101012'; o.beginPath(); o.ellipse(cx, feet + 1, 21, 6, 0, 0, 6.29); o.fill();   // bayangan elips
   drawSprite(o, SPR_A, coordPal, cx - 18, feet - 48 + bob, 3);
   // lencana bintang hijau melayang pelan di bahu
   const sy = feet - 52 + Math.round(Math.sin(t * 2.6) * 1.5);
@@ -862,19 +912,19 @@ function drawOverlays(t){
   // plat nama bidang di badan meja
   desks.forEach(d => {
     const active = d.state === 'work' || d.state === 'spawn' || d.state === 'done';
-    pill(d.name, d.cx * 2, 352, {
+    pill(d.name, d.cx * 2, d.pillY * 2, {
       border: active ? 'hsl(142,71%,45%)' : '#3a3a41',
       fg: active ? '#b9ffd6' : '#a7a7ad'
     });
   });
   // label koordinator
-  pill('● Muse — Chat Utama', 240 * 2, 396, {
+  pill('● Muse — Chat Utama', 240 * 2, 344, {
     font: '700 14px ui-monospace, monospace', border: 'hsl(142,71%,45%)', fg: '#EDEDED', padX: 12, padY: 6
   });
   // balon tugas di atas kepala pekerja yang sedang bekerja
   desks.forEach(d => {
     if (d.state !== 'work' || d.progress > 0.88) return;
-    const bx = d.cx * 2, by = 218;
+    const bx = d.cx * 2, by = (d.cy - 34) * 2;
     ctx.font = '600 14px ui-monospace, monospace';
     const w = ctx.measureText(d.task).width + 22, h = 30;
     const x = Math.max(8, Math.min(960 - w - 8, bx - w / 2)), y = by - h;
@@ -898,8 +948,8 @@ function frame(now){
   desks.forEach(d => updateDesk(d, dt));
 
   drawRoom(t);
-  desks.forEach(d => drawDesk(d, t));
-  desks.forEach(d => { drawStandingWorker(d, t); drawFloats(d, dt); });
+  [...desks].sort((a, b) => (a.fx + a.fy) - (b.fx + b.fy))
+    .forEach(d => { drawDesk(d, t); drawStandingWorker(d, t); drawFloats(d, dt); });
   drawCoordinator(t);
   drawPaper(dt, t);
   drawDust(t);
