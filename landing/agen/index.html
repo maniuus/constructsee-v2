@@ -126,6 +126,18 @@ footer{border-top:1px solid var(--line-soft);margin-top:64px;padding:28px 0 40px
 footer .wrap{display:flex;gap:18px;flex-wrap:wrap;align-items:center}
 footer nav{margin-left:auto}
 .note{max-width:74ch}
+/* ===== kantor pixel ===== */
+.pixel-frame{margin-bottom:20px}
+.pixel-frame canvas{display:block;width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges;background:hsl(240 4% 9%)}
+.pixel-stats{display:flex;gap:26px;align-items:center;flex-wrap:wrap;padding:14px 18px;border-top:1px solid var(--line-soft)}
+.pstat{display:flex;gap:10px;align-items:center}
+.pstat .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);flex:none}
+.pstat .dot.gold{background:var(--amber)}
+.pstat small{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-weight:600}
+.pstat b{font-size:20px;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
+.plegend{color:var(--muted);font-size:13px;flex:1;min-width:260px}
+.plegend .g{color:var(--accent-text);font-weight:600}
+
 @media(max-width:640px){
   .map{display:flex;flex-direction:column;gap:10px;padding:14px;min-height:0;background:var(--panel)}
   .map svg{display:none}
@@ -156,6 +168,16 @@ footer nav{margin-left:auto}
       <div class="kpi"><b id="kpiDone">0</b><span>Tugas selesai sesi ini</span></div>
       <div class="kpi"><b>5</b><span>Alur kerja berjalan</span></div>
       <div class="kpi"><b id="kpiSession">00:00</b><span>Lama sesi halaman ini</span></div>
+    </div>
+  </section>
+
+  <section class="frame pixel-frame">
+    <div class="frame-head">Kantor pixel — subagen sedang bekerja<span class="right">digambar langsung dengan kode, tanpa berkas gambar</span></div>
+    <canvas id="game" width="960" height="540"></canvas>
+    <div class="pixel-stats">
+      <div class="pstat"><span class="dot"></span><div><small>Subagen aktif</small><b id="pActive">0</b></div></div>
+      <div class="pstat"><span class="dot gold"></span><div><small>Tugas selesai</small><b id="pDone">0</b></div></div>
+      <p class="plegend"><b>Cara membaca adegan:</b> meja menyala = ada subagen bekerja &nbsp;·&nbsp; balon teks = tugas yang sedang dipegang &nbsp;·&nbsp; <span class="g">centang hijau</span> = tugas selesai dan hasil diserahkan ke <b>Muse — Chat Utama</b>.</p>
     </div>
   </section>
 
@@ -450,6 +472,449 @@ footer nav{margin-left:auto}
   setTimeout(spawnLoop, 3200);
   setTimeout(hubLoop, 9000);
 })();
+</script>
+<script>
+"use strict";
+/* ============================================================
+   SUBAGEN SEDANG BEKERJA — pixel art hidup di canvas
+   Adegan digambar di kanvas kecil 480x270 lalu diperbesar x2
+   (image-rendering: pixelated). Label & balon teks digambar
+   di resolusi penuh agar tetap terbaca.
+   ============================================================ */
+const LW = 480, LH = 270;                 // resolusi logis (piksel besar)
+const cv = document.getElementById('game');
+const ctx = cv.getContext('2d');
+ctx.imageSmoothingEnabled = false;
+
+const off = document.createElement('canvas');
+off.width = LW; off.height = LH;
+const o = off.getContext('2d');
+
+/* ---------- helper piksel ---------- */
+function R(c, x, y, w, h, col){ c.fillStyle = col; c.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h)); }
+function rand(a, b){ return a + Math.random() * (b - a); }
+function pick(arr){ return arr[Math.floor(Math.random() * arr.length)]; }
+
+/* ---------- palet ConstrucSee ---------- */
+const C = {
+  wallA:'#19191B', wallB:'#151517', floor:'#232325', floorLine:'#1b1b1e',
+  baseboard:'#2c2c30', green:'hsl(142,71%,45%)', greenDk:'#14532d',
+  wood:'#6e4f30', woodDk:'#4e3620', woodLt:'#86643c',
+  deskSide:'#3a3a40', metal:'#33333a'
+};
+
+/* ============================================================
+   SPRITE KARAKTER — peta string piksel + palet
+   h=rambut  s=kulit  e=mata  t=baju  p=celana  b=sepatu
+   ============================================================ */
+const SPR_A = [
+"............",
+"....hhhh....",
+"...hhhhhh...",
+"...hhhhhh...",
+"...ssssss...",
+"...ssssss...",
+"...se..es...",
+"....ssss....",
+"...tttttt...",
+"..tttttttt..",
+".stttttttts.",
+".s.tttttt.s.",
+"....tttt....",
+"....pppp....",
+"....p..p....",
+"...bb..bb...",
+];
+const SPR_B = [   // frame mengetik B: posisi tangan berganti
+"............",
+"....hhhh....",
+"...hhhhhh...",
+"...hhhhhh...",
+"...ssssss...",
+"...ssssss...",
+"...se..es...",
+"....ssss....",
+"...tttttt...",
+"..tttttttt..",
+"..tttttttts.",
+".s.tttttt...",
+"....tttt....",
+"....pppp....",
+"....p..p....",
+"...bb..bb...",
+];
+function drawSprite(c, map, pal, x, y, u, alpha){
+  if (alpha !== undefined){ c.save(); c.globalAlpha = Math.max(0, Math.min(1, alpha)); }
+  for (let r = 0; r < map.length; r++){
+    const row = map[r];
+    for (let i = 0; i < row.length; i++){
+      const col = pal[row[i]];
+      if (col) R(c, x + i * u, y + r * u, u, u, col);
+    }
+  }
+  if (alpha !== undefined) c.restore();
+}
+const SKINS = ['#e8b08a','#c98a5e','#8a5a3b','#f0c8a0'];
+const HAIRS = ['#2b2b30','#6b4a2b','#3a3f4a','#57443a','#22201e'];
+
+/* ============================================================
+   MEJA BIDANG
+   ============================================================ */
+const DESK_Y = 158;            // permukaan meja (y logis)
+const desks = [
+  { id:'seo',    name:'SEO',     cx:62,  monSide: 1, shirt:'#3f7fbf',
+    tasks:['nulis artikel…','cek indeks…','riset kata kunci…','bikin carousel…','cek sitemap…'] },
+  { id:'app',    name:'Aplikasi', cx:172, monSide:-1, shirt:'#b0623a',
+    tasks:['uji hitung…','bangun UI…','cek katalog…','samakan tampilan…'] },
+  { id:'draftr', name:'draftr',  cx:282, monSide: 1, shirt:'#7a5fd0',
+    tasks:['gambar simbol…','verifikasi DXF…','atur grid…','terbitkan revisi…'] },
+  { id:'jadwal', name:'Jadwal',  cx:392, monSide:-1, shirt:'#c2a13a',
+    tasks:['briefing pagi…','jadwal video…','cek kalender…','siapkan draf…'] },
+];
+desks.forEach((d, i) => {
+  d.state = 'idle';            // idle|spawn|work|done|leave
+  d.t = rand(0.2, 1.6) + i * 0.7;   // timer state (detik) — mulai bergiliran
+  d.progress = 0;
+  d.task = '';
+  d.skin = pick(SKINS); d.hair = pick(HAIRS);
+  d.step = 0; d.stepT = 0;     // langkah gulir kode di monitor
+  d.floats = [];               // centang/bintang melayang
+  d.walkX = 0; d.alpha = 0;
+});
+/* Ritme awal: kantor sudah hidup sejak halaman dibuka —
+   dua meja langsung bekerja, satu subagen sedang spawn,
+   satu lagi menyusul sebentar lagi. */
+Object.assign(desks[0], { state:'work', task: desks[0].tasks[0], progress: 0.25, dur: 7, t: 7 * 0.75, alpha: 1 });
+Object.assign(desks[1], { state:'work', task: desks[1].tasks[1], progress: 0.50, dur: 8, t: 8 * 0.50, alpha: 1 });
+Object.assign(desks[2], { state:'spawn', t: 0.6, alpha: 0 });
+Object.assign(desks[3], { state:'idle', t: 1.6 });
+let doneCount = 0;
+
+function deskPal(d){
+  return { h:d.hair, s:d.skin, e:'#141415', t:d.shirt, p:'#2e3138', b:'#101012' };
+}
+const coordPal = { h:'#232326', s:'#e8b08a', e:'#141415', t:'#1fbd59', p:'#26262c', b:'#101012' };
+
+/* ============================================================
+   RUANGAN
+   ============================================================ */
+const starsWin = [];
+for (let i = 0; i < 26; i++) starsWin.push({ x: 22 + Math.random() * 84, y: 20 + Math.random() * 58, tw: Math.random() * 6.28 });
+
+function drawRoom(t){
+  // dinding & lantai
+  R(o, 0, 0, LW, 168, C.wallA);
+  R(o, 0, 120, LW, 48, C.wallB);
+  R(o, 0, 166, LW, 3, C.baseboard);
+  R(o, 0, 169, LW, LH - 169, C.floor);
+  for (let x = 0; x < LW; x += 42) R(o, x, 169, 1, LH - 169, C.floorLine);
+  R(o, 0, 210, LW, 1, C.floorLine); R(o, 0, 244, LW, 1, C.floorLine);
+
+  // jendela malam (kiri atas)
+  R(o, 16, 14, 96, 70, '#3a3a41'); R(o, 18, 16, 92, 66, '#0d1220');
+  starsWin.forEach(s => { if (Math.sin(t * 1.4 + s.tw) > -0.2) R(o, s.x, s.y, 1, 1, '#cfe4ff'); });
+  R(o, 88, 24, 9, 9, '#e8e4c8'); R(o, 85, 22, 3, 3, '#0d1220');      // bulan sabit
+  R(o, 62, 16, 2, 66, '#3a3a41'); R(o, 18, 48, 92, 2, '#3a3a41');   // kusen
+  R(o, 18, 82, 92, 3, '#26262c');
+
+  // papan tulis (kanan atas): grafik naik hijau
+  R(o, 368, 14, 96, 70, '#3a3a41'); R(o, 370, 16, 92, 66, '#20211f');
+  R(o, 376, 74, 80, 1, '#3d4a40');
+  const pts = [[376,66],[388,60],[398,63],[408,50],[420,54],[432,42],[444,46],[456,32]];
+  for (let i = 0; i < pts.length - 1; i++){
+    const [x1,y1] = pts[i], [x2,y2] = pts[i + 1];
+    const steps = x2 - x1;
+    for (let s = 0; s <= steps; s++) R(o, x1 + s, y1 + (y2 - y1) * (s / steps), 2, 2, C.green);
+  }
+  [30, 20, 38].forEach((h, i) => R(o, 380 + i * 12, 74 - h * 0.5, 7, h * 0.5, i === 1 ? '#2b7a4b' : '#1f5c38'));
+  R(o, 376, 22, 34, 2, '#4a5548'); R(o, 376, 28, 22, 2, '#39423a');
+
+  // jam dinding (tengah atas) — waktu asli, jarum detik melangkah
+  const jx = 240, jy = 42;
+  o.fillStyle = '#2c2c31'; o.beginPath(); o.arc(jx, jy, 17, 0, 6.29); o.fill();
+  o.fillStyle = '#e8e8e2'; o.beginPath(); o.arc(jx, jy, 15, 0, 6.29); o.fill();
+  for (let i = 0; i < 12; i++){
+    const a = i / 12 * 6.283, r1 = i % 3 === 0 ? 11 : 13;
+    R(o, jx + Math.cos(a) * r1 - 0.5, jy + Math.sin(a) * r1 - 0.5, 1, 1, '#8a8a86');
+  }
+  const now = new Date();
+  const sec = now.getSeconds(), min = now.getMinutes() + sec / 60, hr = (now.getHours() % 12) + min / 60;
+  function hand(ang, len, col, w){
+    o.strokeStyle = col; o.lineWidth = w; o.beginPath();
+    o.moveTo(jx, jy); o.lineTo(jx + Math.cos(ang) * len, jy + Math.sin(ang) * len); o.stroke();
+  }
+  hand(hr / 12 * 6.283 - 1.571, 8, '#26262b', 2);
+  hand(min / 60 * 6.283 - 1.571, 12, '#26262b', 1.6);
+  hand(sec / 60 * 6.283 - 1.571, 13, '#1fbd59', 1);
+  R(o, jx - 1, jy - 1, 2, 2, '#26262b');
+
+  // lampu gantung x2 + cahaya lembut
+  [150, 330].forEach((lx, i) => {
+    R(o, lx, 0, 1, 18, '#3c3c42');
+    R(o, lx - 7, 18, 15, 5, '#2c2c31'); R(o, lx - 4, 23, 9, 2, '#ffd98a');
+    o.save(); o.globalAlpha = 0.05 + 0.008 * Math.sin(t * 7 + i * 2);
+    o.fillStyle = '#ffdf9e';
+    o.beginPath(); o.moveTo(lx - 4, 25); o.lineTo(lx + 5, 25); o.lineTo(lx + 26, 108); o.lineTo(lx - 25, 108); o.closePath(); o.fill();
+    o.restore();
+  });
+
+  // tanaman sudut
+  [[8, 196], [452, 200]].forEach(([pxx, py], i) => {
+    R(o, pxx + 4, py + 22, 14, 9, '#7a4436'); R(o, pxx + 2, py + 20, 18, 3, '#8f5240');
+    const sway = Math.round(Math.sin(t * 1.2 + i * 2) * 0.7);
+    R(o, pxx + 10, py + 8, 2, 13, '#2b7a4b');
+    [[2,4],[8,0],[14,3],[5,9],[13,10]].forEach(([gx, gy]) => R(o, pxx + gx + sway, py + gy, 5, 3, '#2f8f57'));
+    [[6,2],[12,6]].forEach(([gx, gy]) => R(o, pxx + gx + sway, py + gy, 4, 2, '#1fbd59'));
+  });
+
+  // karpet koordinator
+  R(o, 168, 228, 144, 34, '#1d2b21'); R(o, 172, 232, 136, 26, '#223528');
+  R(o, 172, 232, 136, 1, '#2c4634'); R(o, 172, 257, 136, 1, '#2c4634');
+}
+
+/* ---------- partikel debu melayang ---------- */
+const dust = [];
+for (let i = 0; i < 22; i++) dust.push({ x: Math.random() * LW, y: Math.random() * LH, s: rand(2, 7), ph: Math.random() * 6.28 });
+function drawDust(t){
+  dust.forEach(p => {
+    const x = (p.x + t * p.s) % LW, y = p.y + Math.sin(t * 0.7 + p.ph) * 3;
+    o.save(); o.globalAlpha = 0.10 + 0.06 * Math.sin(t + p.ph);
+    R(o, x, y, 1, 1, '#fff6d8'); o.restore();
+  });
+}
+
+/* ---------- kertas beterbangan sesekali ---------- */
+const paper = { active:false, x:-20, y:40, t:0, next:5 };
+function drawPaper(dt, t){
+  paper.next -= dt;
+  if (!paper.active && paper.next <= 0){ paper.active = true; paper.x = -14; paper.y = rand(28, 70); paper.t = 0; }
+  if (paper.active){
+    paper.t += dt; paper.x += dt * 46;
+    const y = paper.y + Math.sin(paper.t * 3.2) * 5, tilt = Math.sin(paper.t * 3.2) * 1.5;
+    R(o, paper.x, y + tilt, 8, 6, '#e8e6da'); R(o, paper.x, y + tilt, 8, 1, '#c9c7ba');
+    R(o, paper.x + 1, y + tilt + 2, 5, 1, '#a9b8ad'); R(o, paper.x + 1, y + tilt + 4, 4, 1, '#a9b8ad');
+    if (paper.x > LW + 16){ paper.active = false; paper.next = rand(6, 12); }
+  }
+}
+
+/* ============================================================
+   MONITOR + MEJA
+   ============================================================ */
+function drawMonitor(d, t){
+  const mx = d.cx + (d.monSide > 0 ? 8 : -44), my = 126;
+  const on = d.state === 'work' || d.state === 'spawn' || d.state === 'done';
+  R(o, mx + 14, 150, 8, 6, '#17171a');                       // kaki monitor
+  R(o, mx - 2, 122, 40, 30, '#0b0b0d');                     // bezel
+  R(o, mx, 124, 36, 26, on ? '#0d2016' : '#0a0d0b');        // layar
+  if (on){
+    for (let i = 0; i < 5; i++){
+      const w = 6 + ((i * 9 + d.step * 5 + d.cx) % 24);
+      const col = i % 3 === 2 ? '#7d8a80' : (i % 2 ? '#1fbd59' : '#2b7a4b');
+      R(o, mx + 3, 127 + i * 5, Math.min(w, 31), 2, col);
+    }
+    if (Math.floor(t * 2) % 2 === 0) R(o, mx + 3, 147, 4, 2, '#b9ffd6');   // kursor berkedip
+  } else {
+    R(o, mx + 30, 145, 3, 2, '#274435');
+    if (Math.floor(t * 1.2) % 2 === 0) R(o, mx + 33, 126, 2, 2, '#7a2d2d'); // lampu standby
+  }
+}
+
+function drawDesk(d, t){
+  const cx = d.cx;
+  // kursi (di belakang pekerja)
+  R(o, cx - 13, 138, 26, 22, '#26262c'); R(o, cx - 13, 138, 26, 3, '#30303a');
+  // pekerja duduk (digambar sebelum meja agar tertutup meja)
+  if (d.state === 'work'){
+    const bob = Math.round(Math.sin(t * 9 + cx) * 0.6);
+    const map = Math.floor(t * 5.5 + cx) % 2 === 0 ? SPR_A : SPR_B;
+    drawSprite(o, map.slice(0, 13), deskPal(d), cx - 12, 126 + bob, 2);
+  }
+  // monitor + meja
+  drawMonitor(d, t);
+  R(o, cx - 16, 152, 20, 3, '#1b1b1f');                        // keyboard
+  R(o, cx - 15, 153, 18, 1, '#2e2e35');
+  R(o, cx - 48, DESK_Y - 3, 96, 5, C.woodLt);                  // permukaan meja
+  R(o, cx - 48, DESK_Y + 2, 96, 3, C.woodDk);
+  R(o, cx - 44, DESK_Y + 5, 88, 26, C.wood);                   // badan meja
+  R(o, cx - 44, DESK_Y + 5, 88, 2, C.woodDk);
+  R(o, cx - 40, DESK_Y + 12, 34, 12, C.woodDk);                // laci
+  R(o, cx - 26, DESK_Y + 17, 6, 2, '#c9c9cf');
+  R(o, cx + 24, DESK_Y + 12, 16, 19, '#413016');               // tumpukan berkas
+  R(o, cx - 47, DESK_Y + 31, 4, 12, '#2c2016'); R(o, cx + 43, DESK_Y + 31, 4, 12, '#2c2016');
+  // cangkir + kertas di meja
+  R(o, cx - 34, DESK_Y - 8, 5, 5, '#b03a3a'); R(o, cx - 34, DESK_Y - 8, 5, 1, '#d98a8a');
+  R(o, cx + 30, DESK_Y - 5, 12, 4, '#dedbd0');
+  // progress bar di atas meja saat bekerja
+  if (d.state === 'work' || d.state === 'done'){
+    const bw = 76, bx = cx - bw / 2, by = 112;
+    R(o, bx - 1, by - 1, bw + 2, 6, '#0c0c0e');
+    R(o, bx, by, bw, 4, '#26262b');
+    R(o, bx, by, bw * (d.state === 'done' ? 1 : d.progress), 4, C.green);
+  }
+}
+
+/* ---------- pekerja berdiri di samping meja (spawn / done / leave) ---------- */
+function drawStandingWorker(d, t){
+  if (d.state !== 'spawn' && d.state !== 'done' && d.state !== 'leave') return;
+  const wx = d.cx + 56 + (d.state === 'leave' ? d.walkX : 0);
+  const map = Math.floor(t * 6) % 2 === 0 ? SPR_A : SPR_B;
+  drawSprite(o, map, deskPal(d), wx, 168, 2, d.alpha);
+  // kilau spawn
+  if (d.state === 'spawn'){
+    o.save(); o.globalAlpha = d.alpha * 0.9;
+    [[-6, 168], [30, 176], [4, 158], [22, 196]].forEach(([sx, sy], i) => {
+      if (Math.floor(t * 6 + i) % 2 === 0){ R(o, wx + sx, sy, 3, 1, '#b9ffd6'); R(o, wx + sx + 1, sy - 1, 1, 3, '#b9ffd6'); }
+    });
+    o.restore();
+  }
+}
+
+/* ---------- centang & bintang melayang ---------- */
+function drawFloats(d, dt){
+  d.floats = d.floats.filter(f => f.life > 0);
+  d.floats.forEach(f => {
+    f.y -= dt * 16; f.life -= dt * 0.8;
+    o.save(); o.globalAlpha = Math.max(0, Math.min(1, f.life));
+    if (f.kind === 'check'){
+      R(o, f.x, f.y + 4, 3, 3, '#1fbd59'); R(o, f.x + 3, f.y + 2, 3, 5, '#1fbd59'); R(o, f.x + 6, f.y - 2, 3, 9, '#1fbd59');
+    } else {
+      R(o, f.x + 3, f.y, 3, 9, '#e8c33a'); R(o, f.x, f.y + 3, 9, 3, '#e8c33a');
+      R(o, f.x + 1, f.y + 1, 2, 2, '#f5d95e'); R(o, f.x + 6, f.y + 6, 2, 2, '#f5d95e');
+    }
+    o.restore();
+  });
+}
+
+/* ============================================================
+   SIKLUS HIDUP SUBAGEN
+   idle → spawn (muncul di samping meja) → work (duduk, mengetik)
+   → done (berdiri, centang melayang, penghitung +1) → leave → idle
+   ============================================================ */
+const pActive = document.getElementById('pActive');
+const pDone = document.getElementById('pDone');
+
+function setState(d, s, dur){ d.state = s; d.t = dur; }
+
+function updateDesk(d, dt){
+  d.t -= dt;
+  switch (d.state){
+    case 'idle':
+      if (d.t <= 0){ d.skin = pick(SKINS); d.hair = pick(HAIRS); d.alpha = 0; setState(d, 'spawn', 0.6); }
+      break;
+    case 'spawn':
+      d.alpha = 1 - Math.max(0, d.t) / 0.6;
+      if (d.t <= 0){
+        d.alpha = 1; d.task = pick(d.tasks); d.progress = 0; d.step = 0; d.stepT = 0;
+        setState(d, 'work', rand(5.5, 9.5));
+        d.dur = d.t;
+      }
+      break;
+    case 'work':
+      d.progress = 1 - Math.max(0, d.t) / d.dur;
+      d.stepT += dt;
+      if (d.stepT > 0.28){ d.stepT = 0; d.step++; }
+      if (d.t <= 0){
+        d.progress = 1; doneCount++;
+        d.floats.push({ kind:'check', x: d.cx + d.monSide * 14, y: 108, life: 1.4 });
+        d.floats.push({ kind:'star',  x: d.cx + 44, y: 118, life: 1.2 });
+        setState(d, 'done', 1.5);
+      }
+      break;
+    case 'done':
+      if (d.t <= 0){ d.walkX = 0; setState(d, 'leave', 0.7); }
+      break;
+    case 'leave':
+      d.walkX += dt * 30;
+      d.alpha = Math.max(0, d.t) / 0.7;
+      if (d.t <= 0){ d.alpha = 0; setState(d, 'idle', rand(0.4, 1.2)); }
+      break;
+  }
+}
+
+/* ============================================================
+   KOORDINATOR — Muse, Chat Utama (lebih besar, di depan)
+   ============================================================ */
+function drawCoordinator(t){
+  const cx = 240, feet = 260;
+  const bob = Math.round(Math.sin(t * 2.1) * 0.8);
+  R(o, cx - 20, feet - 1, 40, 3, '#101012');                       // bayangan
+  drawSprite(o, SPR_A, coordPal, cx - 18, feet - 48 + bob, 3);
+  // lencana bintang hijau melayang pelan di bahu
+  const sy = feet - 52 + Math.round(Math.sin(t * 2.6) * 1.5);
+  R(o, cx + 16, sy + 2, 2, 6, '#e8c33a'); R(o, cx + 14, sy + 4, 6, 2, '#e8c33a');
+}
+
+/* ============================================================
+   OVERLAY RESOLUSI PENUH — plat nama, label, balon tugas
+   ============================================================ */
+function pill(text, cxFull, cyFull, opts){
+  const { font = '700 13px ui-monospace, monospace', fg = '#EDEDED', bg = '#101012', border = '#3a3a41', padX = 10, padY = 5 } = opts || {};
+  ctx.font = font;
+  const w = ctx.measureText(text).width + padX * 2, h = 13 + padY * 2;
+  const x = cxFull - w / 2, y = cyFull - h / 2;
+  ctx.fillStyle = bg; ctx.strokeStyle = border; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.roundRect(x, y, w, h, 7); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = fg; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(text, cxFull, cyFull + 1);
+  return w;
+}
+function drawOverlays(t){
+  // plat nama bidang di badan meja
+  desks.forEach(d => {
+    const active = d.state === 'work' || d.state === 'spawn' || d.state === 'done';
+    pill(d.name, d.cx * 2, 352, {
+      border: active ? 'hsl(142,71%,45%)' : '#3a3a41',
+      fg: active ? '#b9ffd6' : '#a7a7ad'
+    });
+  });
+  // label koordinator
+  pill('● Muse — Chat Utama', 240 * 2, 396, {
+    font: '700 14px ui-monospace, monospace', border: 'hsl(142,71%,45%)', fg: '#EDEDED', padX: 12, padY: 6
+  });
+  // balon tugas di atas kepala pekerja yang sedang bekerja
+  desks.forEach(d => {
+    if (d.state !== 'work' || d.progress > 0.88) return;
+    const bx = d.cx * 2, by = 218;
+    ctx.font = '600 14px ui-monospace, monospace';
+    const w = ctx.measureText(d.task).width + 22, h = 30;
+    const x = Math.max(8, Math.min(960 - w - 8, bx - w / 2)), y = by - h;
+    ctx.fillStyle = '#EDEDED';
+    ctx.beginPath(); ctx.roundRect(x, y, w, h, 8); ctx.fill();
+    ctx.beginPath();                                   // ekor balon
+    ctx.moveTo(bx - 6, y + h - 1); ctx.lineTo(bx + 6, y + h - 1); ctx.lineTo(bx, y + h + 9); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#141415'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText(d.task, x + w / 2, y + h / 2 + 1);
+  });
+}
+
+/* ============================================================
+   LOOP UTAMA
+   ============================================================ */
+let last = performance.now();
+function frame(now){
+  const dt = Math.min(0.25, (now - last) / 1000); last = now;
+  const t = now / 1000;
+
+  desks.forEach(d => updateDesk(d, dt));
+
+  drawRoom(t);
+  desks.forEach(d => drawDesk(d, t));
+  desks.forEach(d => { drawStandingWorker(d, t); drawFloats(d, dt); });
+  drawCoordinator(t);
+  drawPaper(dt, t);
+  drawDust(t);
+
+  ctx.clearRect(0, 0, 960, 540);
+  ctx.drawImage(off, 0, 0, 960, 540);
+  drawOverlays(t);
+
+  const active = desks.filter(d => d.state !== 'idle').length;
+  pActive.textContent = active;
+  pDone.textContent = doneCount;
+
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
 </script>
 </body>
 </html>
