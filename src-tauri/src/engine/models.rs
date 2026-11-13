@@ -318,6 +318,8 @@ pub struct EngineSnapshot {
     pub roots: Vec<String>,
     pub total_cost: f64,
     pub overhead_percent: f64,
+    /// PPN (%) — disimpan per proyek, dipakai tampilan rekap & PDF.
+    pub ppn_percent: f64,
     pub can_undo: bool,
     pub can_redo: bool,
 }

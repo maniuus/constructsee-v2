@@ -17,7 +17,7 @@ pub fn build_typst_rab_template(snapshot: &EngineSnapshot, nodes: &[WbsNode]) ->
     let subtotal: f64 = leaf_nodes.iter().map(|n| n.total_price).sum::<f64>();
     let overhead: f64 = subtotal * snapshot.overhead_percent / 100.0;
     let total_sebelum_ppn: f64 = subtotal + overhead;
-    let ppn: f64 = total_sebelum_ppn * 0.11;
+    let ppn: f64 = total_sebelum_ppn * snapshot.ppn_percent / 100.0;
     let grand_total: f64 = total_sebelum_ppn + ppn;
 
     let subtotal_str = fmt_idr(subtotal);
@@ -27,6 +27,7 @@ pub fn build_typst_rab_template(snapshot: &EngineSnapshot, nodes: &[WbsNode]) ->
     let grand_total_str = fmt_idr(grand_total);
     let terbilang = terbilang_id(grand_total.round() as i64);
     let overhead_label = fmt_pct(snapshot.overhead_percent);
+    let ppn_label = fmt_pct(snapshot.ppn_percent);
 
     // Kedalaman tiap node; urutan `nodes` sudah pre-order dari engine.
     let mut depths: HashMap<&str, usize> = HashMap::new();
@@ -217,7 +218,7 @@ pub fn build_typst_rab_template(snapshot: &EngineSnapshot, nodes: &[WbsNode]) ->
   align(right)[#text(font: numfont)[{overhead}]],
   align(right)[#text(size: 8.5pt, weight: "bold")[Total Sebelum PPN]],
   align(right)[#text(font: numfont)[{sebelum_ppn}]],
-  align(right)[#text(size: 8.5pt, weight: "bold")[PPN (11%)]],
+  align(right)[#text(size: 8.5pt, weight: "bold")[PPN ({ppn_label}%)]],
   align(right)[#text(font: numfont)[{ppn}]],
   align(right)[#text(size: 9.5pt, weight: "bold")[GRAND TOTAL (RAB)]],
   align(right)[#text(font: numfont, size: 9.5pt, weight: "bold")[Rp {grand_total}]],
@@ -264,6 +265,7 @@ pub fn build_typst_rab_template(snapshot: &EngineSnapshot, nodes: &[WbsNode]) ->
 "#,
         subtotal = subtotal_str,
         overhead_label = overhead_label,
+        ppn_label = ppn_label,
         overhead = overhead_str,
         sebelum_ppn = total_sebelum_ppn_str,
         ppn = ppn_str,
@@ -533,6 +535,7 @@ mod tests {
             roots: vec!["div-empty".into(), "div-full".into()],
             total_cost: 2000.0,
             overhead_percent: 10.0,
+            ppn_percent: 11.0,
             can_undo: false,
             can_redo: false,
         };

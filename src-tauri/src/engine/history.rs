@@ -34,6 +34,16 @@ pub enum ReversibleCommand {
     AddNode { node: WbsNode },
     RemoveNodes { removed: Vec<RemovedNode> },
     SetOverhead { old_value: f64, new_value: f64 },
+    /// Indent/outdent: node dipindah antar induk pada posisi tertentu.
+    MoveNode {
+        node_id: String,
+        /// Deskripsi siap tampil, mis. `Indent "Galian tanah"`.
+        name: String,
+        from_parent: Option<String>,
+        from_index: usize,
+        to_parent: Option<String>,
+        to_index: usize,
+    },
 }
 
 impl ReversibleCommand {
@@ -53,6 +63,7 @@ impl ReversibleCommand {
                 old_value,
                 new_value,
             } => format!("Overhead {old_value:.0}% → {new_value:.0}%"),
+            ReversibleCommand::MoveNode { name, .. } => name.clone(),
         }
     }
 }

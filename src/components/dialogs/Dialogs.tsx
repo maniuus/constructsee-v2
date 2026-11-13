@@ -190,8 +190,7 @@ function OptionsDialog() {
         </label>
       </div>
       <p className="mt-3 text-[10px] leading-relaxed text-muted/70">
-        Overhead langsung memengaruhi total engine. PPN saat ini hanya berlaku pada perhitungan
-        tampilan; dokumen PDF mengikuti standar 11%.
+        Overhead dan PPN disimpan bersama proyek dan dipakai pada rekap maupun dokumen PDF.
       </p>
       <div className="mt-4 flex justify-end gap-2">
         <button
@@ -204,8 +203,12 @@ function OptionsDialog() {
         <button
           type="button"
           onClick={() => {
-            void setOverhead(Number(overheadInput));
-            setPpn(Number(ppnInput));
+            const overheadValue = Number(overheadInput);
+            const ppnValue = Number(ppnInput);
+            void (async () => {
+              await setOverhead(overheadValue);
+              await setPpn(ppnValue);
+            })();
             close();
           }}
           className="rounded-sm bg-accent px-3 py-1.5 text-[10px] font-semibold text-white hover:opacity-90"

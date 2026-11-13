@@ -241,6 +241,7 @@ const rollup = (nodes: Record<string, WbsNode>): void => {
 
 let state: { nodes: Record<string, WbsNode>; roots: string[] } | null = null;
 let overheadPercent = 10;
+let ppnPercent = 11;
 let workPlans: Record<string, WorkPlan> = {};
 let projectStart = new Date().toISOString().slice(0, 10);
 
@@ -296,6 +297,7 @@ const snapshot = (): EngineSnapshot => {
     roots: [...current.roots],
     total_cost: totalCost,
     overhead_percent: overheadPercent,
+    ppn_percent: ppnPercent,
     can_undo: false,
     can_redo: false,
   };
@@ -504,6 +506,14 @@ const setOverhead = (percent: number): EngineSnapshot => {
     throw new Error("Overhead harus berupa angka non-negatif");
   }
   overheadPercent = percent;
+  return snapshot();
+};
+
+const setPpn = (percent: number): EngineSnapshot => {
+  if (!Number.isFinite(percent) || percent < 0 || percent > 100) {
+    throw new Error("PPN harus berupa angka 0–100");
+  }
+  ppnPercent = percent;
   return snapshot();
 };
 
@@ -781,6 +791,7 @@ const expandAll = (expanded: boolean): EngineSnapshot => {
 const newProject = (): EngineSnapshot => {
   state = { nodes: {}, roots: [] };
   overheadPercent = 10;
+  ppnPercent = 11;
   projectStart = new Date().toISOString().slice(0, 10);
   workPlans = {};
   regionId = "national";
@@ -833,6 +844,8 @@ export async function mockInvoke<T>(
       return removeNode(String(args?.item_id)) as T;
     case "remove_nodes_batch":
       return removeNodesBatch((args?.ids as string[] | undefined) ?? []) as T;
+    case "set_ppn":
+      return setPpn(Number(args?.percent)) as T;
     case "set_overhead":
       return setOverhead(Number(args?.percent)) as T;
     case "get_work_plans":

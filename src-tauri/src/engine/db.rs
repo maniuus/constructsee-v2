@@ -404,60 +404,262 @@ pub fn clear_project(conn: &mut Connection) -> rusqlite::Result<()> {
     tx.commit()
 }
 
+/// Kolom-kolom tabel `name` pada skema `src` yang ter-attach (kosong bila
+/// tabel tidak ada).
+fn src_columns(conn: &Connection, table: &str) -> rusqlite::Result<Vec<String>> {
+    let mut stmt = conn.prepare(&format!("PRAGMA src.table_info({table})"))?;
+    let rows = stmt.query_map([], |row| row.get::<_, String>(1))?;
+    rows.collect()
+}
+
+/// Kolom wajib `wbs_nodes` pada file proyek. `components` dan `method`
+/// opsional (file versi lama) dan diisi default bila tidak ada.
+const REQUIRED_NODE_COLUMNS: [&str; 10] = [
+    "id",
+    "parent_id",
+    "children_ids",
+    "code",
+    "name",
+    "unit",
+    "volume",
+    "unit_price",
+    "total_price",
+    "is_expanded",
+];
+
 /// Salin seluruh isi proyek dari file `.csee` (SQLite) ke koneksi aktif.
-/// Data proyek saat ini diganti sepenuhnya.
-pub fn import_project(conn: &mut Connection, path: &Path) -> rusqlite::Result<()> {
-    if !path.exists() {
-        return Err(rusqlite::Error::InvalidPath(path.to_path_buf()));
+/// Data proyek saat ini diganti sepenuhnya — tetapi hanya bila file sumber
+/// valid dan seluruh penyalinan berhasil (satu transaksi; gagal → data
+/// proyek aktif tidak tersentuh).
+pub fn import_project(conn: &mut Connection, path: &Path) -> Result<(), String> {
+    if !path.is_file() {
+        return Err(format!("File proyek tidak ditemukan: {}", path.display()));
     }
 
-    clear_project(conn)?;
-
     let source = path.to_string_lossy().to_string();
-    conn.execute("ATTACH DATABASE ?1 AS src", params![source])?;
+    conn.execute("ATTACH DATABASE ?1 AS src", params![source])
+        .map_err(|error| format!("Gagal membuka file proyek: {error}"))?;
 
-    let result = (|| -> rusqlite::Result<()> {
-        let tx = conn.transaction()?;
-        tx.execute(
-            "INSERT INTO wbs_nodes (id, parent_id, children_ids, code, name, unit, volume, unit_price, total_price, is_expanded, components, method)
-             SELECT id, parent_id, children_ids, code, name, unit, volume, unit_price, total_price, is_expanded, components, method FROM src.wbs_nodes",
-            [],
-        )?;
-        tx.execute(
-            "INSERT INTO node_resource_items (node_id, category, ord, name, unit, coefficient, base_price)
-             SELECT node_id, category, ord, name, unit, coefficient, base_price FROM src.node_resource_items",
-            [],
-        )?;
-        tx.execute(
-            "INSERT INTO work_plans (node_id, num_workers, duration_days)
-             SELECT node_id, num_workers, duration_days FROM src.work_plans",
-            [],
-        )?;
-        tx.execute(
-            "INSERT INTO project_meta (key, value) SELECT key, value FROM src.project_meta",
-            [],
-        )?;
-        tx.commit()
-    })();
+    let result = copy_from_attached(conn);
 
     let _ = conn.execute("DETACH DATABASE src", []);
     result
 }
 
-/// Ekspor proyek aktif ke file `.csee` memakai `VACUUM INTO` (snapshot konsisten).
+fn copy_from_attached(conn: &mut Connection) -> Result<(), String> {
+    let not_project = |detail: String| {
+        format!("File bukan proyek ConstrucSee yang valid ({detail}). Proyek aktif tidak diubah.")
+    };
+
+    // Validasi skema sumber sebelum menyentuh data aktif. Membaca skema
+    // juga memastikan file benar-benar database SQLite.
+    let node_columns = src_columns(conn, "wbs_nodes").map_err(|error| not_project(error.to_string()))?;
+    if node_columns.is_empty() {
+        return Err(not_project("tabel wbs_nodes tidak ada".to_string()));
+    }
+    if let Some(missing) = REQUIRED_NODE_COLUMNS
+        .iter()
+        .find(|column| !node_columns.iter().any(|existing| existing == *column))
+    {
+        return Err(not_project(format!("kolom wbs_nodes.{missing} tidak ada")));
+    }
+    let has_items = !src_columns(conn, "node_resource_items")
+        .map_err(|error| error.to_string())?
+        .is_empty();
+    let has_plans = !src_columns(conn, "work_plans")
+        .map_err(|error| error.to_string())?
+        .is_empty();
+    let has_meta = !src_columns(conn, "project_meta")
+        .map_err(|error| error.to_string())?
+        .is_empty();
+
+    let components_expr = if node_columns.iter().any(|column| column == "components") {
+        "components"
+    } else {
+        "'{}'"
+    };
+    let method_expr = if node_columns.iter().any(|column| column == "method") {
+        "method"
+    } else {
+        "'langsung'"
+    };
+
+    let tx = conn.transaction().map_err(|error| error.to_string())?;
+    let copy = (|| -> rusqlite::Result<()> {
+        tx.execute("DELETE FROM node_resource_items", [])?;
+        tx.execute("DELETE FROM work_plans", [])?;
+        tx.execute("DELETE FROM wbs_nodes", [])?;
+        tx.execute("DELETE FROM project_meta", [])?;
+        tx.execute(
+            &format!(
+                "INSERT INTO wbs_nodes (id, parent_id, children_ids, code, name, unit, volume, unit_price, total_price, is_expanded, components, method)
+                 SELECT id, parent_id, children_ids, code, name, unit, volume, unit_price, total_price, is_expanded, {components_expr}, {method_expr} FROM src.wbs_nodes"
+            ),
+            [],
+        )?;
+        if has_items {
+            tx.execute(
+                "INSERT INTO node_resource_items (node_id, category, ord, name, unit, coefficient, base_price)
+                 SELECT node_id, category, ord, name, unit, coefficient, base_price FROM src.node_resource_items",
+                [],
+            )?;
+        }
+        if has_plans {
+            tx.execute(
+                "INSERT INTO work_plans (node_id, num_workers, duration_days)
+                 SELECT node_id, num_workers, duration_days FROM src.work_plans",
+                [],
+            )?;
+        }
+        if has_meta {
+            tx.execute(
+                "INSERT INTO project_meta (key, value) SELECT key, value FROM src.project_meta",
+                [],
+            )?;
+        }
+        Ok(())
+    })();
+
+    match copy {
+        Ok(()) => tx.commit().map_err(|error| error.to_string()),
+        // Drop `tx` tanpa commit → rollback otomatis; data aktif utuh.
+        Err(error) => Err(format!(
+            "Gagal menyalin file proyek: {error}. Proyek aktif tidak diubah."
+        )),
+    }
+}
+
+/// Ekspor proyek aktif ke file `.csee` memakai `VACUUM INTO` (snapshot
+/// konsisten). Ditulis ke file sementara lalu di-rename, sehingga file
+/// simpanan lama tetap utuh bila penulisan gagal.
 pub fn export_project(conn: &Connection, path: &Path) -> Result<(), String> {
     if let Some(parent) = path.parent() {
         if !parent.as_os_str().is_empty() {
             std::fs::create_dir_all(parent).map_err(|error| error.to_string())?;
         }
     }
-    if path.exists() {
-        std::fs::remove_file(path).map_err(|error| error.to_string())?;
+
+    let mut tmp_name = path
+        .file_name()
+        .map(|name| name.to_os_string())
+        .unwrap_or_else(|| "project.csee".into());
+    tmp_name.push(".tmp");
+    let tmp_path = path.with_file_name(tmp_name);
+    if tmp_path.exists() {
+        std::fs::remove_file(&tmp_path).map_err(|error| error.to_string())?;
     }
-    conn.execute(
-        "VACUUM INTO ?1",
-        params![path.to_string_lossy().to_string()],
-    )
-    .map_err(|error| error.to_string())?;
-    Ok(())
+
+    let written = conn
+        .execute(
+            "VACUUM INTO ?1",
+            params![tmp_path.to_string_lossy().to_string()],
+        )
+        .map_err(|error| format!("Gagal menulis file proyek: {error}"))
+        .and_then(|_| {
+            // std::fs::rename menimpa tujuan secara atomik (Windows:
+            // MoveFileEx + REPLACE_EXISTING).
+            std::fs::rename(&tmp_path, path)
+                .map_err(|error| format!("Gagal mengganti file proyek: {error}"))
+        });
+
+    if written.is_err() {
+        let _ = std::fs::remove_file(&tmp_path);
+    }
+    written
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::engine::seed;
+
+    fn temp_dir(tag: &str) -> std::path::PathBuf {
+        let dir = std::env::temp_dir().join(format!(
+            "constructsee-db-test-{tag}-{}",
+            uuid::Uuid::new_v4()
+        ));
+        std::fs::create_dir_all(&dir).expect("temp dir");
+        dir
+    }
+
+    fn seeded(path: &Path) -> Connection {
+        let mut conn = open(path).expect("open db");
+        let (nodes, roots) = seed::sample();
+        replace_all(&mut conn, &nodes, &roots).expect("seed");
+        conn
+    }
+
+    fn node_count(conn: &Connection) -> i64 {
+        conn.query_row("SELECT COUNT(*) FROM wbs_nodes", [], |row| row.get(0))
+            .expect("count")
+    }
+
+    #[test]
+    fn import_invalid_file_keeps_active_project() {
+        let dir = temp_dir("invalid");
+        let mut conn = seeded(&dir.join("active.db"));
+        let before = node_count(&conn);
+        assert!(before > 0);
+
+        // Bukan SQLite sama sekali.
+        let garbage = dir.join("garbage.csee");
+        std::fs::write(&garbage, b"this is not a sqlite database").unwrap();
+        assert!(import_project(&mut conn, &garbage).is_err());
+        assert_eq!(node_count(&conn), before);
+
+        // SQLite valid, tetapi bukan file proyek.
+        let foreign = dir.join("foreign.db");
+        Connection::open(&foreign)
+            .unwrap()
+            .execute_batch("CREATE TABLE notes (id INTEGER PRIMARY KEY, body TEXT);")
+            .unwrap();
+        assert!(import_project(&mut conn, &foreign).is_err());
+        assert_eq!(node_count(&conn), before);
+
+        // Koneksi tetap bisa dipakai (src sudah di-detach).
+        save_setting(&conn, "overhead", "12").unwrap();
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn import_legacy_file_without_method_column() {
+        let dir = temp_dir("legacy");
+        let mut conn = seeded(&dir.join("active.db"));
+
+        let legacy = dir.join("legacy.csee");
+        Connection::open(&legacy)
+            .unwrap()
+            .execute_batch(
+                "CREATE TABLE wbs_nodes (id TEXT PRIMARY KEY, parent_id TEXT, children_ids TEXT NOT NULL,
+                    code TEXT NOT NULL, name TEXT NOT NULL, unit TEXT NOT NULL, volume REAL NOT NULL,
+                    unit_price REAL NOT NULL, total_price REAL NOT NULL, is_expanded INTEGER NOT NULL);
+                 INSERT INTO wbs_nodes VALUES ('legacy-1', NULL, '[]', '1', 'Lama', 'm3', 2.0, 500.0, 1000.0, 0);",
+            )
+            .unwrap();
+
+        import_project(&mut conn, &legacy).expect("legacy import");
+        let (nodes, roots) = load(&mut conn).expect("load");
+        assert_eq!(nodes.len(), 1);
+        assert_eq!(nodes[0].method, "langsung");
+        assert_eq!(roots, vec!["legacy-1".to_string()]);
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn export_then_import_roundtrip_and_overwrite() {
+        let dir = temp_dir("roundtrip");
+        let conn = seeded(&dir.join("active.db"));
+        let expected = node_count(&conn);
+        let target = dir.join("project.csee");
+
+        export_project(&conn, &target).expect("first save");
+        // Simpan ulang ke path yang sama harus menimpa file lama.
+        export_project(&conn, &target).expect("second save");
+        assert!(!dir.join("project.csee.tmp").exists());
+
+        let mut other = open(&dir.join("other.db")).expect("open other");
+        import_project(&mut other, &target).expect("import");
+        assert_eq!(node_count(&other), expected);
+        let _ = std::fs::remove_dir_all(&dir);
+    }
 }

@@ -155,7 +155,15 @@ export function RibbonBar() {
               <RibbonButton
                 label="Open"
                 icon={FolderOpen}
-                onClick={() => void openProject()}
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      "Buka proyek lain? Data proyek saat ini akan diganti dan riwayat undo dihapus. Simpan (Save) dulu bila perlu.",
+                    )
+                  ) {
+                    void openProject();
+                  }
+                }}
                 hint="Buka file proyek .csee"
               />
               <RibbonButton
@@ -323,7 +331,15 @@ export function RibbonBar() {
         {tab === "Excel & Export" && (
           <>
             <Group title="Workbook">
-              <RibbonButton label="Import" icon={FileSpreadsheet} onClick={() => void importExcel()} hint="Import .xlsx via calamine" />
+              <RibbonButton label="Import" icon={FileSpreadsheet} onClick={() => {
+                  if (
+                    window.confirm(
+                      "Import Excel? Seluruh WBS dan rencana kerja proyek saat ini akan diganti dan riwayat undo dihapus. Simpan (Save) dulu bila perlu.",
+                    )
+                  ) {
+                    void importExcel();
+                  }
+                }} hint="Import .xlsx via calamine" />
               <RibbonButton label="Export" icon={FileText} onClick={() => void exportExcel()} hint="Export .xlsx dengan live formula" />
               <RibbonButton label="PDF" icon={Printer} onClick={() => void exportPdf()} hint="Ekspor RAB ke PDF (F4, standar resmi)" />
             </Group>

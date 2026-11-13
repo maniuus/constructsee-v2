@@ -30,6 +30,7 @@ pub fn run() {
             commands::set_price_method,
             commands::set_item_price,
             commands::set_overhead,
+            commands::set_ppn,
             commands::get_work_plans,
             commands::set_work_plan,
             commands::add_node,
