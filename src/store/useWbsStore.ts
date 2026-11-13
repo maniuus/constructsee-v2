@@ -68,7 +68,7 @@ interface WbsState {
   exportPdf: () => Promise<void>;
   previewPdf: () => Promise<void>;
   setOverhead: (value: number) => Promise<void>;
-  setPpn: (value: number) => void;
+  setPpn: (value: number) => Promise<void>;
   loadWorkPlans: () => Promise<void>;
   setWorkPlan: (nodeId: string, numWorkers: number, durationDays: number) => Promise<void>;
   loadAnalytics: () => Promise<void>;
@@ -104,6 +104,7 @@ const ingest = (snapshot: EngineSnapshot) => ({
   roots: snapshot.roots,
   totalCost: snapshot.total_cost,
   overhead: Number.isFinite(snapshot.overhead_percent) ? snapshot.overhead_percent : 10,
+  ppn: Number.isFinite(snapshot.ppn_percent) ? snapshot.ppn_percent : 11,
   canUndo: Boolean(snapshot.can_undo),
   canRedo: Boolean(snapshot.can_redo),
   loading: false,
@@ -421,7 +422,12 @@ export const useWbsStore = create<WbsState>((set, get) => ({
     const snapshot = await safeInvoke<EngineSnapshot>("redo");
     if (snapshot) set((state) => ({ ...ingest(snapshot), selectedId: state.selectedId }));
   },
-  setPpn: (value) => set({ ppn: value }),
+  setPpn: async (value) => {
+    if (!Number.isFinite(value) || value < 0 || value > 100) return;
+    set({ ppn: value });
+    const snapshot = await safeInvoke<EngineSnapshot>("set_ppn", { percent: value });
+    if (snapshot) set((state) => ({ ...ingest(snapshot), selectedId: state.selectedId }));
+  },
 
   loadWorkPlans: async () => {
     const plans = await safeInvoke<WorkPlan[]>("get_work_plans");

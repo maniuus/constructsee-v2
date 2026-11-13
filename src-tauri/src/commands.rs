@@ -66,6 +66,14 @@ pub async fn set_overhead(
 }
 
 #[tauri::command(rename_all = "snake_case")]
+pub async fn set_ppn(
+    percent: f64,
+    engine: State<'_, EngineHandle>,
+) -> Result<EngineSnapshot, String> {
+    engine.inner().clone().set_ppn(percent).await
+}
+
+#[tauri::command(rename_all = "snake_case")]
 pub async fn get_work_plans(
     engine: State<'_, EngineHandle>,
 ) -> Result<Vec<WorkPlan>, String> {

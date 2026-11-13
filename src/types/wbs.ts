@@ -39,6 +39,7 @@ export interface EngineSnapshot {
   roots: string[];
   total_cost: number;
   overhead_percent: number;
+  ppn_percent: number;
   can_undo: boolean;
   can_redo: boolean;
 }

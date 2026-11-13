@@ -142,6 +142,7 @@ mod tests {
             roots,
             total_cost: ordered.iter().map(|n| n.total_price).sum::<f64>(),
             overhead_percent: 10.0,
+            ppn_percent: 11.0,
             can_undo: false,
             can_redo: false,
         };

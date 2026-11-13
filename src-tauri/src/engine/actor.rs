@@ -15,6 +15,14 @@ use crate::excel;
 pub type Reply<T> = oneshot::Sender<Result<T, String>>;
 
 pub const DEFAULT_OVERHEAD_PERCENT: f64 = 10.0;
+pub const DEFAULT_PPN_PERCENT: f64 = 11.0;
+
+fn load_ppn(conn: &rusqlite::Connection) -> f64 {
+    db::load_setting(conn, "ppn")
+        .and_then(|raw| raw.parse::<f64>().ok())
+        .filter(|value| value.is_finite() && *value >= 0.0)
+        .unwrap_or(DEFAULT_PPN_PERCENT)
+}
 
 /// Batas entri riwayat undo/redo; melebihi batas → entri terlama dibuang.
 pub const HISTORY_CAPACITY: usize = 100;
@@ -27,6 +35,7 @@ pub enum EngineCommand {
     SetMethod { item_id: String, method: String, reply: Reply<AffectedPatch> },
     SetItemPrice { name: String, unit: String, base_price: f64, reply: Reply<AffectedPatch> },
     SetOverhead { percent: f64, reply: Reply<EngineSnapshot> },
+    SetPpn { percent: f64, reply: Reply<EngineSnapshot> },
     GetWorkPlans { reply: Reply<Vec<WorkPlan>> },
     SetWorkPlan { node_id: String, num_workers: f64, duration_days: f64, reply: Reply<WorkPlan> },
     AddNode { parent_id: Option<String>, node: WbsNode, reply: Reply<AffectedPatch> },
@@ -108,6 +117,11 @@ impl EngineHandle {
 
     pub async fn set_overhead(&self, percent: f64) -> Result<EngineSnapshot, String> {
         self.request(|reply| EngineCommand::SetOverhead { percent, reply })
+            .await
+    }
+
+    pub async fn set_ppn(&self, percent: f64) -> Result<EngineSnapshot, String> {
+        self.request(|reply| EngineCommand::SetPpn { percent, reply })
             .await
     }
 
@@ -281,6 +295,7 @@ struct EngineState {
     nodes: HashMap<String, WbsNode>,
     roots: Vec<String>,
     overhead_percent: f64,
+    ppn_percent: f64,
     work_plans: HashMap<String, WorkPlan>,
     project_start: String,
     region_id: String,
@@ -305,7 +320,15 @@ fn default_project_start() -> String {
 }
 
 impl EngineState {
+    /// Muat state lalu hitung ulang rollup: total induk yang tersimpan bisa
+    /// basi (mis. dari versi lama), jadi jangan dipercaya apa adanya.
     fn load(path: &Path) -> Result<Self, String> {
+        let mut state = Self::load_raw(path)?;
+        state.rollup_and_persist_changed()?;
+        Ok(state)
+    }
+
+    fn load_raw(path: &Path) -> Result<Self, String> {
         let mut conn = db::open(path).map_err(|error| error.to_string())?;
         let (nodes, roots) = db::load(&mut conn).map_err(|error| error.to_string())?;
 
@@ -313,6 +336,7 @@ impl EngineState {
             .and_then(|raw| raw.parse::<f64>().ok())
             .filter(|value| value.is_finite())
             .unwrap_or(DEFAULT_OVERHEAD_PERCENT);
+        let ppn_percent = load_ppn(&conn);
 
         let work_plans: HashMap<String, WorkPlan> = db::load_work_plans(&conn)
             .map_err(|error| error.to_string())?
@@ -343,6 +367,7 @@ impl EngineState {
                     .collect(),
                 roots: seed_roots,
                 overhead_percent,
+                ppn_percent,
                 work_plans,
                 project_start,
                 region_id,
@@ -359,6 +384,7 @@ impl EngineState {
                 .map(|node| (node.id.clone(), node))
                 .collect(),
             roots,
+            ppn_percent,
             overhead_percent,
             work_plans,
             project_start,
@@ -378,6 +404,7 @@ impl EngineState {
             roots: self.roots.clone(),
             total_cost: calc::total_cost(&self.nodes, &self.roots, self.overhead_percent),
             overhead_percent: self.overhead_percent,
+            ppn_percent: self.ppn_percent,
             can_undo: self.history.can_undo(),
             can_redo: self.history.can_redo(),
         }
@@ -467,6 +494,7 @@ impl EngineState {
             .and_then(|raw| raw.parse::<f64>().ok())
             .filter(|value| value.is_finite())
             .unwrap_or(DEFAULT_OVERHEAD_PERCENT);
+        self.ppn_percent = load_ppn(&self.conn);
         self.work_plans = db::load_work_plans(&self.conn)
             .map_err(|error| error.to_string())?
             .into_iter()
@@ -487,6 +515,7 @@ impl EngineState {
             .collect();
         self.roots = roots;
         self.history.clear();
+        self.rollup_and_persist_changed()?;
         Ok(())
     }
 
@@ -497,6 +526,7 @@ impl EngineState {
         self.work_plans.clear();
         self.history.clear();
         self.overhead_percent = DEFAULT_OVERHEAD_PERCENT;
+        self.ppn_percent = DEFAULT_PPN_PERCENT;
         self.project_start = default_project_start();
         self.region_id = default_region_id();
         self.region_name = default_region_name();
@@ -505,7 +535,7 @@ impl EngineState {
     }
 
     fn open_project(&mut self, path: &str) -> Result<EngineSnapshot, String> {
-        db::import_project(&mut self.conn, Path::new(path)).map_err(|error| error.to_string())?;
+        db::import_project(&mut self.conn, Path::new(path))?;
         self.reload()?;
         Ok(self.snapshot())
     }
@@ -557,12 +587,125 @@ impl EngineState {
         }
     }
 
+    /// Indeks `item_id` di daftar anak `parent_id` (atau di `roots`).
+    fn position_in_parent(&self, item_id: &str, parent_id: Option<&str>) -> usize {
+        match parent_id {
+            Some(pid) => self
+                .nodes
+                .get(pid)
+                .and_then(|parent| parent.children_ids.iter().position(|child| child == item_id))
+                .unwrap_or(0),
+            None => self
+                .roots
+                .iter()
+                .position(|root| root == item_id)
+                .unwrap_or(0),
+        }
+    }
+
+    /// Hitung ulang seluruh rollup lalu simpan setiap node yang nilainya
+    /// berubah — termasuk leluhur jauh yang tidak tercakup daftar `affected`
+    /// pemanggil. Mengembalikan node yang berubah.
+    fn rollup_and_persist_changed(&mut self) -> Result<Vec<WbsNode>, String> {
+        let changed = rollup_collect_changed(&mut self.nodes);
+        if !changed.is_empty() {
+            db::upsert_many(&mut self.conn, &changed).map_err(|error| error.to_string())?;
+        }
+        Ok(changed)
+    }
+
     fn persist_nodes(&mut self, ids: &[String]) -> Result<(), String> {
         let nodes: Vec<WbsNode> = ids
             .iter()
             .filter_map(|id| self.nodes.get(id).cloned())
             .collect();
         db::upsert_many(&mut self.conn, &nodes).map_err(|error| error.to_string())
+    }
+
+    /// Pindahkan `item_id` ke `new_parent` (None = root) pada indeks
+    /// `index`. Mengembalikan posisi asal `(parent, index)` agar bisa dibalik.
+    /// Seluruh node yang struktur/total-nya berubah dipersist.
+    fn move_node(
+        &mut self,
+        item_id: &str,
+        new_parent: Option<&str>,
+        index: usize,
+    ) -> Result<(Option<String>, usize), String> {
+        let old_parent = self
+            .nodes
+            .get(item_id)
+            .ok_or_else(|| "Baris tidak ditemukan".to_string())?
+            .parent_id
+            .clone();
+        if let Some(target) = new_parent {
+            if !self.nodes.contains_key(target) {
+                return Err("Induk tujuan tidak ditemukan".to_string());
+            }
+            // Cegah siklus: tujuan tidak boleh node itu sendiri / turunannya.
+            let mut cursor = Some(target.to_string());
+            while let Some(id) = cursor {
+                if id == item_id {
+                    return Err("Tidak dapat memindahkan baris ke dalam dirinya sendiri".to_string());
+                }
+                cursor = self.nodes.get(&id).and_then(|node| node.parent_id.clone());
+            }
+        }
+        let old_index = self.position_in_parent(item_id, old_parent.as_deref());
+
+        match &old_parent {
+            Some(pid) => {
+                if let Some(parent) = self.nodes.get_mut(pid) {
+                    parent.children_ids.retain(|id| id != item_id);
+                }
+            }
+            None => self.roots.retain(|id| id != item_id),
+        }
+        match new_parent {
+            Some(pid) => {
+                if let Some(parent) = self.nodes.get_mut(pid) {
+                    let at = index.min(parent.children_ids.len());
+                    parent.children_ids.insert(at, item_id.to_string());
+                    parent.is_expanded = true;
+                }
+            }
+            None => {
+                let at = index.min(self.roots.len());
+                self.roots.insert(at, item_id.to_string());
+            }
+        }
+        if let Some(target) = self.nodes.get_mut(item_id) {
+            target.parent_id = new_parent.map(str::to_string);
+        }
+
+        // Rollup + persist semua total yang berubah (termasuk leluhur jauh),
+        // lalu node yang struktur children_ids/parent_id-nya berubah.
+        self.rollup_and_persist_changed()?;
+        let mut structural = vec![item_id.to_string()];
+        structural.extend(old_parent.clone());
+        structural.extend(new_parent.map(str::to_string));
+        self.persist_nodes(&structural)?;
+        db::save_roots(&self.conn, &self.roots).map_err(|error| error.to_string())?;
+
+        Ok((old_parent, old_index))
+    }
+
+    fn record_move(
+        &mut self,
+        item_id: &str,
+        from: (Option<String>, usize),
+        description: &str,
+    ) {
+        let node = &self.nodes[item_id];
+        let to_parent = node.parent_id.clone();
+        let to_index = self.position_in_parent(item_id, to_parent.as_deref());
+        self.history.record(ReversibleCommand::MoveNode {
+            node_id: item_id.to_string(),
+            name: format!("{description} \"{}\"", node.name),
+            from_parent: from.0,
+            from_index: from.1,
+            to_parent,
+            to_index,
+        });
     }
 
     /// Jadikan node sebagai anak dari sibling tepat di atasnya.
@@ -582,99 +725,37 @@ impl EngineState {
             return Err("Baris pertama tidak dapat di-indent".to_string());
         }
         let new_parent_id = siblings[position - 1].clone();
-        if new_parent_id == item_id {
-            return Err("Tidak dapat menjadikan baris sebagai anak dirinya sendiri".to_string());
-        }
+        let end = self
+            .nodes
+            .get(&new_parent_id)
+            .map(|parent| parent.children_ids.len())
+            .unwrap_or(0);
 
-        let old_parent_id = node.parent_id.clone();
-
-        match &old_parent_id {
-            Some(parent_id) => {
-                if let Some(parent) = self.nodes.get_mut(parent_id) {
-                    parent.children_ids.retain(|id| id != item_id);
-                }
-            }
-            None => self.roots.retain(|id| id != item_id),
-        }
-
-        if let Some(new_parent) = self.nodes.get_mut(&new_parent_id) {
-            new_parent.children_ids.push(item_id.to_string());
-            new_parent.is_expanded = true;
-        }
-        if let Some(target) = self.nodes.get_mut(item_id) {
-            target.parent_id = Some(new_parent_id.clone());
-        }
-
-        calc::rollup_all(&mut self.nodes);
-
-        let mut affected = vec![item_id.to_string(), new_parent_id.clone()];
-        if let Some(parent_id) = old_parent_id {
-            affected.push(parent_id);
-        }
-        self.persist_nodes(&affected)?;
-        db::save_roots(&self.conn, &self.roots).map_err(|error| error.to_string())?;
-
+        let from = self.move_node(item_id, Some(&new_parent_id), end)?;
+        self.record_move(item_id, from, "Indent");
         Ok(self.snapshot())
     }
 
     /// Keluarkan node satu tingkat: menjadi sibling dari induknya.
     fn outdent_node(&mut self, item_id: &str) -> Result<EngineSnapshot, String> {
-        let node = self
+        let parent_id = self
             .nodes
             .get(item_id)
-            .cloned()
-            .ok_or_else(|| "Baris tidak ditemukan".to_string())?;
-        let parent_id = node
+            .ok_or_else(|| "Baris tidak ditemukan".to_string())?
             .parent_id
             .clone()
             .ok_or_else(|| "Baris sudah berada di level teratas".to_string())?;
-        let parent = self
+        let grandparent_id = self
             .nodes
             .get(&parent_id)
-            .cloned()
-            .ok_or_else(|| "Induk tidak ditemukan".to_string())?;
+            .ok_or_else(|| "Induk tidak ditemukan".to_string())?
+            .parent_id
+            .clone();
+        // Sisipkan tepat setelah induk lama.
+        let insert_at = self.position_in_parent(&parent_id, grandparent_id.as_deref()) + 1;
 
-        if let Some(parent_mut) = self.nodes.get_mut(&parent_id) {
-            parent_mut.children_ids.retain(|id| id != item_id);
-        }
-
-        let grandparent_id = parent.parent_id.clone();
-        match &grandparent_id {
-            Some(gp_id) => {
-                if let Some(grandparent) = self.nodes.get_mut(gp_id) {
-                    let insert_at = grandparent
-                        .children_ids
-                        .iter()
-                        .position(|id| id == &parent_id)
-                        .map(|index| index + 1)
-                        .unwrap_or(grandparent.children_ids.len());
-                    grandparent.children_ids.insert(insert_at, item_id.to_string());
-                }
-            }
-            None => {
-                let insert_at = self
-                    .roots
-                    .iter()
-                    .position(|id| id == &parent_id)
-                    .map(|index| index + 1)
-                    .unwrap_or(self.roots.len());
-                self.roots.insert(insert_at, item_id.to_string());
-            }
-        }
-
-        if let Some(target) = self.nodes.get_mut(item_id) {
-            target.parent_id = grandparent_id.clone();
-        }
-
-        calc::rollup_all(&mut self.nodes);
-
-        let mut affected = vec![item_id.to_string(), parent_id.clone()];
-        if let Some(gp_id) = grandparent_id {
-            affected.push(gp_id);
-        }
-        self.persist_nodes(&affected)?;
-        db::save_roots(&self.conn, &self.roots).map_err(|error| error.to_string())?;
-
+        let from = self.move_node(item_id, grandparent_id.as_deref(), insert_at)?;
+        self.record_move(item_id, from, "Outdent");
         Ok(self.snapshot())
     }
 
@@ -885,6 +966,16 @@ impl EngineState {
         Ok(self.snapshot())
     }
 
+    fn set_ppn(&mut self, percent: f64) -> Result<EngineSnapshot, String> {
+        if !percent.is_finite() || !(0.0..=100.0).contains(&percent) {
+            return Err("PPN harus berupa angka 0–100".to_string());
+        }
+        db::save_setting(&self.conn, "ppn", &percent.to_string())
+            .map_err(|error| error.to_string())?;
+        self.ppn_percent = percent;
+        Ok(self.snapshot())
+    }
+
     fn work_plans(&self) -> Vec<WorkPlan> {
         self.work_plans.values().cloned().collect()
     }
@@ -1001,6 +1092,9 @@ impl EngineState {
             }
         }
         db::upsert_many(&mut self.conn, &affected).map_err(|error| error.to_string())?;
+        if removed.iter().any(|entry| entry.parent_id.is_none()) {
+            db::save_roots(&self.conn, &self.roots).map_err(|error| error.to_string())?;
+        }
 
         self.history
             .record(ReversibleCommand::RemoveNodes { removed });
@@ -1096,6 +1190,9 @@ impl EngineState {
             return Err("Hanya baris pekerjaan (leaf) yang dapat dihapus".to_string());
         }
         let removed_work_plan = self.work_plans.get(item_id).cloned();
+        // Posisi harus dicatat SEBELUM node dilepas dari induknya.
+        let parent_id = node.parent_id.clone();
+        let index = self.position_in_parent(item_id, parent_id.as_deref());
 
         let mut affected_ids: Vec<String> = Vec::new();
         match node.parent_id.clone() {
@@ -1133,26 +1230,10 @@ impl EngineState {
         }
 
         db::upsert_many(&mut self.conn, &affected).map_err(|error| error.to_string())?;
+        if parent_id.is_none() {
+            db::save_roots(&self.conn, &self.roots).map_err(|error| error.to_string())?;
+        }
 
-        let parent_id = node.parent_id.clone();
-        let index = match parent_id.clone() {
-            Some(pid) => self
-                .nodes
-                .get(&pid)
-                .map(|parent| {
-                    parent
-                        .children_ids
-                        .iter()
-                        .position(|child| child == item_id)
-                        .unwrap_or(0)
-                })
-                .unwrap_or(0),
-            None => self
-                .roots
-                .iter()
-                .position(|root| root == item_id)
-                .unwrap_or(0),
-        };
         self.history.record(ReversibleCommand::RemoveNodes {
             removed: vec![RemovedNode {
                 node,
@@ -1249,6 +1330,20 @@ impl EngineState {
                     self.remove_recorded(&ids)
                 }
             },
+            ReversibleCommand::MoveNode {
+                node_id,
+                from_parent,
+                from_index,
+                to_parent,
+                to_index,
+                ..
+            } => {
+                let (parent, index) = match direction {
+                    Direction::Backward => (from_parent, *from_index),
+                    Direction::Forward => (to_parent, *to_index),
+                };
+                self.move_node(node_id, parent.as_deref(), index).map(|_| ())
+            }
             ReversibleCommand::SetOverhead { old_value, new_value } => {
                 let percent = match direction {
                     Direction::Backward => *old_value,
@@ -1332,6 +1427,9 @@ impl EngineState {
                         parent.children_ids.push(node.id.clone());
                     }
                 }
+                // Induk langsung wajib dipersist: children_ids-nya berubah dan
+                // dipakai saat memuat ulang struktur dari SQLite.
+                affected_ids.push(pid.clone());
                 let mut current = self
                     .nodes
                     .get(pid)
@@ -1419,7 +1517,12 @@ impl EngineState {
     /// RemoveNodes), termasuk work plan dan urutan pada induknya.
     fn restore_removed(&mut self, removed: &[RemovedNode]) -> Result<(), String> {
         let mut restore_roots = false;
-        for entry in removed {
+        // Indeks tercatat relatif terhadap daftar SEBELUM penghapusan; sisipkan
+        // dari indeks terkecil agar beberapa sibling kembali ke posisi semula
+        // apa pun urutan seleksinya.
+        let mut ordered: Vec<&RemovedNode> = removed.iter().collect();
+        ordered.sort_by_key(|entry| entry.index);
+        for entry in ordered {
             let id = entry.node.id.clone();
             self.nodes.insert(id.clone(), entry.node.clone());
 
@@ -1435,7 +1538,7 @@ impl EngineState {
             }
         }
 
-        calc::rollup_all(&mut self.nodes);
+        self.rollup_and_persist_changed()?;
 
         let persist_ids: std::collections::BTreeSet<String> = removed
             .iter()
@@ -1463,6 +1566,28 @@ impl EngineState {
         }
         Ok(())
     }
+}
+
+/// `rollup_all` yang juga mengembalikan node yang `unit_price`/`total_price`-nya
+/// berubah, agar bisa dipersist.
+fn rollup_collect_changed(nodes: &mut HashMap<String, WbsNode>) -> Vec<WbsNode> {
+    let before: HashMap<String, (f64, f64)> = nodes
+        .iter()
+        .map(|(id, node)| (id.clone(), (node.unit_price, node.total_price)))
+        .collect();
+    calc::rollup_all(nodes);
+    nodes
+        .values()
+        .filter(|node| {
+            before
+                .get(&node.id)
+                .map(|(unit, total)| {
+                    (unit - node.unit_price).abs() > 1e-9 || (total - node.total_price).abs() > 1e-9
+                })
+                .unwrap_or(true)
+        })
+        .cloned()
+        .collect()
 }
 
 #[derive(Clone, Copy)]
@@ -1504,6 +1629,9 @@ async fn run(mut state: EngineState, mut rx: mpsc::Receiver<EngineCommand>) {
             }
             EngineCommand::SetOverhead { percent, reply } => {
                 let _ = reply.send(state.set_overhead(percent));
+            }
+            EngineCommand::SetPpn { percent, reply } => {
+                let _ = reply.send(state.set_ppn(percent));
             }
             EngineCommand::GetWorkPlans { reply } => {
                 let _ = reply.send(Ok(state.work_plans()));
@@ -1632,6 +1760,7 @@ mod tests {
             nodes: map,
             roots,
             overhead_percent: DEFAULT_OVERHEAD_PERCENT,
+            ppn_percent: DEFAULT_PPN_PERCENT,
             work_plans: HashMap::new(),
             project_start: default_project_start(),
             region_id: default_region_id(),
@@ -1832,5 +1961,133 @@ mod tests {
             Some(7.0),
             "work plan harus ikut dipulihkan"
         );
+    }
+
+    /// Divisi seed dengan 3 item (div-2).
+    fn three_child_division(state: &EngineState) -> (String, Vec<String>) {
+        let div = state.roots[1].clone();
+        let children = state.nodes[&div].children_ids.clone();
+        assert_eq!(children.len(), 3, "seed div-2 harus punya 3 item");
+        (div, children)
+    }
+
+    /// Total tersimpan di SQLite (tanpa rollup ulang) per id.
+    fn stored_totals(state: &mut EngineState) -> HashMap<String, f64> {
+        let (nodes, _) = db::load(&mut state.conn).expect("load");
+        nodes.into_iter().map(|node| (node.id, node.total_price)).collect()
+    }
+
+    #[test]
+    fn undo_remove_middle_child_restores_exact_position() {
+        let mut state = in_memory_state();
+        let (div, children) = three_child_division(&state);
+
+        state.remove_node(&children[1]).expect("hapus gagal");
+        state.perform_undo().expect("undo gagal");
+        assert_eq!(state.nodes[&div].children_ids, children);
+    }
+
+    #[test]
+    fn undo_batch_remove_restores_order_regardless_of_selection_order() {
+        let mut state = in_memory_state();
+        let (div, children) = three_child_division(&state);
+
+        state
+            .remove_nodes_batch(&[children[2].clone(), children[0].clone()])
+            .expect("hapus gagal");
+        assert_eq!(state.nodes[&div].children_ids, vec![children[1].clone()]);
+        state.perform_undo().expect("undo gagal");
+        assert_eq!(state.nodes[&div].children_ids, children);
+    }
+
+    #[test]
+    fn redo_add_node_persists_parent_children() {
+        let mut state = in_memory_state();
+        let parent_id = state.roots[0].clone();
+        let mut node = state.nodes[&first_leaf_id(&state)].clone();
+        node.id = "item-redo-persist".to_string();
+        node.parent_id = None;
+
+        state.add_node(Some(parent_id.clone()), node).expect("add gagal");
+        state.perform_undo().expect("undo gagal");
+        state.perform_redo().expect("redo gagal");
+
+        // Muat ulang dari SQLite: node harus tetap tercantum di induknya.
+        state.reload().expect("reload gagal");
+        assert!(state.nodes[&parent_id]
+            .children_ids
+            .contains(&"item-redo-persist".to_string()));
+    }
+
+    #[test]
+    fn indent_outdent_are_undoable() {
+        let mut state = in_memory_state();
+        let (div, children) = three_child_division(&state);
+
+        state.indent_node(&children[1]).expect("indent gagal");
+        assert_eq!(state.nodes[&children[1]].parent_id.as_deref(), Some(children[0].as_str()));
+        assert!(state.history_view().undo[0].starts_with("Indent"));
+
+        state.perform_undo().expect("undo gagal");
+        assert_eq!(state.nodes[&div].children_ids, children);
+        assert_eq!(state.nodes[&children[1]].parent_id.as_deref(), Some(div.as_str()));
+
+        state.perform_redo().expect("redo gagal");
+        assert_eq!(state.nodes[&children[1]].parent_id.as_deref(), Some(children[0].as_str()));
+
+        state.outdent_node(&children[1]).expect("outdent gagal");
+        assert_eq!(state.nodes[&div].children_ids, children);
+        state.perform_undo().expect("undo outdent gagal");
+        assert_eq!(state.nodes[&children[1]].parent_id.as_deref(), Some(children[0].as_str()));
+
+        // Tidak boleh menjadikan node anak dari turunannya sendiri.
+        assert!(state
+            .move_node(&children[0], Some(children[1].as_str()), 0)
+            .is_err());
+    }
+
+    #[test]
+    fn nested_restore_persists_grandparent_total() {
+        let mut state = in_memory_state();
+        let (div, children) = three_child_division(&state);
+        // div -> children[0] -> children[1] (3 tingkat).
+        state.indent_node(&children[1]).expect("indent gagal");
+
+        state.remove_node(&children[1]).expect("hapus gagal");
+        state.perform_undo().expect("undo gagal");
+
+        let stored = stored_totals(&mut state);
+        assert!((stored[&div] - state.nodes[&div].total_price).abs() < 1e-6);
+        let stored_after_indent = stored[&children[0]];
+        assert!((stored_after_indent - state.nodes[&children[0]].total_price).abs() < 1e-6);
+    }
+
+    #[test]
+    fn load_recomputes_stale_parent_totals() {
+        let mut state = in_memory_state();
+        let div = state.roots[0].clone();
+        let expected = state.nodes[&div].total_price;
+        state
+            .conn
+            .execute("UPDATE wbs_nodes SET total_price = 1 WHERE id = ?1", [&div])
+            .unwrap();
+
+        state.reload().expect("reload gagal");
+        assert!((state.nodes[&div].total_price - expected).abs() < 1e-6);
+        assert!((stored_totals(&mut state)[&div] - expected).abs() < 1e-6);
+    }
+
+    #[test]
+    fn ppn_is_persisted_and_used_by_pdf_template() {
+        let mut state = in_memory_state();
+        assert_eq!(state.snapshot().ppn_percent, DEFAULT_PPN_PERCENT);
+        state.set_ppn(12.0).expect("set ppn gagal");
+        assert!(state.set_ppn(-1.0).is_err());
+
+        state.reload().expect("reload gagal");
+        let snap = state.snapshot();
+        assert_eq!(snap.ppn_percent, 12.0);
+        let source = crate::reports::templates::build_typst_rab_template(&snap, &snap.nodes);
+        assert!(source.contains("PPN (12"), "label PPN harus mengikuti setting");
     }
 }
